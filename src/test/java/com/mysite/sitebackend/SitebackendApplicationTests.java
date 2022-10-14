@@ -12,6 +12,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import javax.transaction.Transactional;
+
 
 @SpringBootTest
 class SitebackendApplicationTests {
@@ -26,14 +28,15 @@ class SitebackendApplicationTests {
 
 	@Test
 	void contextLoads() {
-		CoinBoard c1 = new CoinBoard();
-		InformBoard i1 = new InformBoard();
-		NewsBoard n1 = new NewsBoard();
-		StockMarketBoard sm1 = new StockMarketBoard();
-		String subject;
-		String contents;
 
 		for(int i = 1; i<=10; i++){
+			CoinBoard c1 = new CoinBoard();
+			InformBoard i1 = new InformBoard();
+			NewsBoard n1 = new NewsBoard();
+			StockMarketBoard sm1 = new StockMarketBoard();
+			String subject;
+			String contents;
+
 			// Coin Board (코인게시판) 테스트 케이스 추가 코드
 			subject = i + "번째 코인 게시글 제목";
 			contents = i + "번째 코인 게시글 내용";
