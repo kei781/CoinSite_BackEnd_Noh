@@ -1,13 +1,12 @@
 package com.mysite.sitebackend.board.coin.domain;
 
-import lombok.Getter;
-import lombok.Setter;
-
+import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 
+
 @Entity
-@Getter
-@Setter
+@Data
 public class CoinBoard {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,4 +15,9 @@ public class CoinBoard {
     @Column(length = 200)
     private String subject;
     private String contents;
+    @Column(length = 20)
+    private String author; // 작성자명
+    @DateTimeFormat(pattern = "YYYYMMDD")
+    private String date; // 작성일자
+    private Integer views; // 조회수
 }

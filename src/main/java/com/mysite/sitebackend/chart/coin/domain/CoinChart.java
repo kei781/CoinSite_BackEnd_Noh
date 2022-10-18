@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @Entity
 @Getter
 @Setter
-public class Coin {
+public class CoinChart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
