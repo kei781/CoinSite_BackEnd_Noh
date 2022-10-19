@@ -1,7 +1,5 @@
 package com.mysite.sitebackend.chart.market.service;
 
-import com.mysite.sitebackend.api.market.apiClient.MarketApiClient;
-import com.mysite.sitebackend.api.market.dto.MarketResponseDto;
 import com.mysite.sitebackend.board.coin.domain.CoinBoard;
 import com.mysite.sitebackend.chart.market.api.marketApiClient.MarketChartApiClient;
 import com.mysite.sitebackend.chart.market.dao.MarketChartRepository;

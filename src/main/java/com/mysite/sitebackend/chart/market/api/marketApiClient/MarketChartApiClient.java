@@ -1,6 +1,5 @@
 package com.mysite.sitebackend.chart.market.api.marketApiClient;
 
-import com.mysite.sitebackend.api.market.dto.MarketResponseDto;
 import com.mysite.sitebackend.chart.market.dao.MarketChartRepository;
 import com.mysite.sitebackend.chart.market.dto.MarketChartResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +15,6 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class MarketChartApiClient {
 //        @Autowired
-//        private RestTemplate restTemplate = new RestTemplate();
 //        private final MarketChartRepository c1 = new MarketChartRepository();
 //
 //        private final String openMarketUrl = "https://apis.data.go.kr/1160100/service/GetMarketIndexInfoService/getStockMarketIndex?";

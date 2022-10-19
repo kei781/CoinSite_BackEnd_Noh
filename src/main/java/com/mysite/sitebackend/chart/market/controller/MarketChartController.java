@@ -1,7 +1,6 @@
 package com.mysite.sitebackend.chart.market.controller;
 
 
-import com.mysite.sitebackend.api.market.dto.MarketResponseDto;
 import com.mysite.sitebackend.chart.market.domain.MarketChart;
 import com.mysite.sitebackend.chart.market.service.MarketChartService;
 import lombok.Getter;
