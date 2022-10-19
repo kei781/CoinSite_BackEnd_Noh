@@ -13,6 +13,7 @@ import java.util.List;
 @RequestMapping("/board/coin")
 @RequiredArgsConstructor
 @Controller
+@CrossOrigin("*")
 public class CoinBoardController {
     private final CoinBoardService coinBoardService;
 
@@ -43,4 +44,17 @@ public class CoinBoardController {
     public CoinBoard getContnets(@PathVariable("id") Integer id){
         return this.coinBoardService.findById(id);
     }
+
+//    @PatchMapping("/patch/{id}")
+//    @ResponseBody
+//    public CoinBoardListDto PatchContents(@PathVariable("id") Integer id, @RequestParam("Subject") String subject, @RequestParam("Contents") String contents, @RequestParam("Author") String author){
+//        return this.coinBoardService.findByIdToPatch(id, subject, contents, author);
+//    }
+
+    @DeleteMapping("/delete/{id}")
+    @ResponseBody
+    public void DeleteContents(@PathVariable("id") Integer id){
+        this.coinBoardService.findByIdToDelete(id);
+    }
+
 }

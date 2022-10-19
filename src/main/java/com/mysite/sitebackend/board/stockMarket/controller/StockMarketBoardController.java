@@ -14,6 +14,7 @@ import java.util.List;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/board/stockMarket")
+@CrossOrigin("*")
 public class StockMarketBoardController {
     private final StockMarketService stockMarketService;
 

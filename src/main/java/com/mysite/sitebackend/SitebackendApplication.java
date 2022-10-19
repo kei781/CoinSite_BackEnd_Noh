@@ -8,8 +8,6 @@ import org.springframework.context.annotation.Import;
 @Import(RestTemplateClient.class)
 @SpringBootApplication
 public class SitebackendApplication {
-
-
 	public static void main(String[] args) {
 		SpringApplication.run(SitebackendApplication.class, args);
 	}

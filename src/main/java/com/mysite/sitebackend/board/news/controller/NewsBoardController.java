@@ -14,6 +14,7 @@ import java.util.List;
 @RequestMapping("/board/News")
 @Controller
 @RequiredArgsConstructor
+@CrossOrigin("*")
 public class NewsBoardController {
     private final NewsBoardService newsBoardService;
 
