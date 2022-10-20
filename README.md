@@ -32,9 +32,13 @@
       3. Password(String 타입) : 패스워드
       4. ConfirmPassword(String 타입) : 체크 패스워드
       5. Gender(String 타입) : 성별
+      6. 주의사항 : 암호화가 전혀되지않습니다 ㅋㅋ;
 
 
    2. 로그인(post메소드, account/signIn)기능은 다음과 같은 파라메타를 필요로 합니다.
       1. UserId(String 타입) : 기가입된 아이디
       2. Password(String 타입) : 기가입된 패스워드
       3. 주의사항 : 암호화가 전혀되지않습니다 ㅋㅋ;
+      
+   3. 가져오기(get 메소드, account/accountGet) 기능은 다음과 같은 파라메타를 필요로 합니다.
+      1. UserId(String 타입) : 기가입된 아이디

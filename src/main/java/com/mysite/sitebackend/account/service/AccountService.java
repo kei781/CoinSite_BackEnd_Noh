@@ -47,4 +47,9 @@ public class AccountService {
            return "내용을 재확인해주세요.";
         }
     }
+
+    public Optional accountGet(String userId){
+        Optional<Account> opAccount = Optional.ofNullable(accountRepository.findByUserId(userId));
+        return opAccount;
+    }
 }

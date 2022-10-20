@@ -1,11 +1,14 @@
 package com.mysite.sitebackend.account.controller;
 
 
+import com.mysite.sitebackend.account.domain.Account;
 import com.mysite.sitebackend.account.service.AccountService;
 
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 
 @RestController
@@ -25,5 +28,20 @@ public class AccountController {
     @PostMapping("/signIn")
     public String signIn(@RequestParam("UserId") String userId, @RequestParam("Password") String password){
         return this.accountService.signIn(userId, password);
+    }
+    //아이디 찾기
+    @GetMapping("/findId")
+    public String findId(){
+        return "";
+    }
+    //패스워드 찾기
+    @PostMapping("/forgotPassword")
+    public String forgotPassword(){
+        return "";
+    }
+
+    @GetMapping("/accountGet")
+    public Optional accountGet(@RequestParam("UserId")String userId){
+        return this.accountService.accountGet(userId);
     }
 }
