@@ -65,8 +65,8 @@ public class CoinBoardService {
         if(opBoard.isPresent()){
             CoinBoard board = opBoard.get();
             board.setSubject(subject);
-            board.setSubject(contents);
-            board.setSubject(author);
+            board.setContents(contents);
+            board.setAuthor(author);
             board.setDate(formatedNow);
             boardRepository.save(board);
         }
