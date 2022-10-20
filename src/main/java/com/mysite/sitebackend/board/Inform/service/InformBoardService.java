@@ -2,8 +2,10 @@ package com.mysite.sitebackend.board.Inform.service;
 
 import com.mysite.sitebackend.board.Inform.dao.InformBoardRepository;
 import com.mysite.sitebackend.board.Inform.domain.InformBoard;
+import com.mysite.sitebackend.board.Inform.dto.InformBoardDto;
 import com.mysite.sitebackend.board.Inform.dto.InfromBoardListDto;
 import com.mysite.sitebackend.board.coin.domain.CoinBoard;
+import com.mysite.sitebackend.board.coin.dto.CoinBoardDto;
 import com.mysite.sitebackend.board.coin.dto.CoinBoardListDto;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +21,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class InformBoardService {
-    private final InformBoardRepository informBoardRepository;
+    private final InformBoardRepository boardRepository;
     private final ModelMapper modelMapper;
 
     public void save(String subject, String contents, String author){
@@ -33,12 +35,12 @@ public class InformBoardService {
         c1.setAuthor(author);
         c1.setViews(0);
         c1.setDate(formatedNow);
-        this.informBoardRepository.save(c1);
+        this.boardRepository.save(c1);
         System.out.println("성공적으로 저장되었습니다.");
     }
 
     public List<InfromBoardListDto> findAll(){
-        List<InformBoard> informBoards = informBoardRepository.findAll();
+        List<InformBoard> informBoards = boardRepository.findAll();
         List<InfromBoardListDto> infromBoardListDto =
                 informBoards.stream()
                 .map(informBoard1 -> modelMapper.map(informBoard1, InfromBoardListDto.class))
@@ -46,10 +48,11 @@ public class InformBoardService {
         return infromBoardListDto;
     }
 
-    public InformBoard findById(Integer id){
-        Optional<InformBoard> boardOptional = informBoardRepository.findById(id);
-        InformBoard informBoard = boardOptional.get();
-        return informBoard;
+    public InformBoardDto findById(Integer id){
+        InformBoard board = boardRepository.findById(id).get();
+        InformBoardDto boardDto = modelMapper.map(board, InformBoardDto.class);
+
+        return boardDto;
     }
 
 }

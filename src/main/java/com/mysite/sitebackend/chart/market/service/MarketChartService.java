@@ -25,14 +25,12 @@ public class MarketChartService {
         return this.marketChartRepository.findAll();
     }
 
-//    @Transactional(readOnly = true)
-//    public MarketResponseDto findByKeyword(String keyword){
-//        Object chart = marketChartApiClient.requestMarket(keyword);
-//        MarketChartResponseDto c1 = new MarketChartResponseDto();
-//
-//
-//        return ;
-//    }
+
+
+    @Transactional(readOnly = true)
+    public void findByKeyword(String keyword){
+        marketChartApiClient.requestMarket(keyword);
+    }
 
 
 

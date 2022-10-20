@@ -3,6 +3,7 @@ package com.mysite.sitebackend.board.news.controller;
 import com.mysite.sitebackend.board.coin.domain.CoinBoard;
 import com.mysite.sitebackend.board.news.dao.NewsBoardRepository;
 import com.mysite.sitebackend.board.news.domain.NewsBoard;
+import com.mysite.sitebackend.board.news.dto.NewsBoardDto;
 import com.mysite.sitebackend.board.news.dto.NewsBoardListDto;
 import com.mysite.sitebackend.board.news.service.NewsBoardService;
 import lombok.RequiredArgsConstructor;
@@ -42,7 +43,7 @@ public class NewsBoardController {
 
     @GetMapping("/get/{id}")
     @ResponseBody
-    public NewsBoard getContnets(@PathVariable("id") Integer id){
+    public NewsBoardDto getContnets(@PathVariable("id") Integer id){
         return this.newsBoardService.findById(id);
     }
 }

@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin("*")
 public class AccountController {
     private final AccountService accountService;
-
     @PostMapping("/signUp")
     public String signUp(@RequestParam("UserId") String userId, @RequestParam("UserName") String userName,
                          @RequestParam("Password") String password, @RequestParam("ConfirmPassword") String confirmPassword, @RequestParam("Gender") String gender){

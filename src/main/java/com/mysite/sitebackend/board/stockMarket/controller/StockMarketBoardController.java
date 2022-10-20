@@ -3,6 +3,7 @@ package com.mysite.sitebackend.board.stockMarket.controller;
 import com.mysite.sitebackend.board.coin.domain.CoinBoard;
 import com.mysite.sitebackend.board.stockMarket.dao.StockMarketBoardRepository;
 import com.mysite.sitebackend.board.stockMarket.domain.StockMarketBoard;
+import com.mysite.sitebackend.board.stockMarket.dto.StockMarketBoardDto;
 import com.mysite.sitebackend.board.stockMarket.dto.StockMarketBoardListDto;
 import com.mysite.sitebackend.board.stockMarket.service.StockMarketService;
 import lombok.RequiredArgsConstructor;
@@ -41,7 +42,7 @@ public class StockMarketBoardController {
 
     @GetMapping("/get/{id}")
     @ResponseBody
-    public StockMarketBoard getContnets(@PathVariable("id") Integer id){
+    public StockMarketBoardDto getContnets(@PathVariable("id") Integer id){
         return this.stockMarketService.findById(id);
     }
 

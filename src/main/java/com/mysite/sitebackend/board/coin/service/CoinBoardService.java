@@ -47,16 +47,12 @@ public class CoinBoardService {
 
         return coinBoardListDto;
     }
-    public CoinBoard findById(Integer id){
-        Optional<CoinBoard> boardOptional = boardRepository.findById(id);
-        CoinBoard coinBoard = boardOptional.get();
+    public CoinBoardDto findById(Integer id){
+        CoinBoard board = boardRepository.findById(id).get();
+        CoinBoardDto CoinboardDto = modelMapper.map(board, CoinBoardDto.class);
 
-        return coinBoard;
+        return CoinboardDto;
     }
-//    public CoinBoardDto findByIdToPatch(Integer id, String subject, String contents, String author){
-//
-//        this.boardRepository.patch
-//    }
 
     public String findByIdToDelete(Integer id){
         this.boardRepository.deleteById(id);

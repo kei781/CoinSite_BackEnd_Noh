@@ -2,6 +2,7 @@ package com.mysite.sitebackend.board.coin.controller;
 
 
 import com.mysite.sitebackend.board.coin.domain.CoinBoard;
+import com.mysite.sitebackend.board.coin.dto.CoinBoardDto;
 import com.mysite.sitebackend.board.coin.dto.CoinBoardListDto;
 import com.mysite.sitebackend.board.coin.service.CoinBoardService;
 import lombok.RequiredArgsConstructor;
@@ -24,12 +25,10 @@ public class CoinBoardController {
         return "Coin";
     }
 
-
     @PostMapping("/post")
     @ResponseBody
     public String post(@RequestParam("Subject") String subject, @RequestParam("Contents") String contents, @RequestParam("Author") String author) {
         this.coinBoardService.save(subject, contents,  author);
-
         return "성공적으로 저장되었습니다.";
     }
 
@@ -41,7 +40,7 @@ public class CoinBoardController {
 
     @GetMapping("/get/{id}")
     @ResponseBody
-    public CoinBoard getContnets(@PathVariable("id") Integer id){
+    public CoinBoardDto getContnets(@PathVariable("id") Integer id){
         return this.coinBoardService.findById(id);
     }
 
@@ -53,8 +52,8 @@ public class CoinBoardController {
 
     @DeleteMapping("/delete/{id}")
     @ResponseBody
-    public void DeleteContents(@PathVariable("id") Integer id){
-        this.coinBoardService.findByIdToDelete(id);
+    public String DeleteContents(@PathVariable("id") Integer id){
+        return this.coinBoardService.findByIdToDelete(id);
     }
 
 }

@@ -2,6 +2,7 @@ package com.mysite.sitebackend.board.Inform.controller;
 
 import com.mysite.sitebackend.board.Inform.dao.InformBoardRepository;
 import com.mysite.sitebackend.board.Inform.domain.InformBoard;
+import com.mysite.sitebackend.board.Inform.dto.InformBoardDto;
 import com.mysite.sitebackend.board.Inform.dto.InfromBoardListDto;
 import com.mysite.sitebackend.board.Inform.service.InformBoardService;
 import com.mysite.sitebackend.board.coin.domain.CoinBoard;
@@ -40,7 +41,7 @@ public class InformBoardController {
     }
     @GetMapping("/get/{id}")
     @ResponseBody
-    public InformBoard getContnets(@PathVariable("id") Integer id){
+    public InformBoardDto getContnets(@PathVariable("id") Integer id){
         return this.informBoardService.findById(id);
     }
 }

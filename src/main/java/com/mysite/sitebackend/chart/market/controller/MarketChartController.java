@@ -30,10 +30,10 @@ public class MarketChartController {
         return this.marketChartService.findByAll();
     }
 
-//    @GetMapping("/get/api/{keyword}")
-//    @ResponseBody
-//    public MarketResponseDto getApiByKeyword(@RequestParam String keyword){
-//        return this.marketChartService.findByKeyword(keyword);
-//    }
+    @GetMapping("/get/api/{keyword}")
+    @ResponseBody
+    public void getApiByKeyword(@RequestParam String keyword){
+        this.marketChartService.findByKeyword(keyword);
+    }
 
 }
