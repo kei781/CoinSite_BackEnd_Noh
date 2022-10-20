@@ -16,7 +16,10 @@
 
 2. 게시판 리스트 가져오기(get 메소드, /board/{원하는 게시판}/get)
 3. 특정 게시글 가져오기(get 메소드, /board/{원하는 게시판}/get/{원하는 게시글의 id값})
-4. 특정 게시글 수정(patch 메소드, 미구현)
+4. 특정 게시글 수정(patch 메소드, /board/{원하는 게시판}/patch/{원하는 게시글의 id값})
+   1. Subject(String 타입) : 게시글 제목
+   2. Contents(String 타입) : 게시글 내용
+   3. Author(String 타입) : 게시글 작성자
 5. 게시글 삭제(delet메소드, /board/{원하는 게시판}/delete/{원하는 게시글의 id값})
 
 <h2> chart(미구현) </h2>

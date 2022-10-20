@@ -25,6 +25,7 @@ public class CoinBoardController {
         return "Coin";
     }
 
+    //게시글 작성하기
     @PostMapping("/post")
     @ResponseBody
     public String post(@RequestParam("Subject") String subject, @RequestParam("Contents") String contents, @RequestParam("Author") String author) {
@@ -32,24 +33,28 @@ public class CoinBoardController {
         return "성공적으로 저장되었습니다.";
     }
 
+    //게시글 전체 불러오기
     @GetMapping("/get")
     @ResponseBody
     public List<CoinBoardListDto> get(){
         return this.coinBoardService.findAll();
     }
 
+    //게시글 1개 불러오기
     @GetMapping("/get/{id}")
     @ResponseBody
     public CoinBoardDto getContnets(@PathVariable("id") Integer id){
         return this.coinBoardService.findById(id);
     }
 
-//    @PatchMapping("/patch/{id}")
-//    @ResponseBody
-//    public CoinBoardListDto PatchContents(@PathVariable("id") Integer id, @RequestParam("Subject") String subject, @RequestParam("Contents") String contents, @RequestParam("Author") String author){
-//        return this.coinBoardService.findByIdToPatch(id, subject, contents, author);
-//    }
+    //게시글 수정
+    @PatchMapping("/patch/{id}")
+    @ResponseBody
+    public CoinBoardDto PatchContents(@PathVariable("id") Integer id, @RequestParam("Subject") String subject, @RequestParam("Contents") String contents, @RequestParam("Author") String author){
+        return this.coinBoardService.findByIdToPatch(id, subject, contents, author);
+    }
 
+    //게시글 삭제
     @DeleteMapping("/delete/{id}")
     @ResponseBody
     public String DeleteContents(@PathVariable("id") Integer id){

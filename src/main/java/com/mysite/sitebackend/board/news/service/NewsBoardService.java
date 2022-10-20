@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 public class NewsBoardService {
     private final NewsBoardRepository boardRepository;
     private final ModelMapper modelMapper;
-
+    //게시글 작성하기
     public void save(String subject, String contents, String author){
         LocalDate now = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
@@ -39,7 +39,7 @@ public class NewsBoardService {
         c1.setDate(formatedNow);
         this.boardRepository.save(c1);
     }
-
+    //게시글 리스트 불러오기
     public List<NewsBoardListDto> findAll(){
         List<NewsBoard> newsBoards = boardRepository.findAll();
         List<NewsBoardListDto> newsBoardListDtos = newsBoards.stream()
@@ -47,11 +47,36 @@ public class NewsBoardService {
                 .collect(Collectors.toList());
         return newsBoardListDtos;
     }
+    //게시글 불러오기
     public NewsBoardDto findById(Integer id){
         NewsBoard board = boardRepository.findById(id).get();
         NewsBoardDto boardDto = modelMapper.map(board, NewsBoardDto.class);
 
         return boardDto;
+    }
+    //게시글 수정
+    public NewsBoardDto findByIdToPatch(Integer id, String subject, String contents, String author){
+        LocalDate now = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+        String formatedNow = now.format(formatter);
+
+        Optional<NewsBoard> opBoard = boardRepository.findById(id);
+        if(opBoard.isPresent()){
+            NewsBoard board = opBoard.get();
+            board.setSubject(subject);
+            board.setSubject(contents);
+            board.setSubject(author);
+            board.setDate(formatedNow);
+            boardRepository.save(board);
+        }
+        NewsBoard board = boardRepository.findById(id).get();
+        NewsBoardDto boardDto = modelMapper.map(board, NewsBoardDto.class);
+        return boardDto;
+    }
+    //게시글 삭제
+    public String findByIdToDelete(Integer id){
+        this.boardRepository.deleteById(id);
+        return id + "번 게시판의 삭제가 완료되었습니다.";
     }
 
 }
