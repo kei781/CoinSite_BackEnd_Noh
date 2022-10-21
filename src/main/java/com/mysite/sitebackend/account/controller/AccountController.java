@@ -20,13 +20,13 @@ public class AccountController {
     
     //회원가입
     @PostMapping("/signUp")
-    public String signUp(@RequestParam("UserId") String userId, @RequestParam("UserName") String userName,
+    public boolean signUp(@RequestParam("UserId") String userId, @RequestParam("UserName") String userName,
                          @RequestParam("Password") String password, @RequestParam("ConfirmPassword") String confirmPassword, @RequestParam("Gender") String gender){
                 return this.accountService.signUp(userId, userName, password, confirmPassword, gender);
     }
     //로그인
     @PostMapping("/signIn")
-    public String signIn(@RequestParam("UserId") String userId, @RequestParam("Password") String password){
+    public boolean signIn(@RequestParam("UserId") String userId, @RequestParam("Password") String password){
         return this.accountService.signIn(userId, password);
     }
     //아이디 찾기

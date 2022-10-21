@@ -17,7 +17,7 @@ import java.util.Optional;
 public class AccountService {
     private final AccountRepository accountRepository;
     //회원가입
-    public String signUp(String userId, String userName, String password, String confirmPassword, String gender){
+    public boolean signUp(String userId, String userName, String password, String confirmPassword, String gender){
         if(password.equals(confirmPassword)){
             Account a1 = new Account();
             a1.setUserId(userId);
@@ -25,26 +25,26 @@ public class AccountService {
             a1.setPassword(password);
             a1.setGender(gender);
             this.accountRepository.save(a1);
-            return "회원가입을 축하드립니다.";
+            return true;
         }
         else{
-            return "패스워드가 다릅니다.";
+            return false;
         }
     }
     //로그인
-    public String signIn(String userId, String password){
+    public boolean signIn(String userId, String password){
         Optional<Account> opAccount = Optional.ofNullable(accountRepository.findByUserId(userId));
         if (opAccount.isPresent()){
             Account account = accountRepository.findByUserId(userId);
             if (account.getPassword().equals(password)){
-                return account.getUserId() + "님 방문을 환영합니다.";
+                return true;
             }
             else {
-                return "내용을 재확인해주세요.";
+                return false;
             }
         }
         else {
-           return "내용을 재확인해주세요.";
+           return false;
         }
     }
 
