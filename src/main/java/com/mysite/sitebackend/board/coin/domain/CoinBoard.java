@@ -3,7 +3,9 @@ package com.mysite.sitebackend.board.coin.domain;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
-
+import java.util.List;
+import javax.persistence.OneToMany;
+import javax.persistence.CascadeType;
 
 @Entity
 @Data
@@ -14,10 +16,17 @@ public class CoinBoard {
 
     @Column(length = 200)
     private String subject;
+
     private String contents;
+
     @Column(length = 20)
     private String author; // 작성자명
+
     @DateTimeFormat(pattern = "YYYYMMDD")
     private String date; // 작성일자
+
     private Integer views; // 조회수
+
+    @OneToMany(mappedBy = "coinBoard", cascade = CascadeType.REMOVE)
+    private List<CoinBoardComment> coinBoardCommentList;
 }

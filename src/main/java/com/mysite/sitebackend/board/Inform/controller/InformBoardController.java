@@ -7,6 +7,7 @@ import com.mysite.sitebackend.board.Inform.dto.InfromBoardListDto;
 import com.mysite.sitebackend.board.Inform.service.InformBoardService;
 import com.mysite.sitebackend.board.coin.domain.CoinBoard;
 import com.mysite.sitebackend.board.coin.dto.CoinBoardDto;
+import com.mysite.sitebackend.board.dto.BoardInput;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -29,8 +30,8 @@ public class InformBoardController {
     //게시글 작성하기
     @PostMapping("/post")
     @ResponseBody
-    public String post(@RequestParam("Subject") String subject, @RequestParam("Contents") String contents, @RequestParam("Author") String author) {
-        this.informBoardService.save(subject, contents, author);
+    public String post(@RequestBody BoardInput boardInput) {
+        this.informBoardService.save(boardInput);
         return "성공적으로 저장되었습니다.";
     }
     //게시글 목록 불러오기
@@ -40,21 +41,21 @@ public class InformBoardController {
         return this.informBoardService.findAll();
     }
     //게시글 불러오기
-    @GetMapping("/get/{id}")
+    @GetMapping("/getid")
     @ResponseBody
-    public InformBoardDto getContnets(@PathVariable("id") Integer id){
-        return this.informBoardService.findById(id);
+    public InformBoardDto getContnets(@RequestBody BoardInput boardInput){
+        return this.informBoardService.findById(boardInput);
     }
     //게시글 수정하기
-    @PatchMapping("/patch/{id}")
+    @PatchMapping("/patch")
     @ResponseBody
-    public InformBoardDto PatchContents(@PathVariable("id") Integer id, @RequestParam("Subject") String subject, @RequestParam("Contents") String contents, @RequestParam("Author") String author){
-        return this.informBoardService.findByIdToPatch(id, subject, contents, author);
+    public InformBoardDto PatchContents(@RequestBody BoardInput boardInput){
+        return this.informBoardService.findByIdToPatch(boardInput);
     }
     //게시글 삭제
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/delete")
     @ResponseBody
-    public String DeleteContents(@PathVariable("id") Integer id){
-        return this.informBoardService.findByIdToDelete(id);
+    public String DeleteContents(@RequestBody BoardInput boardInput){
+        return this.informBoardService.findByIdToDelete(boardInput);
     }
 }

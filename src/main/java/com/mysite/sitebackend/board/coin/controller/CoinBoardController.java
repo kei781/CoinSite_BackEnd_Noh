@@ -2,9 +2,11 @@ package com.mysite.sitebackend.board.coin.controller;
 
 
 import com.mysite.sitebackend.board.coin.domain.CoinBoard;
+import com.mysite.sitebackend.board.coin.domain.CoinBoardComment;
 import com.mysite.sitebackend.board.coin.dto.CoinBoardDto;
 import com.mysite.sitebackend.board.coin.dto.CoinBoardListDto;
 import com.mysite.sitebackend.board.coin.service.CoinBoardService;
+import com.mysite.sitebackend.board.dto.BoardInput;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -28,10 +30,16 @@ public class CoinBoardController {
     //게시글 작성하기
     @PostMapping("/post")
     @ResponseBody
-    public String post(@RequestParam("Subject") String subject, @RequestParam("Contents") String contents, @RequestParam("Author") String author) {
-        this.coinBoardService.save(subject, contents,  author);
+    public String post(@RequestBody BoardInput boardInput) {
+        this.coinBoardService.boardPost(boardInput);
         return "성공적으로 저장되었습니다.";
     }
+//    //댓글 작성하기
+//    @PostMapping("/comment")
+//    @ResponseBody
+//    public CoinBoardComment commentPost(@RequestBody BoardInput boardInput) {
+//        return this.coinBoardService.commentPost(boardInput);
+//    }
 
     //게시글 전체 불러오기
     @GetMapping("/get")
@@ -41,24 +49,24 @@ public class CoinBoardController {
     }
 
     //게시글 1개 불러오기
-    @GetMapping("/get/{id}")
+    @GetMapping("/getid")
     @ResponseBody
-    public CoinBoardDto getContnets(@PathVariable("id") Integer id){
-        return this.coinBoardService.findById(id);
+    public CoinBoardDto getContnets(@RequestBody BoardInput boardInput){
+        return this.coinBoardService.findById(boardInput);
     }
 
     //게시글 수정
-    @PatchMapping("/patch/{id}")
+    @PatchMapping("/patch")
     @ResponseBody
-    public CoinBoardDto PatchContents(@PathVariable("id") Integer id, @RequestParam("Subject") String subject, @RequestParam("Contents") String contents, @RequestParam("Author") String author){
-        return this.coinBoardService.findByIdToPatch(id, subject, contents, author);
+    public CoinBoardDto PatchContents(@RequestBody BoardInput boardInput){
+        return this.coinBoardService.findByIdToPatch(boardInput);
     }
 
     //게시글 삭제
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/delete")
     @ResponseBody
-    public String DeleteContents(@PathVariable("id") Integer id){
-        return this.coinBoardService.findByIdToDelete(id);
+    public String DeleteContents(@RequestBody BoardInput boardInput){
+        return this.coinBoardService.findByIdToDelete(boardInput);
     }
 
 }

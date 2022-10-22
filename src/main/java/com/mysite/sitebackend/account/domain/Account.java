@@ -21,5 +21,4 @@ public class Account {
     private String userName;
     @NotNull
     private String password;
-    private String gender;
 }

@@ -2,6 +2,7 @@ package com.mysite.sitebackend.board.news.controller;
 
 import com.mysite.sitebackend.board.coin.domain.CoinBoard;
 import com.mysite.sitebackend.board.coin.dto.CoinBoardDto;
+import com.mysite.sitebackend.board.dto.BoardInput;
 import com.mysite.sitebackend.board.news.dao.NewsBoardRepository;
 import com.mysite.sitebackend.board.news.domain.NewsBoard;
 import com.mysite.sitebackend.board.news.dto.NewsBoardDto;
@@ -29,8 +30,8 @@ public class NewsBoardController {
     //게시글 작성하기
     @PostMapping("/post")
     @ResponseBody
-    public String post(@RequestParam("Subject") String subject, @RequestParam("Contents") String contents, @RequestParam("Author") String author) {
-        this.newsBoardService.save(subject, contents, author);
+    public String post(@RequestBody BoardInput boardInput) {
+        this.newsBoardService.save(boardInput);
         System.out.println("성공적으로 저장되었습니다.");
         return "성공적으로 저장되었습니다.";
     }
@@ -42,21 +43,21 @@ public class NewsBoardController {
         return this.newsBoardService.findAll();
     }
     //게시글 불러오기
-    @GetMapping("/get/{id}")
+    @GetMapping("/getid")
     @ResponseBody
-    public NewsBoardDto getContnets(@PathVariable("id") Integer id){
-        return this.newsBoardService.findById(id);
+    public NewsBoardDto getContnets(@RequestBody BoardInput boardInput){
+        return this.newsBoardService.findById(boardInput);
     }
     //게시글 수정하기
-    @PatchMapping("/patch/{id}")
+    @PatchMapping("/patch")
     @ResponseBody
-    public NewsBoardDto PatchContents(@PathVariable("id") Integer id, @RequestParam("Subject") String subject, @RequestParam("Contents") String contents, @RequestParam("Author") String author){
-        return this.newsBoardService.findByIdToPatch(id, subject, contents, author);
+    public NewsBoardDto PatchContents(@RequestBody BoardInput boardInput){
+        return this.newsBoardService.findByIdToPatch(boardInput);
     }
     //게시글 삭제
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/delete")
     @ResponseBody
-    public String DeleteContents(@PathVariable("id") Integer id){
-        return this.newsBoardService.findByIdToDelete(id);
+    public String DeleteContents(@RequestBody BoardInput boardInput){
+        return this.newsBoardService.findByIdToDelete(boardInput);
     }
 }

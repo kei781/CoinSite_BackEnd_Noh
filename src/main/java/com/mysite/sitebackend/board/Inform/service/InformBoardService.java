@@ -7,6 +7,7 @@ import com.mysite.sitebackend.board.Inform.dto.InfromBoardListDto;
 import com.mysite.sitebackend.board.coin.domain.CoinBoard;
 import com.mysite.sitebackend.board.coin.dto.CoinBoardDto;
 import com.mysite.sitebackend.board.coin.dto.CoinBoardListDto;
+import com.mysite.sitebackend.board.dto.BoardInput;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -24,15 +25,15 @@ public class InformBoardService {
     private final InformBoardRepository boardRepository;
     private final ModelMapper modelMapper;
     //게시글 작성하기
-    public void save(String subject, String contents, String author){
+    public void save(BoardInput boardInput){
         LocalDate now = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
         String formatedNow = now.format(formatter);
 
         InformBoard c1 = new InformBoard();
-        c1.setSubject(subject);
-        c1.setContents(contents);
-        c1.setAuthor(author);
+        c1.setSubject(boardInput.getSubject());
+        c1.setContents(boardInput.getContents());
+        c1.setAuthor(boardInput.getAuthor());
         c1.setViews(0);
         c1.setDate(formatedNow);
         this.boardRepository.save(c1);
@@ -48,36 +49,36 @@ public class InformBoardService {
         return infromBoardListDto;
     }
     //게시글 불러오기
-    public InformBoardDto findById(Integer id){
-        InformBoard board = boardRepository.findById(id).get();
+    public InformBoardDto findById(BoardInput boardInput){
+        InformBoard board = boardRepository.findById(boardInput.getId()).get();
         InformBoardDto boardDto = modelMapper.map(board, InformBoardDto.class);
 
         return boardDto;
     }
 
     //게시글 수정
-    public InformBoardDto findByIdToPatch(Integer id, String subject, String contents, String author){
+    public InformBoardDto findByIdToPatch(BoardInput boardInput){
         LocalDate now = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
         String formatedNow = now.format(formatter);
 
-        Optional<InformBoard> opBoard = boardRepository.findById(id);
+        Optional<InformBoard> opBoard = boardRepository.findById(boardInput.getId());
         if(opBoard.isPresent()){
             InformBoard board = opBoard.get();
-            board.setSubject(subject);
-            board.setSubject(contents);
-            board.setSubject(author);
+            board.setSubject(boardInput.getSubject());
+            board.setContents(boardInput.getContents());
+            board.setAuthor(boardInput.getAuthor());
             board.setDate(formatedNow);
             boardRepository.save(board);
         }
-        InformBoard board = boardRepository.findById(id).get();
+        InformBoard board = boardRepository.findById(boardInput.getId()).get();
         InformBoardDto boardDto = modelMapper.map(board, InformBoardDto.class);
         return boardDto;
     }
     //게시글 삭제
-    public String findByIdToDelete(Integer id){
-        this.boardRepository.deleteById(id);
-        return id + "번 게시판의 삭제가 완료되었습니다.";
+    public String findByIdToDelete(BoardInput boardInput){
+        this.boardRepository.deleteById(boardInput.getId());
+        return boardInput.getId() + "번 게시판의 삭제가 완료되었습니다.";
     }
 
 }

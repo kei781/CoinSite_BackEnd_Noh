@@ -3,8 +3,9 @@ package com.mysite.sitebackend.board.coin.domain;
 
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
-
+import com.mysite.sitebackend.board.coin.domain.CoinBoard;
 import javax.persistence.*;
+import javax.persistence.ManyToOne;
 
 @Data
 @Entity
@@ -17,4 +18,6 @@ public class CoinBoardComment {
     private String author; // 작성자명
     @DateTimeFormat(pattern = "YYYYMMDD")
     private String date; // 작성일자
+    @ManyToOne
+    private CoinBoard coinBoard;
 }

@@ -2,6 +2,7 @@ package com.mysite.sitebackend.board.stockMarket.controller;
 
 import com.mysite.sitebackend.board.coin.domain.CoinBoard;
 import com.mysite.sitebackend.board.coin.dto.CoinBoardDto;
+import com.mysite.sitebackend.board.dto.BoardInput;
 import com.mysite.sitebackend.board.stockMarket.dao.StockMarketBoardRepository;
 import com.mysite.sitebackend.board.stockMarket.domain.StockMarketBoard;
 import com.mysite.sitebackend.board.stockMarket.dto.StockMarketBoardDto;
@@ -29,8 +30,8 @@ public class StockMarketBoardController {
     //게시글 작성하기
     @PostMapping("/post")
     @ResponseBody
-    public String post(@RequestParam("Subject") String subject, @RequestParam("Contents") String contents, @RequestParam("Author") String author) {
-        this.stockMarketService.save(subject, contents, author);
+    public String post(@RequestBody BoardInput boardInput) {
+        this.stockMarketService.save(boardInput);
         System.out.println("성공적으로 저장되었습니다.");
         return "성공적으로 저장되었습니다.";
     }
@@ -41,22 +42,22 @@ public class StockMarketBoardController {
         return this.stockMarketService.findAll();
     }
     //게시글 불러오기
-    @GetMapping("/get/{id}")
+    @GetMapping("/getid")
     @ResponseBody
-    public StockMarketBoardDto getContnets(@PathVariable("id") Integer id){
-        return this.stockMarketService.findById(id);
+    public StockMarketBoardDto getContnets(@RequestBody BoardInput boardInput){
+        return this.stockMarketService.findById(boardInput);
     }
     //게시글 수정
-    @PatchMapping("/patch/{id}")
+    @PatchMapping("/patch")
     @ResponseBody
-    public StockMarketBoardDto PatchContents(@PathVariable("id") Integer id, @RequestParam("Subject") String subject, @RequestParam("Contents") String contents, @RequestParam("Author") String author){
-        return this.stockMarketService.findByIdToPatch(id, subject, contents, author);
+    public StockMarketBoardDto PatchContents(@RequestBody BoardInput boardInput){
+        return this.stockMarketService.findByIdToPatch(boardInput);
     }
     //게시글 삭제
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/delete")
     @ResponseBody
-    public String DeleteContents(@PathVariable("id") Integer id){
-        return this.stockMarketService.findByIdToDelete(id);
+    public String DeleteContents(@RequestBody BoardInput boardInput){
+        return this.stockMarketService.findByIdToDelete(boardInput);
     }
 
 }

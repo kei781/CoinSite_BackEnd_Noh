@@ -1,7 +1,7 @@
 package com.mysite.sitebackend.account.controller;
 
 
-import com.mysite.sitebackend.account.domain.Account;
+import com.mysite.sitebackend.account.dto.UserInput;
 import com.mysite.sitebackend.account.service.AccountService;
 
 import lombok.RequiredArgsConstructor;
@@ -17,17 +17,16 @@ import java.util.Optional;
 @CrossOrigin("*")
 public class AccountController {
     private final AccountService accountService;
-    
+
     //회원가입
     @PostMapping("/signUp")
-    public boolean signUp(@RequestParam("UserId") String userId, @RequestParam("UserName") String userName,
-                         @RequestParam("Password") String password, @RequestParam("ConfirmPassword") String confirmPassword, @RequestParam("Gender") String gender){
-                return this.accountService.signUp(userId, userName, password, confirmPassword, gender);
+    public boolean signUp(@RequestBody UserInput userInput){
+                return this.accountService.signUp(userInput);
     }
     //로그인
     @PostMapping("/signIn")
-    public boolean signIn(@RequestParam("UserId") String userId, @RequestParam("Password") String password){
-        return this.accountService.signIn(userId, password);
+    public boolean signIn(@RequestBody UserInput userInput){
+        return this.accountService.signIn(userInput);
     }
     //아이디 찾기
     @GetMapping("/findId")
@@ -41,7 +40,7 @@ public class AccountController {
     }
 
     @GetMapping("/accountGet")
-    public Optional accountGet(@RequestParam("UserId")String userId){
-        return this.accountService.accountGet(userId);
+    public Optional accountGet(@RequestBody UserInput userInput){
+        return this.accountService.accountGet(userInput);
     }
 }
