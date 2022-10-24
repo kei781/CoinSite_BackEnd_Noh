@@ -22,5 +22,5 @@ public class MarketChart {
     private Integer value;
 
     @DateTimeFormat(pattern = "YYYYMMDD")
-    private LocalDate date;
+    private String date;
 }

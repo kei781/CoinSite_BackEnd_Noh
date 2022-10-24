@@ -27,12 +27,6 @@ public class MarketChartService {
 
 
 
-    @Transactional(readOnly = true)
-    public void findByKeyword(String keyword){
-        marketChartApiClient.requestMarket(keyword);
-    }
-
-
 
 
 }
