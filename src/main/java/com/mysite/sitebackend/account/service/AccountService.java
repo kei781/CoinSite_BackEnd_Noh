@@ -3,7 +3,7 @@ package com.mysite.sitebackend.account.service;
 
 import com.mysite.sitebackend.account.dao.AccountRepository;
 import com.mysite.sitebackend.account.domain.Account;
-import com.mysite.sitebackend.account.dto.UserInput;
+import com.mysite.sitebackend.account.dto.AccountInput;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,12 +14,12 @@ import java.util.Optional;
 public class AccountService {
     private final AccountRepository accountRepository;
     //회원가입
-    public boolean signUp(UserInput userInput){
-        if(userInput.getPassword().equals(userInput.getConfirmPassword())){
+    public boolean signUp(AccountInput accountInput){
+        if(accountInput.getPassword().equals(accountInput.getConfirmPassword())){
             Account a1 = new Account();
-            a1.setUserId(userInput.getUserId());
-            a1.setUserName(userInput.getUserName());
-            a1.setPassword(userInput.getPassword());
+            a1.setUserId(accountInput.getUserId());
+            a1.setUserName(accountInput.getUserName());
+            a1.setPassword(accountInput.getPassword());
             this.accountRepository.save(a1);
             return true;
         }
@@ -29,11 +29,11 @@ public class AccountService {
     }
 
     //로그인
-    public boolean signIn(UserInput userInput){
-        Optional<Account> opAccount = Optional.ofNullable(accountRepository.findByUserId(userInput.getUserId()));
+    public boolean signIn(AccountInput accountInput){
+        Optional<Account> opAccount = Optional.ofNullable(accountRepository.findByUserId(accountInput.getUserId()));
         if (opAccount.isPresent()){
-            Account account = accountRepository.findByUserId(userInput.getUserId());
-            if (account.getPassword().equals(userInput.getPassword())){
+            Account account = accountRepository.findByUserId(accountInput.getUserId());
+            if (account.getPassword().equals(accountInput.getPassword())){
                 return true;
             }
             else {
@@ -45,8 +45,8 @@ public class AccountService {
         }
     }
 
-    public Optional accountGet(UserInput userInput){
-        Optional<Account> opAccount = Optional.ofNullable(accountRepository.findByUserId(userInput.getUserId()));
+    public Optional accountGet(AccountInput accountInput){
+        Optional<Account> opAccount = Optional.ofNullable(accountRepository.findByUserId(accountInput.getUserId()));
         return opAccount;
     }
 }

@@ -26,7 +26,4 @@ public class CoinBoard {
     private String date; // 작성일자
 
     private Integer views; // 조회수
-
-    @OneToMany(mappedBy = "coinBoard", cascade = CascadeType.REMOVE)
-    private List<CoinBoardComment> coinBoardCommentList;
 }

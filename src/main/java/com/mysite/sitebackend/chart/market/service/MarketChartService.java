@@ -19,8 +19,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MarketChartService {
     private final MarketChartRepository marketChartRepository;
-    private final MarketChartApiClient marketChartApiClient;
-
     public List<MarketChart> findByAll(){
         return this.marketChartRepository.findAll();
     }

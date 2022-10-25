@@ -1,10 +1,12 @@
 package com.mysite.sitebackend.board.Inform.domain;
 
+import com.mysite.sitebackend.board.coin.domain.CoinBoardComment;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Entity
@@ -13,7 +15,6 @@ public class InformBoard {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
     @Column(length = 200)
     private String subject;
     private String contents;
@@ -22,5 +23,4 @@ public class InformBoard {
     @DateTimeFormat(pattern = "YYYYMMDD")
     private String date; // 작성일자
     private Integer views; // 조회수
-
 }

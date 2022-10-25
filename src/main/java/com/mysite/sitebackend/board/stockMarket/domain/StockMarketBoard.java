@@ -1,12 +1,10 @@
 package com.mysite.sitebackend.board.stockMarket.domain;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.format.annotation.DateTimeFormat;
 
+import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
-import java.time.LocalDate;
+
 
 @Entity
 @Data

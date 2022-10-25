@@ -1,7 +1,5 @@
 package com.mysite.sitebackend.board.stockMarket.dto;
 
-import java.time.LocalDate;
-
 public class StockMarketBoardListDto {
     private Integer id;
     private String subject;

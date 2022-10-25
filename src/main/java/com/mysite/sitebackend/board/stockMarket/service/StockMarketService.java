@@ -1,12 +1,10 @@
 package com.mysite.sitebackend.board.stockMarket.service;
 
-import com.mysite.sitebackend.board.Inform.domain.InformBoard;
-import com.mysite.sitebackend.board.Inform.dto.InformBoardDto;
-import com.mysite.sitebackend.board.coin.domain.CoinBoard;
-import com.mysite.sitebackend.board.coin.dto.CoinBoardDto;
 import com.mysite.sitebackend.board.dto.BoardInput;
+import com.mysite.sitebackend.board.stockMarket.dao.StockMarketBoardCommentRepository;
 import com.mysite.sitebackend.board.stockMarket.dao.StockMarketBoardRepository;
 import com.mysite.sitebackend.board.stockMarket.domain.StockMarketBoard;
+import com.mysite.sitebackend.board.stockMarket.domain.StockMarketBoardComment;
 import com.mysite.sitebackend.board.stockMarket.dto.StockMarketBoardDto;
 import com.mysite.sitebackend.board.stockMarket.dto.StockMarketBoardListDto;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +21,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class StockMarketService {
     private final StockMarketBoardRepository boardRepository;
+    private final StockMarketBoardCommentRepository commentRepository;
     private final ModelMapper modelMapper;
+    LocalDate now = LocalDate.now();
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+    String formatedNow = now.format(formatter);
     //게시글 작성하기
     public void save(BoardInput boardInput){
         LocalDate now = LocalDate.now();
@@ -38,6 +40,24 @@ public class StockMarketService {
         c1.setDate(formatedNow);
         this.boardRepository.save(c1);
     }
+
+    public boolean commentPost(BoardInput boardInput){
+        Optional<StockMarketBoard> optionalStockMarketBoard = this.boardRepository.findById(boardInput.getId());
+        if(optionalStockMarketBoard.isPresent()){
+            StockMarketBoard q = optionalStockMarketBoard.get();
+            StockMarketBoardComment a = new StockMarketBoardComment();
+            a.setContents(boardInput.getContents());
+            a.setDate(formatedNow);
+            a.setAuthor(boardInput.getAuthor());
+            a.setBoardIndex(boardInput.getId());
+            this.commentRepository.save(a);
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
     //게시글 리스트 불러오기
     public List<StockMarketBoardListDto> findAll(){
         List<StockMarketBoard> stockMarketBoards = boardRepository.findAll();
@@ -47,11 +67,21 @@ public class StockMarketService {
                 .collect(Collectors.toList());
         return stockMarketBoardListDtos;
     }
+
     //게시글 불러오기
     public StockMarketBoardDto findById(BoardInput boardInput){
         StockMarketBoard board = boardRepository.findById(boardInput.getId()).get();
         StockMarketBoardDto boardDto = modelMapper.map(board, StockMarketBoardDto.class);
         return boardDto;
+    }
+
+    //게시글 1개의 댓글 전체목록 불러오기
+    public List<StockMarketBoardComment> findByIdToComment(BoardInput boardInput) {
+        Optional<StockMarketBoard> optionalCoinBoard = this.boardRepository.findById(boardInput.getId());
+        optionalCoinBoard.isPresent();
+        List<StockMarketBoardComment> stockMarketBoardComments = commentRepository.findAllByBoardIndex(boardInput.getId());
+
+        return stockMarketBoardComments;
     }
 
     //게시글 수정
@@ -73,10 +103,16 @@ public class StockMarketService {
         StockMarketBoardDto boardDto = modelMapper.map(board, StockMarketBoardDto.class);
         return boardDto;
     }
-    //게시글 삭제
-    public String findByIdToDelete(BoardInput boardInput){
+
+    public String boardDelete(BoardInput boardInput){
         this.boardRepository.deleteById(boardInput.getId());
+        this.commentRepository.deleteAllByBoardIndex(boardInput.getId());
         return boardInput.getId() + "번 게시판의 삭제가 완료되었습니다.";
+    }
+    // 댓글삭제
+    public String commnetDelete(BoardInput boardInput){
+        this.commentRepository.deleteById(boardInput.getId());
+        return boardInput.getId() + "번 댓글의 삭제가 완료되었습니다.";
     }
 
 }

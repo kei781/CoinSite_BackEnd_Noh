@@ -1,10 +1,9 @@
 package com.mysite.sitebackend.board.stockMarket.controller;
 
-import com.mysite.sitebackend.board.coin.domain.CoinBoard;
-import com.mysite.sitebackend.board.coin.dto.CoinBoardDto;
+
 import com.mysite.sitebackend.board.dto.BoardInput;
-import com.mysite.sitebackend.board.stockMarket.dao.StockMarketBoardRepository;
-import com.mysite.sitebackend.board.stockMarket.domain.StockMarketBoard;
+
+import com.mysite.sitebackend.board.stockMarket.domain.StockMarketBoardComment;
 import com.mysite.sitebackend.board.stockMarket.dto.StockMarketBoardDto;
 import com.mysite.sitebackend.board.stockMarket.dto.StockMarketBoardListDto;
 import com.mysite.sitebackend.board.stockMarket.service.StockMarketService;
@@ -19,7 +18,7 @@ import java.util.List;
 @RequestMapping("/board/stockMarket")
 @CrossOrigin("*")
 public class StockMarketBoardController {
-    private final StockMarketService stockMarketService;
+    private final StockMarketService boardService;
 
     @RequestMapping("/")
     @ResponseBody
@@ -31,33 +30,56 @@ public class StockMarketBoardController {
     @PostMapping("/post")
     @ResponseBody
     public String post(@RequestBody BoardInput boardInput) {
-        this.stockMarketService.save(boardInput);
+        this.boardService.save(boardInput);
         System.out.println("성공적으로 저장되었습니다.");
         return "성공적으로 저장되었습니다.";
     }
+
+    //댓글 작성하기
+    @PostMapping("/comment")
+    @ResponseBody
+    public boolean commentPost(@RequestBody BoardInput boardInput) {
+        return this.boardService.commentPost(boardInput);
+    }
+
     //게시글 리스트 불러오기
     @GetMapping("/get")
     @ResponseBody
     private List<StockMarketBoardListDto> get(){
-        return this.stockMarketService.findAll();
+        return this.boardService.findAll();
     }
+
     //게시글 불러오기
     @GetMapping("/getid")
     @ResponseBody
     public StockMarketBoardDto getContnets(@RequestBody BoardInput boardInput){
-        return this.stockMarketService.findById(boardInput);
+        return this.boardService.findById(boardInput);
     }
+
+    //해당 id값의 댓글들 불러오기
+    @GetMapping("/getid/comment")
+    @ResponseBody
+    public List<StockMarketBoardComment> getComment(@RequestBody BoardInput boardInput){
+        return this.boardService.findByIdToComment(boardInput);
+    }
+
     //게시글 수정
     @PatchMapping("/patch")
     @ResponseBody
     public StockMarketBoardDto PatchContents(@RequestBody BoardInput boardInput){
-        return this.stockMarketService.findByIdToPatch(boardInput);
+        return this.boardService.findByIdToPatch(boardInput);
     }
-    //게시글 삭제
+    // 게시글 삭제
     @DeleteMapping("/delete")
     @ResponseBody
-    public String DeleteContents(@RequestBody BoardInput boardInput){
-        return this.stockMarketService.findByIdToDelete(boardInput);
+    public String boardDelete(@RequestBody BoardInput boardInput){
+        return this.boardService.boardDelete(boardInput);
+    }
+    //댓글삭제
+    @DeleteMapping("/delete/comment")
+    @ResponseBody
+    public String deleteContents(@RequestBody BoardInput boardInput){
+        return this.boardService.commnetDelete(boardInput);
     }
 
 }

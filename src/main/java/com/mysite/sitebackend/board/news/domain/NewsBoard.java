@@ -1,5 +1,6 @@
 package com.mysite.sitebackend.board.news.domain;
 
+import com.mysite.sitebackend.board.coin.domain.CoinBoardComment;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -7,6 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Data

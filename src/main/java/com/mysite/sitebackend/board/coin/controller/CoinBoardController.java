@@ -18,7 +18,7 @@ import java.util.List;
 @Controller
 @CrossOrigin("*")
 public class CoinBoardController {
-    private final CoinBoardService coinBoardService;
+    private final CoinBoardService boardService;
 
     @RequestMapping("/")
     @ResponseBody
@@ -31,42 +31,56 @@ public class CoinBoardController {
     @PostMapping("/post")
     @ResponseBody
     public String post(@RequestBody BoardInput boardInput) {
-        this.coinBoardService.boardPost(boardInput);
+        this.boardService.boardPost(boardInput);
         return "성공적으로 저장되었습니다.";
     }
-//    //댓글 작성하기
-//    @PostMapping("/comment")
-//    @ResponseBody
-//    public CoinBoardComment commentPost(@RequestBody BoardInput boardInput) {
-//        return this.coinBoardService.commentPost(boardInput);
-//    }
+
+    //댓글 작성하기
+    @PostMapping("/post/comment")
+    @ResponseBody
+    public boolean commentPost(@RequestBody BoardInput boardInput) {
+        return this.boardService.commentPost(boardInput);
+    }
 
     //게시글 전체 불러오기
     @GetMapping("/get")
     @ResponseBody
     public List<CoinBoardListDto> get(){
-        return this.coinBoardService.findAll();
+        return this.boardService.findAll();
     }
 
     //게시글 1개 불러오기
     @GetMapping("/getid")
     @ResponseBody
     public CoinBoardDto getContnets(@RequestBody BoardInput boardInput){
-        return this.coinBoardService.findById(boardInput);
+        return this.boardService.findByIdToBoard(boardInput);
+    }
+
+    //해당 id값의 댓글들 불러오기
+    @GetMapping("/getid/comment")
+    @ResponseBody
+    public List<CoinBoardComment> getComment(@RequestBody BoardInput boardInput){
+        return this.boardService.findByIdToComment(boardInput);
     }
 
     //게시글 수정
     @PatchMapping("/patch")
     @ResponseBody
-    public CoinBoardDto PatchContents(@RequestBody BoardInput boardInput){
-        return this.coinBoardService.findByIdToPatch(boardInput);
+    public CoinBoardDto patchContents(@RequestBody BoardInput boardInput){
+        return this.boardService.findByIdToPatch(boardInput);
     }
 
     //게시글 삭제
     @DeleteMapping("/delete")
     @ResponseBody
-    public String DeleteContents(@RequestBody BoardInput boardInput){
-        return this.coinBoardService.findByIdToDelete(boardInput);
+    public String boardDelete(@RequestBody BoardInput boardInput){
+        return this.boardService.boardDelete(boardInput);
+    }
+    //댓글삭제
+    @DeleteMapping("/delete/comment")
+    @ResponseBody
+    public String deleteContents(@RequestBody BoardInput boardInput){
+        return this.boardService.commnetDelete(boardInput);
     }
 
 }

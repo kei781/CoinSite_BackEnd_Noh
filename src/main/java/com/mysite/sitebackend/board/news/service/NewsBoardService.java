@@ -1,14 +1,10 @@
 package com.mysite.sitebackend.board.news.service;
 
-import com.mysite.sitebackend.board.Inform.dao.InformBoardRepository;
-import com.mysite.sitebackend.board.Inform.domain.InformBoard;
-import com.mysite.sitebackend.board.Inform.dto.InformBoardDto;
-import com.mysite.sitebackend.board.Inform.dto.InfromBoardListDto;
-import com.mysite.sitebackend.board.coin.domain.CoinBoard;
-import com.mysite.sitebackend.board.coin.dto.CoinBoardListDto;
 import com.mysite.sitebackend.board.dto.BoardInput;
+import com.mysite.sitebackend.board.news.dao.NewsBoardCommentRepository;
 import com.mysite.sitebackend.board.news.dao.NewsBoardRepository;
 import com.mysite.sitebackend.board.news.domain.NewsBoard;
+import com.mysite.sitebackend.board.news.domain.NewsBoardComment;
 import com.mysite.sitebackend.board.news.dto.NewsBoardDto;
 import com.mysite.sitebackend.board.news.dto.NewsBoardListDto;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +21,12 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class NewsBoardService {
     private final NewsBoardRepository boardRepository;
+    private final NewsBoardCommentRepository commentRepository;
     private final ModelMapper modelMapper;
+    LocalDate now = LocalDate.now();
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+    String formatedNow = now.format(formatter);
+
     //게시글 작성하기
     public void save(BoardInput boardInput){
         LocalDate now = LocalDate.now();
@@ -40,6 +41,24 @@ public class NewsBoardService {
         c1.setDate(formatedNow);
         this.boardRepository.save(c1);
     }
+
+    public boolean commentPost(BoardInput boardInput){
+        Optional<NewsBoard> optionalNewsBoard = this.boardRepository.findById(boardInput.getId());
+        if(optionalNewsBoard.isPresent()){
+            NewsBoard q = optionalNewsBoard.get();
+            NewsBoardComment a = new NewsBoardComment();
+            a.setContents(boardInput.getContents());
+            a.setDate(formatedNow);
+            a.setAuthor(boardInput.getAuthor());
+            a.setBoardIndex(boardInput.getId());
+            this.commentRepository.save(a);
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
     //게시글 리스트 불러오기
     public List<NewsBoardListDto> findAll(){
         List<NewsBoard> newsBoards = boardRepository.findAll();
@@ -55,6 +74,15 @@ public class NewsBoardService {
 
         return boardDto;
     }
+    //게시글 1개의 댓글 전체목록 불러오기
+    public List<NewsBoardComment> findByIdToComment(BoardInput boardInput) {
+        Optional<NewsBoard> optionalCoinBoard = this.boardRepository.findById(boardInput.getId());
+        optionalCoinBoard.isPresent();
+        List<NewsBoardComment> newsBoardComments = commentRepository.findAllByBoardIndex(boardInput.getId());
+
+        return newsBoardComments;
+    }
+
     //게시글 수정
     public NewsBoardDto findByIdToPatch(BoardInput boardInput){
         LocalDate now = LocalDate.now();
@@ -75,9 +103,15 @@ public class NewsBoardService {
         return boardDto;
     }
     //게시글 삭제
-    public String findByIdToDelete(BoardInput boardInput){
+    public String boardDelete(BoardInput boardInput){
         this.boardRepository.deleteById(boardInput.getId());
+        this.commentRepository.deleteAllByBoardIndex(boardInput.getId());
         return boardInput.getId() + "번 게시판의 삭제가 완료되었습니다.";
+    }
+    // 댓글 삭제
+    public String commnetDelete(BoardInput boardInput){
+        this.commentRepository.deleteById(boardInput.getId());
+        return boardInput.getId() + "번 댓글의 삭제가 완료되었습니다.";
     }
 
 }

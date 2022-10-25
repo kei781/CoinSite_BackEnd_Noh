@@ -1,7 +1,7 @@
 package com.mysite.sitebackend.account.controller;
 
 
-import com.mysite.sitebackend.account.dto.UserInput;
+import com.mysite.sitebackend.account.dto.AccountInput;
 import com.mysite.sitebackend.account.service.AccountService;
 
 import lombok.RequiredArgsConstructor;
@@ -20,13 +20,13 @@ public class AccountController {
 
     //회원가입
     @PostMapping("/signUp")
-    public boolean signUp(@RequestBody UserInput userInput){
-                return this.accountService.signUp(userInput);
+    public boolean signUp(@RequestBody AccountInput accountInput){
+                return this.accountService.signUp(accountInput);
     }
     //로그인
     @PostMapping("/signIn")
-    public boolean signIn(@RequestBody UserInput userInput){
-        return this.accountService.signIn(userInput);
+    public boolean signIn(@RequestBody AccountInput accountInput){
+        return this.accountService.signIn(accountInput);
     }
     //아이디 찾기
     @GetMapping("/findId")
@@ -40,7 +40,7 @@ public class AccountController {
     }
 
     @GetMapping("/accountGet")
-    public Optional accountGet(@RequestBody UserInput userInput){
-        return this.accountService.accountGet(userInput);
+    public Optional accountGet(@RequestBody AccountInput accountInput){
+        return this.accountService.accountGet(accountInput);
     }
 }

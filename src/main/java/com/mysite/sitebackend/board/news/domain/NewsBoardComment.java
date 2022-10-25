@@ -1,15 +1,16 @@
-package com.mysite.sitebackend.board.coin.domain;
+package com.mysite.sitebackend.board.news.domain;
 
 
+import com.mysite.sitebackend.board.coin.domain.CoinBoard;
+import com.mysite.sitebackend.board.news.service.NewsBoardService;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
-import com.mysite.sitebackend.board.coin.domain.CoinBoard;
+
 import javax.persistence.*;
-import javax.persistence.ManyToOne;
 
 @Data
 @Entity
-public class CoinBoardComment {
+public class NewsBoardComment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
