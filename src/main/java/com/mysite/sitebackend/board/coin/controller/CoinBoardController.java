@@ -1,15 +1,14 @@
 package com.mysite.sitebackend.board.coin.controller;
 
-
-import com.mysite.sitebackend.board.coin.domain.CoinBoardComment;
-import com.mysite.sitebackend.board.coin.dto.CoinBoardDto;
-import com.mysite.sitebackend.board.coin.dto.CoinBoardListDto;
 import com.mysite.sitebackend.board.coin.service.CoinBoardService;
+import com.mysite.sitebackend.board.dto.BoardDto;
 import com.mysite.sitebackend.board.dto.BoardInput;
+import com.mysite.sitebackend.board.dto.BoardListDto;
+import com.mysite.sitebackend.board.dto.CommentListDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.SQLException;
 import java.util.List;
 
 @RequestMapping("/board/coin")
@@ -30,7 +29,7 @@ public class CoinBoardController {
     public boolean boardPost(@RequestBody BoardInput boardInput) {
         try {
             return this.boardService.boardPost(boardInput);
-        } catch (Exception e) {
+        } catch (SQLException e) {
             return false;
         }
     }
@@ -42,17 +41,17 @@ public class CoinBoardController {
 
     //게시글 전체 불러오기
     @GetMapping("/get")
-    public List<CoinBoardListDto> get(){
+    public List<BoardListDto> get(){
         return this.boardService.findAll();
     }
     //게시글 1개 불러오기
     @GetMapping("/getid")
-    public CoinBoardDto boardGet(@RequestBody BoardInput boardInput){
+    public BoardDto boardGet(@RequestBody BoardInput boardInput){
         return this.boardService.findByIdToBoard(boardInput);
     }
     //해당 id값의 댓글들 불러오기
     @GetMapping("/getid/comment")
-    public List<CoinBoardComment> commentGet(@RequestBody BoardInput boardInput){
+    public List<CommentListDto> commentGet(@RequestBody BoardInput boardInput){
         return this.boardService.findByIdToComment(boardInput);
     }
 
@@ -77,5 +76,4 @@ public class CoinBoardController {
     public boolean commnetDelete(@RequestBody BoardInput boardInput){
         return this.boardService.commnetDelete(boardInput);
     }
-
 }

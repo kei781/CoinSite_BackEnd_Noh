@@ -28,16 +28,16 @@ public class AccountController {
     public boolean signIn(@RequestBody AccountInput accountInput){
         return this.accountService.signIn(accountInput);
     }
-    //아이디 찾기
-    @GetMapping("/findId")
-    public String findId(){
-        return "";
-    }
-    //패스워드 찾기
-    @PostMapping("/forgotPassword")
-    public String forgotPassword(){
-        return "";
-    }
+//    //아이디 찾기
+//    @GetMapping("/findId")
+//    public String findId(){
+//        return "";
+//    }
+//    //패스워드 찾기
+//    @PostMapping("/forgotPassword")
+//    public String forgotPassword(){
+//        return "";
+//    }
 
     @GetMapping("/accountGet")
     public Optional accountGet(@RequestBody AccountInput accountInput){

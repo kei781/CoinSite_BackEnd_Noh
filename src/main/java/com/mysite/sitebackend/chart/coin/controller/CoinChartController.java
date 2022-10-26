@@ -1,8 +1,8 @@
 package com.mysite.sitebackend.chart.coin.controller;
 
 
-import com.mysite.sitebackend.chart.coin.domain.CoinChart;
 import com.mysite.sitebackend.chart.coin.service.CoinChartService;
+import com.mysite.sitebackend.chart.coin.domain.CoinChart;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

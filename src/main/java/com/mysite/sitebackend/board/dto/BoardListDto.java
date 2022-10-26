@@ -1,6 +1,6 @@
-package com.mysite.sitebackend.board.stockMarket.dto;
+package com.mysite.sitebackend.board.dto;
 
-public class StockMarketBoardDto {
+public class BoardListDto {
     private Integer id;
     private String subject;
     private String author; // 작성자명

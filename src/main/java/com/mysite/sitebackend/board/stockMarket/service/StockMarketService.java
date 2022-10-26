@@ -1,12 +1,15 @@
 package com.mysite.sitebackend.board.stockMarket.service;
 
+
+import com.mysite.sitebackend.board.dto.BoardDto;
 import com.mysite.sitebackend.board.dto.BoardInput;
+import com.mysite.sitebackend.board.dto.BoardListDto;
+import com.mysite.sitebackend.board.dto.CommentListDto;
 import com.mysite.sitebackend.board.stockMarket.dao.StockMarketBoardCommentRepository;
 import com.mysite.sitebackend.board.stockMarket.dao.StockMarketBoardRepository;
 import com.mysite.sitebackend.board.stockMarket.domain.StockMarketBoard;
 import com.mysite.sitebackend.board.stockMarket.domain.StockMarketBoardComment;
-import com.mysite.sitebackend.board.stockMarket.dto.StockMarketBoardDto;
-import com.mysite.sitebackend.board.stockMarket.dto.StockMarketBoardListDto;
+
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -57,29 +60,29 @@ public class StockMarketService {
     }
 
     //게시글 리스트 불러오기
-    public List<StockMarketBoardListDto> findAll(){
-        List<StockMarketBoard> stockMarketBoards = boardRepository.findAll();
-        List<StockMarketBoardListDto> stockMarketBoardListDtos =
-                stockMarketBoards.stream()
-                .map(stockMarketBoard -> modelMapper.map(stockMarketBoard, StockMarketBoardListDto.class))
+    public List<BoardListDto> findAll(){
+        List<StockMarketBoard> stBoard = boardRepository.findAll();
+        List<BoardListDto> boardListDto = stBoard.stream()
+                .map(stBoard1 -> modelMapper.map(stBoard1, BoardListDto.class))
                 .collect(Collectors.toList());
-        return stockMarketBoardListDtos;
+        return boardListDto;
     }
-
-    //게시글 불러오기
-    public StockMarketBoardDto findById(BoardInput boardInput){
+    //게시글 1개불러오기
+    public BoardDto findByIdToBoard(BoardInput boardInput){
         StockMarketBoard board = boardRepository.findById(boardInput.getId()).get();
-        StockMarketBoardDto boardDto = modelMapper.map(board, StockMarketBoardDto.class);
+        board.setViews(board.getViews() +1);
+        BoardDto boardDto = modelMapper.map(board, BoardDto.class);
         return boardDto;
     }
-
     //게시글 1개의 댓글 전체목록 불러오기
-    public List<StockMarketBoardComment> findByIdToComment(BoardInput boardInput) {
-        Optional<StockMarketBoard> optionalCoinBoard = this.boardRepository.findById(boardInput.getId());
-        optionalCoinBoard.isPresent();
-        List<StockMarketBoardComment> stockMarketBoardComments = commentRepository.findAllByBoardIndex(boardInput.getId());
-
-        return stockMarketBoardComments;
+    public List<CommentListDto> findByIdToComment(BoardInput boardInput){
+        Optional<StockMarketBoard> opBoard = this.boardRepository.findById(boardInput.getId());
+        opBoard.isPresent() ;
+        List<StockMarketBoardComment> stComment = commentRepository.findAllByBoardIndex(boardInput.getId());
+        List<CommentListDto> boardListDto = stComment.stream()
+                .map(stComment1 -> modelMapper.map(stComment1, CommentListDto.class))
+                .collect(Collectors.toList());
+        return boardListDto;
     }
 
     //게시글 수정

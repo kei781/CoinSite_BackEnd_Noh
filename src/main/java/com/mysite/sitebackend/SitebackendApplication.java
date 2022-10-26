@@ -1,6 +1,6 @@
 package com.mysite.sitebackend;
 
-import com.mysite.sitebackend.chart.stock.api.configurable.RestTemplateClient;
+import com.mysite.sitebackend.configurable.RestTemplateClient;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Import;

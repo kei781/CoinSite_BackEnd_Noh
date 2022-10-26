@@ -15,6 +15,7 @@ public class AccountService {
     private final AccountRepository accountRepository;
     //회원가입
     public boolean signUp(AccountInput accountInput){
+        //
         if(accountInput.getPassword().equals(accountInput.getConfirmPassword())){
             Account a1 = new Account();
             a1.setUserId(accountInput.getUserId());

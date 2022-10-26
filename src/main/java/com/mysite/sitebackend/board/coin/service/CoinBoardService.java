@@ -5,13 +5,15 @@ import com.mysite.sitebackend.board.coin.dao.CoinBoardCommentRepository;
 import com.mysite.sitebackend.board.coin.dao.CoinBoardRepository;
 import com.mysite.sitebackend.board.coin.domain.CoinBoard;
 import com.mysite.sitebackend.board.coin.domain.CoinBoardComment;
-import com.mysite.sitebackend.board.coin.dto.CoinBoardDto;
-import com.mysite.sitebackend.board.coin.dto.CoinBoardListDto;
+import com.mysite.sitebackend.board.dto.BoardDto;
 import com.mysite.sitebackend.board.dto.BoardInput;
+import com.mysite.sitebackend.board.dto.BoardListDto;
+import com.mysite.sitebackend.board.dto.CommentListDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.modelmapper.ModelMapper;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -29,7 +31,7 @@ public class CoinBoardService {
     String formatedNow = now.format(formatter);
 
     //게시글 작성하기
-    public boolean boardPost(BoardInput boardInput) throws Exception{
+    public boolean boardPost(BoardInput boardInput) throws SQLException {
             CoinBoard c1 = new CoinBoard();
             c1.setSubject(boardInput.getSubject());
             c1.setContents(boardInput.getContents());
@@ -57,26 +59,29 @@ public class CoinBoardService {
     }
 
     //게시글 전체목록 불러오기
-    public List<CoinBoardListDto> findAll(){
+    public List<BoardListDto> findAll(){
         List<CoinBoard> coinBoard = boardRepository.findAll();
-        List<CoinBoardListDto> coinBoardListDto = coinBoard.stream()
-                        .map(coinBoard1 -> modelMapper.map(coinBoard1, CoinBoardListDto.class))
+        List<BoardListDto> boardListDto = coinBoard.stream()
+                        .map(coinBoard1 -> modelMapper.map(coinBoard1, BoardListDto.class))
                         .collect(Collectors.toList());
-        return coinBoardListDto;
+        return boardListDto;
     }
     //게시글 1개불러오기
-    public CoinBoardDto findByIdToBoard(BoardInput boardInput){
+    public BoardDto findByIdToBoard(BoardInput boardInput){
         CoinBoard board = boardRepository.findById(boardInput.getId()).get();
         board.setViews(board.getViews().intValue() +1);
-        CoinBoardDto CoinboardDto = modelMapper.map(board, CoinBoardDto.class);
-        return CoinboardDto;
+        BoardDto boardDto = modelMapper.map(board, BoardDto.class);
+        return boardDto;
     }
     //게시글 1개의 댓글 전체목록 불러오기
-    public List<CoinBoardComment> findByIdToComment(BoardInput boardInput){
-        Optional<CoinBoard> optionalCoinBoard = this.boardRepository.findById(boardInput.getId());
-        optionalCoinBoard.isPresent() ;
-            List<CoinBoardComment> coinBoardComments = commentRepository.findAllByBoardIndex(boardInput.getId());
-        return coinBoardComments;
+    public List<CommentListDto> findByIdToComment(BoardInput boardInput){
+        Optional<CoinBoard> opboard = this.boardRepository.findById(boardInput.getId());
+        opboard.isPresent() ;
+            List<CoinBoardComment> coinComment = commentRepository.findAllByBoardIndex(boardInput.getId());
+            List<CommentListDto> boardListDto = coinComment.stream()
+                    .map(coinComments1 -> modelMapper.map(coinComments1, CommentListDto.class))
+                    .collect(Collectors.toList());
+        return boardListDto;
     }
 
     //게시글 수정
@@ -151,5 +156,4 @@ public class CoinBoardService {
             return false;
         }
     }
-
 }

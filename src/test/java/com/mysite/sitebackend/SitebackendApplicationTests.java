@@ -4,7 +4,6 @@ import com.mysite.sitebackend.board.Inform.dao.InformBoardRepository;
 import com.mysite.sitebackend.board.Inform.domain.InformBoard;
 import com.mysite.sitebackend.board.coin.dao.CoinBoardRepository;
 import com.mysite.sitebackend.board.coin.domain.CoinBoard;
-import com.mysite.sitebackend.board.coin.dto.CoinBoardListDto;
 import com.mysite.sitebackend.board.news.dao.NewsBoardRepository;
 import com.mysite.sitebackend.board.news.domain.NewsBoard;
 import com.mysite.sitebackend.board.stockMarket.dao.StockMarketBoardRepository;

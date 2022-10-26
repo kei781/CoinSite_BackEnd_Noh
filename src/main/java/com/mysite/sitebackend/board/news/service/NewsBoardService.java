@@ -2,17 +2,19 @@ package com.mysite.sitebackend.board.news.service;
 
 import com.mysite.sitebackend.board.Inform.domain.InformBoard;
 import com.mysite.sitebackend.board.Inform.domain.InformBoardComment;
+import com.mysite.sitebackend.board.dto.BoardDto;
 import com.mysite.sitebackend.board.dto.BoardInput;
+import com.mysite.sitebackend.board.dto.BoardListDto;
+import com.mysite.sitebackend.board.dto.CommentListDto;
 import com.mysite.sitebackend.board.news.dao.NewsBoardCommentRepository;
 import com.mysite.sitebackend.board.news.dao.NewsBoardRepository;
 import com.mysite.sitebackend.board.news.domain.NewsBoard;
 import com.mysite.sitebackend.board.news.domain.NewsBoardComment;
-import com.mysite.sitebackend.board.news.dto.NewsBoardDto;
-import com.mysite.sitebackend.board.news.dto.NewsBoardListDto;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -30,7 +32,7 @@ public class NewsBoardService {
     String formatedNow = now.format(formatter);
 
     //게시글 작성하기
-    public boolean boardPost(BoardInput boardInput) throws Exception{
+    public boolean boardPost(BoardInput boardInput) throws SQLException {
             NewsBoard c1 = new NewsBoard();
             c1.setSubject(boardInput.getSubject());
             c1.setContents(boardInput.getContents());
@@ -59,27 +61,29 @@ public class NewsBoardService {
     }
 
     //게시글 리스트 불러오기
-    public List<NewsBoardListDto> findAll(){
-        List<NewsBoard> newsBoards = boardRepository.findAll();
-        List<NewsBoardListDto> newsBoardListDtos = newsBoards.stream()
-                .map(newsBoard -> modelMapper.map(newsBoard, NewsBoardListDto.class))
+    public List<BoardListDto> findAll(){
+        List<NewsBoard> newsBoard = boardRepository.findAll();
+        List<BoardListDto> boardListDto = newsBoard.stream()
+                .map(newsBoard1 -> modelMapper.map(newsBoard1, BoardListDto.class))
                 .collect(Collectors.toList());
-        return newsBoardListDtos;
+        return boardListDto;
     }
-    //게시글 불러오기
-    public NewsBoardDto findById(BoardInput boardInput){
+    //게시글 1개불러오기
+    public BoardDto findByIdToBoard(BoardInput boardInput){
         NewsBoard board = boardRepository.findById(boardInput.getId()).get();
-        NewsBoardDto boardDto = modelMapper.map(board, NewsBoardDto.class);
-
+        board.setViews(board.getViews() +1);
+        BoardDto boardDto = modelMapper.map(board, BoardDto.class);
         return boardDto;
     }
     //게시글 1개의 댓글 전체목록 불러오기
-    public List<NewsBoardComment> findByIdToComment(BoardInput boardInput) {
-        Optional<NewsBoard> optionalCoinBoard = this.boardRepository.findById(boardInput.getId());
-        optionalCoinBoard.isPresent();
-        List<NewsBoardComment> newsBoardComments = commentRepository.findAllByBoardIndex(boardInput.getId());
-
-        return newsBoardComments;
+    public List<CommentListDto> findByIdToComment(BoardInput boardInput){
+        Optional<NewsBoard> opboard = this.boardRepository.findById(boardInput.getId());
+        opboard.isPresent() ;
+        List<NewsBoardComment> newsComment = commentRepository.findAllByBoardIndex(boardInput.getId());
+        List<CommentListDto> boardListDto = newsComment.stream()
+                .map(newsComment1 -> modelMapper.map(newsComment1, CommentListDto.class))
+                .collect(Collectors.toList());
+        return boardListDto;
     }
 
     //게시글 수정

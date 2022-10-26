@@ -4,19 +4,18 @@ import com.mysite.sitebackend.board.Inform.dao.InformBoardCommentRepository;
 import com.mysite.sitebackend.board.Inform.dao.InformBoardRepository;
 import com.mysite.sitebackend.board.Inform.domain.InformBoard;
 import com.mysite.sitebackend.board.Inform.domain.InformBoardComment;
-import com.mysite.sitebackend.board.Inform.dto.InformBoardDto;
-import com.mysite.sitebackend.board.Inform.dto.InfromBoardListDto;
-import com.mysite.sitebackend.board.coin.dao.CoinBoardCommentRepository;
 import com.mysite.sitebackend.board.coin.domain.CoinBoard;
 import com.mysite.sitebackend.board.coin.domain.CoinBoardComment;
-import com.mysite.sitebackend.board.coin.dto.CoinBoardDto;
-import com.mysite.sitebackend.board.coin.dto.CoinBoardListDto;
+import com.mysite.sitebackend.board.dto.BoardDto;
 import com.mysite.sitebackend.board.dto.BoardInput;
+import com.mysite.sitebackend.board.dto.BoardListDto;
+import com.mysite.sitebackend.board.dto.CommentListDto;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -33,7 +32,7 @@ public class InformBoardService {
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
     String formatedNow = now.format(formatter);
     //게시글 작성하기
-    public boolean boardPost(BoardInput boardInput) throws Exception{
+    public boolean boardPost(BoardInput boardInput) throws SQLException{
             InformBoard c1 = new InformBoard();
             c1.setSubject(boardInput.getSubject());
             c1.setContents(boardInput.getContents());
@@ -61,30 +60,29 @@ public class InformBoardService {
         }
     }
 
-    //게시글 리스트 불러오기
-    public List<InfromBoardListDto> findAll(){
-        List<InformBoard> informBoards = boardRepository.findAll();
-        List<InfromBoardListDto> infromBoardListDto =
-                informBoards.stream()
-                .map(informBoard1 -> modelMapper.map(informBoard1, InfromBoardListDto.class))
+    public List<BoardListDto> findAll(){
+        List<InformBoard> informBoard = boardRepository.findAll();
+        List<BoardListDto> boardListDto = informBoard.stream()
+                .map(informBoard1 -> modelMapper.map(informBoard1, BoardListDto.class))
                 .collect(Collectors.toList());
-        return infromBoardListDto;
+        return boardListDto;
     }
-    //게시글 불러오기
-    public InformBoardDto findById(BoardInput boardInput){
+    //게시글 1개불러오기
+    public BoardDto findByIdToBoard(BoardInput boardInput){
         InformBoard board = boardRepository.findById(boardInput.getId()).get();
-        InformBoardDto boardDto = modelMapper.map(board, InformBoardDto.class);
-
+        board.setViews(board.getViews().intValue() +1);
+        BoardDto boardDto = modelMapper.map(board, BoardDto.class);
         return boardDto;
     }
-
     //게시글 1개의 댓글 전체목록 불러오기
-    public List<InformBoardComment> findByIdToComment(BoardInput boardInput){
-        Optional<InformBoard> optionalCoinBoard = this.boardRepository.findById(boardInput.getId());
-        optionalCoinBoard.isPresent() ;
-        List<InformBoardComment> informBoardComments = commentRepository.findAllByBoardIndex(boardInput.getId());
-
-        return informBoardComments;
+    public List<CommentListDto> findByIdToComment(BoardInput boardInput){
+        Optional<InformBoard> opboard = this.boardRepository.findById(boardInput.getId());
+        opboard.isPresent() ;
+        List<InformBoardComment> informComment = commentRepository.findAllByBoardIndex(boardInput.getId());
+        List<CommentListDto> boardListDto = informComment.stream()
+                .map(informComment1 -> modelMapper.map(informComment1, CommentListDto.class))
+                .collect(Collectors.toList());
+        return boardListDto;
     }
 
     //게시글 수정

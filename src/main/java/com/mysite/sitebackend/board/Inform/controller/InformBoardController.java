@@ -1,13 +1,14 @@
 package com.mysite.sitebackend.board.Inform.controller;
 
-import com.mysite.sitebackend.board.Inform.domain.InformBoardComment;
-import com.mysite.sitebackend.board.Inform.dto.InformBoardDto;
-import com.mysite.sitebackend.board.Inform.dto.InfromBoardListDto;
 import com.mysite.sitebackend.board.Inform.service.InformBoardService;
+import com.mysite.sitebackend.board.dto.BoardDto;
 import com.mysite.sitebackend.board.dto.BoardInput;
+import com.mysite.sitebackend.board.dto.BoardListDto;
+import com.mysite.sitebackend.board.dto.CommentListDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.SQLException;
 import java.util.List;
 
 @RequestMapping("/board/inform")
@@ -28,7 +29,7 @@ public class InformBoardController {
     public boolean boardPost(@RequestBody BoardInput boardInput) {
         try {
             return this.boardService.boardPost(boardInput);
-        } catch (Exception e) {
+        } catch (SQLException e) {
             return false;
         }
     }
@@ -38,19 +39,19 @@ public class InformBoardController {
         return this.boardService.commentPost(boardInput);
     }
 
-    //게시글 목록 불러오기
+    //게시글 전체 불러오기
     @GetMapping("/get")
-    public List<InfromBoardListDto> get() {
+    public List<BoardListDto> get(){
         return this.boardService.findAll();
     }
-    //게시글 불러오기
+    //게시글 1개 불러오기
     @GetMapping("/getid")
-    public InformBoardDto boardGet(@RequestBody BoardInput boardInput) {
-        return this.boardService.findById(boardInput);
+    public BoardDto boardGet(@RequestBody BoardInput boardInput){
+        return this.boardService.findByIdToBoard(boardInput);
     }
     //해당 id값의 댓글들 불러오기
     @GetMapping("/getid/comment")
-    public List<InformBoardComment> commentGet(@RequestBody BoardInput boardInput) {
+    public List<CommentListDto> commentGet(@RequestBody BoardInput boardInput){
         return this.boardService.findByIdToComment(boardInput);
     }
 

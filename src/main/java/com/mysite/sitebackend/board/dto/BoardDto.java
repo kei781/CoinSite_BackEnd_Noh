@@ -1,9 +1,6 @@
-package com.mysite.sitebackend.board.coin.dto;
+package com.mysite.sitebackend.board.dto;
 
-import lombok.Data;
-
-@Data
-public class CoinBoardDto {
+public class BoardDto {
     private Integer id;
     private String subject;
     private String contents;

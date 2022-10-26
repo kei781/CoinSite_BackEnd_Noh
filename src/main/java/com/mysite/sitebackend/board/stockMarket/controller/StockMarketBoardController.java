@@ -1,11 +1,12 @@
 package com.mysite.sitebackend.board.stockMarket.controller;
 
 
+import com.mysite.sitebackend.board.dto.BoardDto;
 import com.mysite.sitebackend.board.dto.BoardInput;
 
-import com.mysite.sitebackend.board.stockMarket.domain.StockMarketBoardComment;
-import com.mysite.sitebackend.board.stockMarket.dto.StockMarketBoardDto;
-import com.mysite.sitebackend.board.stockMarket.dto.StockMarketBoardListDto;
+import com.mysite.sitebackend.board.dto.BoardListDto;
+import com.mysite.sitebackend.board.dto.CommentListDto;
+
 import com.mysite.sitebackend.board.stockMarket.service.StockMarketService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -42,19 +43,19 @@ public class StockMarketBoardController {
         return this.boardService.commentPost(boardInput);
     }
 
-    //게시글 리스트 불러오기
+    //게시글 전체 불러오기
     @GetMapping("/get")
-    private List<StockMarketBoardListDto> get(){
+    public List<BoardListDto> get(){
         return this.boardService.findAll();
     }
-    //게시글 불러오기
+    //게시글 1개 불러오기
     @GetMapping("/getid")
-    public StockMarketBoardDto boardGet(@RequestBody BoardInput boardInput){
-        return this.boardService.findById(boardInput);
+    public BoardDto boardGet(@RequestBody BoardInput boardInput){
+        return this.boardService.findByIdToBoard(boardInput);
     }
     //해당 id값의 댓글들 불러오기
     @GetMapping("/getid/comment")
-    public List<StockMarketBoardComment> commentGet(@RequestBody BoardInput boardInput){
+    public List<CommentListDto> commentGet(@RequestBody BoardInput boardInput){
         return this.boardService.findByIdToComment(boardInput);
     }
 

@@ -1,19 +1,16 @@
 package com.mysite.sitebackend.board.news.controller;
 
-import com.mysite.sitebackend.board.coin.domain.CoinBoard;
-import com.mysite.sitebackend.board.coin.domain.CoinBoardComment;
-import com.mysite.sitebackend.board.coin.dto.CoinBoardDto;
+
+import com.mysite.sitebackend.board.dto.BoardDto;
 import com.mysite.sitebackend.board.dto.BoardInput;
-import com.mysite.sitebackend.board.news.dao.NewsBoardRepository;
-import com.mysite.sitebackend.board.news.domain.NewsBoard;
-import com.mysite.sitebackend.board.news.domain.NewsBoardComment;
-import com.mysite.sitebackend.board.news.dto.NewsBoardDto;
-import com.mysite.sitebackend.board.news.dto.NewsBoardListDto;
+import com.mysite.sitebackend.board.dto.BoardListDto;
+import com.mysite.sitebackend.board.dto.CommentListDto;
 import com.mysite.sitebackend.board.news.service.NewsBoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.SQLException;
 import java.util.List;
 
 @RequestMapping("/board/News")
@@ -33,7 +30,7 @@ public class NewsBoardController {
     public boolean boardPost(@RequestBody BoardInput boardInput) {
         try {
             return this.boardService.boardPost(boardInput);
-        } catch (Exception e) {
+        } catch (SQLException e) {
             return false;
         }
     }
@@ -43,21 +40,22 @@ public class NewsBoardController {
         return this.boardService.commentPost(boardInput);
     }
 
-    //게시글 목록 불러오기
+    //게시글 전체 불러오기
     @GetMapping("/get")
-    private List<NewsBoardListDto> get(){
+    public List<BoardListDto> get(){
         return this.boardService.findAll();
     }
-    //게시글 불러오기
+    //게시글 1개 불러오기
     @GetMapping("/getid")
-    public NewsBoardDto boardGet(@RequestBody BoardInput boardInput){
-        return this.boardService.findById(boardInput);
+    public BoardDto boardGet(@RequestBody BoardInput boardInput){
+        return this.boardService.findByIdToBoard(boardInput);
     }
     //해당 id값의 댓글들 불러오기
     @GetMapping("/getid/comment")
-    public List<NewsBoardComment> commentGet(@RequestBody BoardInput boardInput){
+    public List<CommentListDto> commentGet(@RequestBody BoardInput boardInput){
         return this.boardService.findByIdToComment(boardInput);
     }
+
     //게시글 수정
     @PatchMapping("/patch")
     public boolean boardPatch(@RequestBody BoardInput boardInput){

@@ -1,18 +1,10 @@
 package com.mysite.sitebackend.chart.market.service;
 
-import com.mysite.sitebackend.board.coin.domain.CoinBoard;
-import com.mysite.sitebackend.chart.market.api.marketApiClient.MarketChartApiClient;
 import com.mysite.sitebackend.chart.market.dao.MarketChartRepository;
 import com.mysite.sitebackend.chart.market.domain.MarketChart;
-import com.mysite.sitebackend.chart.market.dto.MarketChartResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Service

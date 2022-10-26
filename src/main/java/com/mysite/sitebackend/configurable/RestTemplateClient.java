@@ -1,4 +1,4 @@
-package com.mysite.sitebackend.chart.stock.api.configurable;
+package com.mysite.sitebackend.configurable;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Configurable;
