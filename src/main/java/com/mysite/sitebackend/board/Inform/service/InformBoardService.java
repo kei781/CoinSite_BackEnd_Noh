@@ -33,19 +33,15 @@ public class InformBoardService {
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
     String formatedNow = now.format(formatter);
     //게시글 작성하기
-    public void save(BoardInput boardInput){
-        LocalDate now = LocalDate.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-        String formatedNow = now.format(formatter);
-
-        InformBoard c1 = new InformBoard();
-        c1.setSubject(boardInput.getSubject());
-        c1.setContents(boardInput.getContents());
-        c1.setAuthor(boardInput.getAuthor());
-        c1.setViews(0);
-        c1.setDate(formatedNow);
-        this.boardRepository.save(c1);
-        System.out.println("성공적으로 저장되었습니다.");
+    public boolean boardPost(BoardInput boardInput) throws Exception{
+            InformBoard c1 = new InformBoard();
+            c1.setSubject(boardInput.getSubject());
+            c1.setContents(boardInput.getContents());
+            c1.setAuthor(boardInput.getAuthor());
+            c1.setViews(0);
+            c1.setDate(formatedNow);
+            this.boardRepository.save(c1);
+            return true;
     }
     //댓글 작성하기
     public boolean commentPost(BoardInput boardInput){
@@ -92,33 +88,77 @@ public class InformBoardService {
     }
 
     //게시글 수정
-    public InformBoardDto findByIdToPatch(BoardInput boardInput){
-        LocalDate now = LocalDate.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-        String formatedNow = now.format(formatter);
-
+    public boolean boardPatch(BoardInput boardInput){
         Optional<InformBoard> opBoard = boardRepository.findById(boardInput.getId());
         if(opBoard.isPresent()){
-            InformBoard board = opBoard.get();
-            board.setSubject(boardInput.getSubject());
-            board.setContents(boardInput.getContents());
-            board.setAuthor(boardInput.getAuthor());
-            board.setDate(formatedNow);
-            boardRepository.save(board);
+            if(boardInput.getAuthor() == opBoard.get().getAuthor()){
+                InformBoard board = opBoard.get();
+                board.setSubject(boardInput.getSubject());
+                board.setContents(boardInput.getContents());
+                board.setAuthor(boardInput.getAuthor());
+                board.setDate(formatedNow);
+                boardRepository.save(board);
+                return true;
+            }
+            else {
+                return false;
+            }
         }
-        InformBoard board = boardRepository.findById(boardInput.getId()).get();
-        InformBoardDto boardDto = modelMapper.map(board, InformBoardDto.class);
-        return boardDto;
+        else{
+            return false;
+        }
     }
-    public String boardDelete(BoardInput boardInput){
-        this.boardRepository.deleteById(boardInput.getId());
-        this.commentRepository.deleteAllByBoardIndex(boardInput.getId());
-        return boardInput.getId() + "번 게시판의 삭제가 완료되었습니다.";
+    //댓글 수정
+    public boolean commentPatch(BoardInput boardInput){
+        Optional<InformBoardComment> opComment = commentRepository.findById(boardInput.getId());
+        if(opComment.isPresent()){
+            if(boardInput.getAuthor() == opComment.get().getAuthor()){
+                InformBoardComment comment = opComment.get();
+                comment.setContents(boardInput.getContents());
+                comment.setAuthor(boardInput.getAuthor());
+                comment.setDate(formatedNow);
+                comment.setBoardIndex(comment.getBoardIndex());
+                commentRepository.save(comment);
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+        return false;
+    }
+    //게시글 삭제
+    public boolean boardDelete(BoardInput boardInput){
+        Optional<InformBoard> opBoard = boardRepository.findById(boardInput.getId());
+        if(opBoard.isPresent()){
+            if(boardInput.getAuthor() == opBoard.get().getAuthor()){
+                this.boardRepository.deleteById(boardInput.getId());
+                this.commentRepository.deleteAllByBoardIndex(boardInput.getId());
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        else {
+            return false;
+        }
     }
     // 댓글삭제
-    public String commnetDelete(BoardInput boardInput){
-        this.commentRepository.deleteById(boardInput.getId());
-        return boardInput.getId() + "번 댓글의 삭제가 완료되었습니다.";
+    public boolean commnetDelete(BoardInput boardInput){
+        Optional<InformBoardComment> opComment= commentRepository.findById(boardInput.getId());
+        if(opComment.isPresent()){
+            if(boardInput.getAuthor() == opComment.get().getAuthor()){
+                this.commentRepository.deleteById(boardInput.getId());
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+        else {
+            return false;
+        }
     }
 
 }

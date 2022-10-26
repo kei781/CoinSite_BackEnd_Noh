@@ -1,5 +1,7 @@
 package com.mysite.sitebackend.board.news.service;
 
+import com.mysite.sitebackend.board.Inform.domain.InformBoard;
+import com.mysite.sitebackend.board.Inform.domain.InformBoardComment;
 import com.mysite.sitebackend.board.dto.BoardInput;
 import com.mysite.sitebackend.board.news.dao.NewsBoardCommentRepository;
 import com.mysite.sitebackend.board.news.dao.NewsBoardRepository;
@@ -28,18 +30,15 @@ public class NewsBoardService {
     String formatedNow = now.format(formatter);
 
     //게시글 작성하기
-    public void save(BoardInput boardInput){
-        LocalDate now = LocalDate.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-        String formatedNow = now.format(formatter);
-
-        NewsBoard c1 = new NewsBoard();
-        c1.setSubject(boardInput.getSubject());
-        c1.setContents(boardInput.getContents());
-        c1.setAuthor(boardInput.getAuthor());
-        c1.setViews(0);
-        c1.setDate(formatedNow);
-        this.boardRepository.save(c1);
+    public boolean boardPost(BoardInput boardInput) throws Exception{
+            NewsBoard c1 = new NewsBoard();
+            c1.setSubject(boardInput.getSubject());
+            c1.setContents(boardInput.getContents());
+            c1.setAuthor(boardInput.getAuthor());
+            c1.setViews(0);
+            c1.setDate(formatedNow);
+            this.boardRepository.save(c1);
+            return true;
     }
 
     public boolean commentPost(BoardInput boardInput){
@@ -84,34 +83,77 @@ public class NewsBoardService {
     }
 
     //게시글 수정
-    public NewsBoardDto findByIdToPatch(BoardInput boardInput){
-        LocalDate now = LocalDate.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-        String formatedNow = now.format(formatter);
-
+    public boolean boardPatch(BoardInput boardInput){
         Optional<NewsBoard> opBoard = boardRepository.findById(boardInput.getId());
         if(opBoard.isPresent()){
-            NewsBoard board = opBoard.get();
-            board.setSubject(boardInput.getSubject());
-            board.setContents(boardInput.getContents());
-            board.setAuthor(boardInput.getAuthor());
-            board.setDate(formatedNow);
-            boardRepository.save(board);
+            if(boardInput.getAuthor() == opBoard.get().getAuthor()){
+                NewsBoard board = opBoard.get();
+                board.setSubject(boardInput.getSubject());
+                board.setContents(boardInput.getContents());
+                board.setAuthor(boardInput.getAuthor());
+                board.setDate(formatedNow);
+                boardRepository.save(board);
+                return true;
+            }
+            else {
+                return false;
+            }
         }
-        NewsBoard board = boardRepository.findById(boardInput.getId()).get();
-        NewsBoardDto boardDto = modelMapper.map(board, NewsBoardDto.class);
-        return boardDto;
+        else{
+            return false;
+        }
+    }
+    //댓글 수정
+    public boolean commentPatch(BoardInput boardInput){
+        Optional<NewsBoardComment> opComment = commentRepository.findById(boardInput.getId());
+        if(opComment.isPresent()){
+            if(boardInput.getAuthor() == opComment.get().getAuthor()){
+                NewsBoardComment comment = opComment.get();
+                comment.setContents(boardInput.getContents());
+                comment.setAuthor(boardInput.getAuthor());
+                comment.setDate(formatedNow);
+                comment.setBoardIndex(comment.getBoardIndex());
+                commentRepository.save(comment);
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+        return false;
     }
     //게시글 삭제
-    public String boardDelete(BoardInput boardInput){
-        this.boardRepository.deleteById(boardInput.getId());
-        this.commentRepository.deleteAllByBoardIndex(boardInput.getId());
-        return boardInput.getId() + "번 게시판의 삭제가 완료되었습니다.";
+    public boolean boardDelete(BoardInput boardInput){
+        Optional<NewsBoard> opBoard = boardRepository.findById(boardInput.getId());
+        if(opBoard.isPresent()){
+            if(boardInput.getAuthor() == opBoard.get().getAuthor()){
+                this.boardRepository.deleteById(boardInput.getId());
+                this.commentRepository.deleteAllByBoardIndex(boardInput.getId());
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        else {
+            return false;
+        }
     }
-    // 댓글 삭제
-    public String commnetDelete(BoardInput boardInput){
-        this.commentRepository.deleteById(boardInput.getId());
-        return boardInput.getId() + "번 댓글의 삭제가 완료되었습니다.";
+    // 댓글삭제
+    public boolean commnetDelete(BoardInput boardInput){
+        Optional<NewsBoardComment> opComment= commentRepository.findById(boardInput.getId());
+        if(opComment.isPresent()){
+            if(boardInput.getAuthor() == opComment.get().getAuthor()){
+                this.commentRepository.deleteById(boardInput.getId());
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+        else {
+            return false;
+        }
     }
 
 }

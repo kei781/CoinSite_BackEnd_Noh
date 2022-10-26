@@ -1,7 +1,6 @@
 package com.mysite.sitebackend.board.coin.controller;
 
 
-import com.mysite.sitebackend.board.coin.domain.CoinBoard;
 import com.mysite.sitebackend.board.coin.domain.CoinBoardComment;
 import com.mysite.sitebackend.board.coin.dto.CoinBoardDto;
 import com.mysite.sitebackend.board.coin.dto.CoinBoardListDto;
@@ -15,13 +14,12 @@ import java.util.List;
 
 @RequestMapping("/board/coin")
 @RequiredArgsConstructor
-@Controller
+@RestController
 @CrossOrigin("*")
 public class CoinBoardController {
     private final CoinBoardService boardService;
 
     @RequestMapping("/")
-    @ResponseBody
     public String index(){
         System.out.println("Coin");
         return "Coin";
@@ -29,57 +27,54 @@ public class CoinBoardController {
 
     //게시글 작성하기
     @PostMapping("/post")
-    @ResponseBody
-    public String post(@RequestBody BoardInput boardInput) {
-        this.boardService.boardPost(boardInput);
-        return "성공적으로 저장되었습니다.";
+    public boolean boardPost(@RequestBody BoardInput boardInput) {
+        try {
+            return this.boardService.boardPost(boardInput);
+        } catch (Exception e) {
+            return false;
+        }
     }
-
     //댓글 작성하기
     @PostMapping("/post/comment")
-    @ResponseBody
     public boolean commentPost(@RequestBody BoardInput boardInput) {
         return this.boardService.commentPost(boardInput);
     }
 
     //게시글 전체 불러오기
     @GetMapping("/get")
-    @ResponseBody
     public List<CoinBoardListDto> get(){
         return this.boardService.findAll();
     }
-
     //게시글 1개 불러오기
     @GetMapping("/getid")
-    @ResponseBody
-    public CoinBoardDto getContnets(@RequestBody BoardInput boardInput){
+    public CoinBoardDto boardGet(@RequestBody BoardInput boardInput){
         return this.boardService.findByIdToBoard(boardInput);
     }
-
     //해당 id값의 댓글들 불러오기
     @GetMapping("/getid/comment")
-    @ResponseBody
-    public List<CoinBoardComment> getComment(@RequestBody BoardInput boardInput){
+    public List<CoinBoardComment> commentGet(@RequestBody BoardInput boardInput){
         return this.boardService.findByIdToComment(boardInput);
     }
 
     //게시글 수정
     @PatchMapping("/patch")
-    @ResponseBody
-    public CoinBoardDto patchContents(@RequestBody BoardInput boardInput){
-        return this.boardService.findByIdToPatch(boardInput);
+    public boolean boardPatch(@RequestBody BoardInput boardInput){
+        return this.boardService.boardPatch(boardInput);
+    }
+    //댓글 수정
+    @PatchMapping("/patch/comment")
+    public boolean commentPatch(@RequestBody BoardInput boardInput){
+        return this.boardService.commentPatch(boardInput);
     }
 
     //게시글 삭제
     @DeleteMapping("/delete")
-    @ResponseBody
-    public String boardDelete(@RequestBody BoardInput boardInput){
+    public boolean boardDelete(@RequestBody BoardInput boardInput){
         return this.boardService.boardDelete(boardInput);
     }
     //댓글삭제
     @DeleteMapping("/delete/comment")
-    @ResponseBody
-    public String deleteContents(@RequestBody BoardInput boardInput){
+    public boolean commnetDelete(@RequestBody BoardInput boardInput){
         return this.boardService.commnetDelete(boardInput);
     }
 

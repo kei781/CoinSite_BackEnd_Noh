@@ -6,20 +6,18 @@ import com.mysite.sitebackend.board.Inform.dto.InfromBoardListDto;
 import com.mysite.sitebackend.board.Inform.service.InformBoardService;
 import com.mysite.sitebackend.board.dto.BoardInput;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RequestMapping("/board/inform")
-@Controller
+@RestController
 @RequiredArgsConstructor
 @CrossOrigin("*")
 public class InformBoardController {
     private final InformBoardService boardService;
 
     @RequestMapping("/")
-    @ResponseBody
     public String Inform() {
         System.out.println("Infrom");
         return "Inform";
@@ -27,58 +25,54 @@ public class InformBoardController {
 
     //게시글 작성하기
     @PostMapping("/post")
-    @ResponseBody
-    public String post(@RequestBody BoardInput boardInput) {
-        this.boardService.save(boardInput);
-        return "성공적으로 저장되었습니다.";
+    public boolean boardPost(@RequestBody BoardInput boardInput) {
+        try {
+            return this.boardService.boardPost(boardInput);
+        } catch (Exception e) {
+            return false;
+        }
     }
-
     //댓글 작성하기
-    @PostMapping("/comment")
-    @ResponseBody
+    @PostMapping("/post/comment")
     public boolean commentPost(@RequestBody BoardInput boardInput) {
         return this.boardService.commentPost(boardInput);
     }
 
     //게시글 목록 불러오기
     @GetMapping("/get")
-    @ResponseBody
     public List<InfromBoardListDto> get() {
         return this.boardService.findAll();
     }
-
     //게시글 불러오기
     @GetMapping("/getid")
-    @ResponseBody
-    public InformBoardDto getContnets(@RequestBody BoardInput boardInput) {
+    public InformBoardDto boardGet(@RequestBody BoardInput boardInput) {
         return this.boardService.findById(boardInput);
     }
-
     //해당 id값의 댓글들 불러오기
     @GetMapping("/getid/comment")
-    @ResponseBody
-    public List<InformBoardComment> getComment(@RequestBody BoardInput boardInput) {
+    public List<InformBoardComment> commentGet(@RequestBody BoardInput boardInput) {
         return this.boardService.findByIdToComment(boardInput);
     }
 
-    //게시글 수정하기
+    //게시글 수정
     @PatchMapping("/patch")
-    @ResponseBody
-    public InformBoardDto PatchContents(@RequestBody BoardInput boardInput) {
-        return this.boardService.findByIdToPatch(boardInput);
+    public boolean boardPatch(@RequestBody BoardInput boardInput){
+        return this.boardService.boardPatch(boardInput);
+    }
+    //댓글 수정하기
+    @PatchMapping("/patch/comment")
+    public boolean commentPatch(@RequestBody BoardInput boardInput){
+        return this.boardService.commentPatch(boardInput);
     }
 
     // 게시글 삭제
     @DeleteMapping("/delete")
-    @ResponseBody
-    public String boardDelete(@RequestBody BoardInput boardInput) {
+    public boolean boardDelete(@RequestBody BoardInput boardInput) {
         return this.boardService.boardDelete(boardInput);
     }
-
     //댓글삭제
     @DeleteMapping("/delete/comment")
-    @ResponseBody
-    public String deleteContents(@RequestBody BoardInput boardInput) {
+    public boolean commentDelete(@RequestBody BoardInput boardInput) {
         return this.boardService.commnetDelete(boardInput);
     }
 }
