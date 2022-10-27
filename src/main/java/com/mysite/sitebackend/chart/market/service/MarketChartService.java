@@ -14,9 +14,4 @@ public class MarketChartService {
     public List<MarketChart> findByAll(){
         return this.marketChartRepository.findAll();
     }
-
-
-
-
-
 }

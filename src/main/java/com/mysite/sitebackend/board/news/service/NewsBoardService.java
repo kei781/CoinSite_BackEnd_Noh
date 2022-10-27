@@ -1,9 +1,7 @@
 package com.mysite.sitebackend.board.news.service;
 
-import com.mysite.sitebackend.board.Inform.domain.InformBoard;
-import com.mysite.sitebackend.board.Inform.domain.InformBoardComment;
 import com.mysite.sitebackend.board.dto.BoardDto;
-import com.mysite.sitebackend.board.dto.BoardInput;
+import com.mysite.sitebackend.board.vo.BoardInput;
 import com.mysite.sitebackend.board.dto.BoardListDto;
 import com.mysite.sitebackend.board.dto.CommentListDto;
 import com.mysite.sitebackend.board.news.dao.NewsBoardCommentRepository;

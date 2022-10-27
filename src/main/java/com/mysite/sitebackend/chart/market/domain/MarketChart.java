@@ -17,10 +17,14 @@ public class MarketChart {
     private Integer id;
 
     @Column(length = 200)
-    private String name;
+    private String name; // idxNm 이름
 
-    private Integer value;
+    private String value; //clpr 전일종가
+    private String avg; // fltRt 전일대비 변동폭
+    private String high; // hipr 전일 고점
+    private String low; // lopr 전일 저점
+    private String yavg; // lsYrEdVsFltRg 52주 평균 변동폭
 
     @DateTimeFormat(pattern = "YYYYMMDD")
-    private String date;
+    private String date; // basDt 날짜
 }

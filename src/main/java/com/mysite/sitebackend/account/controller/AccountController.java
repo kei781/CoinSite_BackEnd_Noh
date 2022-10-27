@@ -2,6 +2,7 @@ package com.mysite.sitebackend.account.controller;
 
 
 import com.mysite.sitebackend.account.dto.AccountInput;
+import com.mysite.sitebackend.account.dto.AccountSighInDto;
 import com.mysite.sitebackend.account.service.AccountService;
 
 import lombok.RequiredArgsConstructor;
@@ -21,11 +22,11 @@ public class AccountController {
     //회원가입
     @PostMapping("/signUp")
     public boolean signUp(@RequestBody AccountInput accountInput){
-                return this.accountService.signUp(accountInput);
+        return this.accountService.signUp(accountInput);
     }
     //로그인
     @PostMapping("/signIn")
-    public boolean signIn(@RequestBody AccountInput accountInput){
+    public AccountSighInDto signIn(@RequestBody AccountInput accountInput){
         return this.accountService.signIn(accountInput);
     }
 //    //아이디 찾기

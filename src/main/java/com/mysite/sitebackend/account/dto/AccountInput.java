@@ -1,10 +1,8 @@
 package com.mysite.sitebackend.account.dto;
 
 
-import lombok.Data;
 import lombok.Getter;
 
-@Data
 @Getter
 public class AccountInput {
     private String userId;

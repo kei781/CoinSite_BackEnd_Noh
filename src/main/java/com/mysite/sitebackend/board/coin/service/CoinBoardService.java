@@ -6,7 +6,7 @@ import com.mysite.sitebackend.board.coin.dao.CoinBoardRepository;
 import com.mysite.sitebackend.board.coin.domain.CoinBoard;
 import com.mysite.sitebackend.board.coin.domain.CoinBoardComment;
 import com.mysite.sitebackend.board.dto.BoardDto;
-import com.mysite.sitebackend.board.dto.BoardInput;
+import com.mysite.sitebackend.board.vo.BoardInput;
 import com.mysite.sitebackend.board.dto.BoardListDto;
 import com.mysite.sitebackend.board.dto.CommentListDto;
 import lombok.RequiredArgsConstructor;

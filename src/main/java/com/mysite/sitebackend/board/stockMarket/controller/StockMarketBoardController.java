@@ -2,14 +2,13 @@ package com.mysite.sitebackend.board.stockMarket.controller;
 
 
 import com.mysite.sitebackend.board.dto.BoardDto;
-import com.mysite.sitebackend.board.dto.BoardInput;
+import com.mysite.sitebackend.board.vo.BoardInput;
 
 import com.mysite.sitebackend.board.dto.BoardListDto;
 import com.mysite.sitebackend.board.dto.CommentListDto;
 
 import com.mysite.sitebackend.board.stockMarket.service.StockMarketService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;

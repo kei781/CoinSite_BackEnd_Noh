@@ -1,4 +1,4 @@
-package com.mysite.sitebackend.board.dto;
+package com.mysite.sitebackend.board.vo;
 
 import lombok.Getter;
 

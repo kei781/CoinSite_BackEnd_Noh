@@ -4,6 +4,7 @@ package com.mysite.sitebackend.account.service;
 import com.mysite.sitebackend.account.dao.AccountRepository;
 import com.mysite.sitebackend.account.domain.Account;
 import com.mysite.sitebackend.account.dto.AccountInput;
+import com.mysite.sitebackend.account.dto.AccountSighInDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -30,19 +31,29 @@ public class AccountService {
     }
 
     //로그인
-    public boolean signIn(AccountInput accountInput){
+    public AccountSighInDto signIn(AccountInput accountInput){
         Optional<Account> opAccount = Optional.ofNullable(accountRepository.findByUserId(accountInput.getUserId()));
+        AccountSighInDto accountSighInDto = new AccountSighInDto();
         if (opAccount.isPresent()){
             Account account = accountRepository.findByUserId(accountInput.getUserId());
             if (account.getPassword().equals(accountInput.getPassword())){
-                return true;
+                //로그인에 성공했을때만, 유저네임과 true 반환
+                //실패했을땐 null과 false반환
+                accountSighInDto.setUserName(opAccount.get().getUserName());
+                accountSighInDto.setAboolean(true);
+                System.out.println(accountSighInDto);
+                return accountSighInDto;
             }
             else {
-                return false;
+                accountSighInDto.setUserName(null);
+                accountSighInDto.setAboolean(false);
+                return accountSighInDto;
             }
         }
         else {
-           return false;
+            accountSighInDto.setUserName(null);
+            accountSighInDto.setAboolean(false);
+            return accountSighInDto;
         }
     }
 

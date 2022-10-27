@@ -3,16 +3,16 @@ package com.mysite.sitebackend.chart.market.controller;
 
 import com.mysite.sitebackend.chart.market.domain.MarketChart;
 import com.mysite.sitebackend.chart.market.service.MarketChartService;
+import com.mysite.sitebackend.chart.market.vo.MarketApiVo;
 import lombok.RequiredArgsConstructor;
-import org.json.JSONObject;
-import org.json.XML;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.input.SAXBuilder;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.List;
 
 @RestController
@@ -34,31 +34,29 @@ public class MarketChartController {
     }
 
     @GetMapping("/apitest")
-    public String  apitest(){
-        StringBuffer result = new StringBuffer();
-        String jsonPrintString = null;
-        try {
-            String apiUrl = "http://apis.data.go.kr/1160100/service/GetMarketIndexInfoService/getStockMarketIndex?"+
-                    "serviceKey=J0bSLK%2BDoFdhT9ULtidMBZ5nV2VMqf9Ly6LxAv0fzrVRoEOf62u4UbVmhHJZfFaDXbE53Bk%2FmY%2FRpTlNIC83ng%3D%3D"+
-                     "&likeBasDt=20221007" +  "&idxNm=%EC%BD%94%EC%8A%A4%EB%8B%A5";
-            URL url = new URL(apiUrl);
-            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.connect();
-            BufferedInputStream bufferedInputStream = new BufferedInputStream(urlConnection.getInputStream());
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(bufferedInputStream, "UTF-8"));
-            String returnLine;
-            while((returnLine = bufferedReader.readLine()) != null) {
-                result.append(returnLine);
-            }
+    public void  apitest() throws Exception{
+        StringBuffer sb = new StringBuffer("https://apis.data.go.kr/1160100/service/GetMarketIndexInfoService/getStockMarketIndex?");
+        String name = URLEncoder.encode("코스피", "UTF-8");
+        sb.append("ServiceKey=J0bSLK%2BDoFdhT9ULtidMBZ5nV2VMqf9Ly6LxAv0fzrVRoEOf62u4UbVmhHJZfFaDXbE53Bk%2FmY%2FRpTlNIC83ng%3D%3D");
+        sb.append("&likeBasDt=20221011");
+        sb.append("&idxNm="+name);
 
-            JSONObject jsonObject = XML.toJSONObject(result.toString());
-            jsonPrintString = jsonObject.toString();
+        URL url = new URL(sb.toString());
 
-            urlConnection.disconnect();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        return jsonPrintString;
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestProperty("Content-Type","application/xml");
+        conn.connect();
+        SAXBuilder builder = new SAXBuilder();
+
+            Document document = builder.build(conn.getInputStream());
+
+            Element root = document.getRootElement();
+            Element response = root.getChild("response");
+            Element body = response.getChild("body");
+            Element items = body.getChild("items");
+            List<Element> itemList = items.getChildren("item");
+        MarketApiVo[] ar = new MarketApiVo[itemList.size()];
+
     }
 
 }
