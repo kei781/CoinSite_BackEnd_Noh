@@ -4,13 +4,9 @@ package com.mysite.sitebackend.account.controller;
 import com.mysite.sitebackend.account.dto.AccountInput;
 import com.mysite.sitebackend.account.dto.AccountSighInDto;
 import com.mysite.sitebackend.account.service.AccountService;
-
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.web.bind.annotation.*;
-
 import java.util.Optional;
-
 
 @RestController
 @RequiredArgsConstructor
@@ -29,6 +25,7 @@ public class AccountController {
     public AccountSighInDto signIn(@RequestBody AccountInput accountInput){
         return this.accountService.signIn(accountInput);
     }
+
 //    //아이디 찾기
 //    @GetMapping("/findId")
 //    public String findId(){
