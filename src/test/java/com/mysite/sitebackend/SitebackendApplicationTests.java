@@ -1,19 +1,10 @@
 package com.mysite.sitebackend;
 
-import com.mysite.sitebackend.board.Inform.dao.InformBoardRepository;
-import com.mysite.sitebackend.board.Inform.domain.InformBoard;
-import com.mysite.sitebackend.board.coin.dao.CoinBoardRepository;
-import com.mysite.sitebackend.board.coin.domain.CoinBoard;
-import com.mysite.sitebackend.board.news.dao.NewsBoardRepository;
-import com.mysite.sitebackend.board.news.domain.NewsBoard;
-import com.mysite.sitebackend.board.stockMarket.dao.StockMarketBoardRepository;
-import com.mysite.sitebackend.board.stockMarket.domain.StockMarketBoard;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.transaction.Transactional;
+import org.junit.jupiter.api.Test;
+
+import org.springframework.boot.test.context.SpringBootTest;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 

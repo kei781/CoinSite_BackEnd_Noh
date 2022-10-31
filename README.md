@@ -10,7 +10,32 @@
 
 <h2> 게시판(/board/)의 경우 총 2개의 카테고리(/board/{Large category}/{Medium category})을 지원합니다.</h2>
 
-    각각의 게시판은 다음의 기능을 공통적으로 지원합니다.
+    추천 예시 : 
+    주식(Stock) 
+      국내 주식 정보(Domestic stock information) : /stock/dsi
+      해외 주식 정보(Overseas Stock Information) : /stock/osi
+      게시판 : /stock/b
+
+    코인(Coin) 
+      코인 정보(Coin information) : /coin/ci
+      게시판 : /coin/b
+
+    선물/마진(Futures/Margin)
+      선물/마진 정보(Futures/Margin Information) : /fm/mi
+      게시판 : /fm/b
+
+    커뮤니티(Community)
+      자유 게시판(Free Board) : /community/fb
+      손익인증(Profit and Loss Certification) : /community/pl
+
+    공지(Notice)
+      공지사항(Notice) : /notice/n
+      이벤트(Event) : /notice/e
+      문의(Inquiry) : /notice/i
+
+    설정(Set)
+      개인정보(Privacy) : /set/privacy
+
 
 1. 게시글작성(post 메소드, /board/{Large category}/{Medium category}/post) 기능은 다음과 같은 객체를 필요로 합니다.
    ````json
