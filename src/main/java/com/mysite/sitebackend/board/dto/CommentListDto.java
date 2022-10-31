@@ -1,5 +1,8 @@
 package com.mysite.sitebackend.board.dto;
 
+import lombok.Data;
+
+@Data
 public class CommentListDto {
     private Integer id;
     private String contents; // 내용

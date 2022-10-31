@@ -62,10 +62,18 @@ public class CoinBoardService {
     public List<BoardListDto> findAll(){
         List<CoinBoard> coinBoard = boardRepository.findAll();
         List<BoardListDto> boardListDto = coinBoard.stream()
-                        .map(coinBoard1 -> modelMapper.map(coinBoard1, BoardListDto.class))
+                        .map(BoardListDto1 -> modelMapper.map(BoardListDto1, BoardListDto.class))
                         .collect(Collectors.toList());
+        System.out.println(boardListDto);
         return boardListDto;
     }
+    //게시글 전체목록 불러오기
+
+
+
+
+
+
     //게시글 1개불러오기
     public BoardDto findByIdToBoard(BoardInput boardInput){
         CoinBoard board = boardRepository.findById(boardInput.getId()).get();

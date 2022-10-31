@@ -1,5 +1,8 @@
 package com.mysite.sitebackend.board.dto;
 
+import lombok.Data;
+
+@Data
 public class BoardDto {
     private Integer id;
     private String subject;

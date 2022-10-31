@@ -3,9 +3,6 @@ package com.mysite.sitebackend.board.coin.domain;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
-import java.util.List;
-import javax.persistence.OneToMany;
-import javax.persistence.CascadeType;
 
 @Entity
 @Data
