@@ -1,17 +1,17 @@
-package com.mysite.sitebackend.board.coin.service;
+package com.mysite.sitebackend.board.service;
 
 
-import com.mysite.sitebackend.board.coin.dao.CoinBoardCommentRepository;
-import com.mysite.sitebackend.board.coin.dao.CoinBoardRepository;
-import com.mysite.sitebackend.board.coin.domain.CoinBoard;
-import com.mysite.sitebackend.board.coin.domain.CoinBoardComment;
+import com.mysite.sitebackend.board.dao.BoardCommentRepository;
+import com.mysite.sitebackend.board.dao.BoardRepository;
+import com.mysite.sitebackend.board.domain.Board;
+import com.mysite.sitebackend.board.domain.BoardComment;
 import com.mysite.sitebackend.board.dto.BoardDto;
-import com.mysite.sitebackend.board.vo.BoardInput;
 import com.mysite.sitebackend.board.dto.BoardListDto;
 import com.mysite.sitebackend.board.dto.CommentListDto;
+import com.mysite.sitebackend.board.vo.BoardInput;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -22,30 +22,31 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class CoinBoardService {
-    private final CoinBoardRepository boardRepository;
-    private final CoinBoardCommentRepository commentRepository;
+public class BoardService {
+    private final BoardRepository boardRepository;
+    private final BoardCommentRepository commentRepository;
     private final ModelMapper modelMapper;
     LocalDate now = LocalDate.now();
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
     String formatedNow = now.format(formatter);
-
     //게시글 작성하기
-    public boolean boardPost(BoardInput boardInput) throws SQLException {
-            CoinBoard c1 = new CoinBoard();
-            c1.setSubject(boardInput.getSubject());
-            c1.setContents(boardInput.getContents());
-            c1.setAuthor(boardInput.getAuthor());
-            c1.setViews(0);
-            c1.setDate(formatedNow);
-            this.boardRepository.save(c1);
+    public boolean boardPost(String lcategory, String mcategory, BoardInput boardInput) throws SQLException {
+            Board b1 = new Board();
+            b1.setSubject(boardInput.getSubject());
+            b1.setContents(boardInput.getContents());
+            b1.setAuthor(boardInput.getAuthor());
+            b1.setViews(0);
+            b1.setDate(formatedNow);
+            b1.setLcategory(lcategory);
+            b1.setMcategory(mcategory);
+            this.boardRepository.save(b1);
             return true;
     }
     //댓글 작성하기
     public boolean commentPost(BoardInput boardInput){
-        Optional<CoinBoard> optionalCoinBoard = this.boardRepository.findById(boardInput.getId());
+        Optional<Board> optionalCoinBoard = this.boardRepository.findById(boardInput.getId());
         if(optionalCoinBoard.isPresent()){
-            CoinBoardComment a = new CoinBoardComment();
+            BoardComment a = new BoardComment();
             a.setContents(boardInput.getContents());
             a.setDate(formatedNow);
             a.setAuthor(boardInput.getAuthor());
@@ -59,45 +60,37 @@ public class CoinBoardService {
     }
 
     //게시글 전체목록 불러오기
-    public List<BoardListDto> findAll(){
-        List<CoinBoard> coinBoard = boardRepository.findAll();
-        List<BoardListDto> boardListDto = coinBoard.stream()
+    public List<BoardListDto> findAll(String lcategory, String mcategory){
+        List<Board> board = boardRepository.findAllByLcategoryAndMcategory(lcategory, mcategory);
+        List<BoardListDto> boardListDto = board.stream()
                         .map(BoardListDto1 -> modelMapper.map(BoardListDto1, BoardListDto.class))
                         .collect(Collectors.toList());
-        System.out.println(boardListDto);
         return boardListDto;
     }
-    //게시글 전체목록 불러오기
-
-
-
-
-
-
     //게시글 1개불러오기
-    public BoardDto findByIdToBoard(BoardInput boardInput){
-        CoinBoard board = boardRepository.findById(boardInput.getId()).get();
-        board.setViews(board.getViews().intValue() +1);
+    public BoardDto findByIdToBoard(String lcategory, String mcategory, Integer id){
+        Board board = this.boardRepository.findByIdAndLcategoryAndMcategory(id, lcategory, mcategory);
+        board.setViews(board.getViews() +1);
         BoardDto boardDto = modelMapper.map(board, BoardDto.class);
         return boardDto;
     }
     //게시글 1개의 댓글 전체목록 불러오기
-    public List<CommentListDto> findByIdToComment(BoardInput boardInput){
-        Optional<CoinBoard> opboard = this.boardRepository.findById(boardInput.getId());
+    public List<CommentListDto> findByIdToComment(String lcategory, String mcategory, BoardInput boardInput){
+        Optional<Board> opboard = Optional.of(this.boardRepository.findByIdAndLcategoryAndMcategory(boardInput.getId(), lcategory, mcategory));
         opboard.isPresent() ;
-            List<CoinBoardComment> coinComment = commentRepository.findAllByBoardIndex(boardInput.getId());
-            List<CommentListDto> boardListDto = coinComment.stream()
-                    .map(coinComments1 -> modelMapper.map(coinComments1, CommentListDto.class))
+            List<BoardComment> comment = commentRepository.findAllByBoardIndex(boardInput.getId());
+            List<CommentListDto> boardListDto = comment.stream()
+                    .map(comments1 -> modelMapper.map(comments1, CommentListDto.class))
                     .collect(Collectors.toList());
         return boardListDto;
     }
 
     //게시글 수정
-    public boolean boardPatch(BoardInput boardInput){
-        Optional<CoinBoard> opBoard = boardRepository.findById(boardInput.getId());
+    public boolean boardPatch(String lcategory, String mcategory,  BoardInput boardInput){
+        Optional<Board> opBoard = Optional.of(this.boardRepository.findByIdAndLcategoryAndMcategory(boardInput.getId(), lcategory, mcategory));
         if(opBoard.isPresent()){
-            if(boardInput.getAuthor() == opBoard.get().getAuthor()){
-                CoinBoard board = opBoard.get();
+            if(boardInput.getAuthor().equals(opBoard.get().getAuthor())){
+                Board board = opBoard.get();
                 board.setSubject(boardInput.getSubject());
                 board.setContents(boardInput.getContents());
                 board.setAuthor(boardInput.getAuthor());
@@ -115,10 +108,10 @@ public class CoinBoardService {
     }
     //댓글 수정
     public boolean commentPatch(BoardInput boardInput){
-        Optional<CoinBoardComment> opComment = commentRepository.findById(boardInput.getId());
+        Optional<BoardComment> opComment = commentRepository.findById(boardInput.getId());
         if(opComment.isPresent()){
             if(boardInput.getAuthor() == opComment.get().getAuthor()){
-                CoinBoardComment comment = opComment.get();
+                BoardComment comment = opComment.get();
                 comment.setContents(boardInput.getContents());
                 comment.setAuthor(boardInput.getAuthor());
                 comment.setDate(formatedNow);
@@ -133,14 +126,13 @@ public class CoinBoardService {
         else{
             return false;
         }
-
     }
 
     //게시글 삭제
-    public boolean boardDelete(BoardInput boardInput){
-        Optional<CoinBoard> optionalCoinBoard = this.boardRepository.findById(boardInput.getId());
-        if(optionalCoinBoard.isPresent()){
-            if(boardInput.getAuthor() == optionalCoinBoard.get().getAuthor()){
+    public boolean boardDelete(String lcategory, String mcategory,  BoardInput boardInput){
+        Optional<Board> optionalBoard = Optional.of(this.boardRepository.findByIdAndLcategoryAndMcategory(boardInput.getId(), lcategory, mcategory));
+        if(optionalBoard.isPresent()){
+            if(boardInput.getAuthor().equals(optionalBoard.get().getAuthor())){
                 this.boardRepository.deleteById(boardInput.getId());
                 this.commentRepository.deleteAllByBoardIndex(boardInput.getId());
                 return true;
@@ -155,7 +147,7 @@ public class CoinBoardService {
     }
     // 댓글삭제
     public boolean commnetDelete(BoardInput boardInput){
-        Optional<CoinBoardComment> optionalCoinBoardComment = this.commentRepository.findById(boardInput.getId());
+        Optional<BoardComment> optionalCoinBoardComment = this.commentRepository.findById(boardInput.getId());
         if(optionalCoinBoardComment.isPresent()){
             this.commentRepository.deleteById(boardInput.getId());
             return true;

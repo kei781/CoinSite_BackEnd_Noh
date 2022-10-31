@@ -1,18 +1,17 @@
-package com.mysite.sitebackend.board.stockMarket.domain;
-
+package com.mysite.sitebackend.board.domain;
 
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
-import javax.persistence.*;
+import org.springframework.web.bind.annotation.PathVariable;
 
+import javax.persistence.*;
 
 @Entity
 @Data
-public class StockMarketBoard {
+public class Board {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
     @Column(length = 200)
     private String subject;
     private String contents;
@@ -21,4 +20,8 @@ public class StockMarketBoard {
     @DateTimeFormat(pattern = "YYYYMMDD")
     private String date; // 작성일자
     private Integer views; // 조회수
+    @Column(length = 20)
+    private String lcategory; // 대카테고리
+    @Column(length = 20)
+    private String mcategory; // 중카테고리
 }

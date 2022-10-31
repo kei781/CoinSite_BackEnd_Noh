@@ -25,6 +25,11 @@ public class AccountController {
     public AccountSighInDto signIn(@RequestBody AccountInput accountInput){
         return this.accountService.signIn(accountInput);
     }
+    //패스워드 재설정
+    @PatchMapping("/pwReset")
+    public boolean pwReset(@RequestBody AccountInput accountInput){
+        return this.accountService.pwReset(accountInput);
+    }
 
 //    //아이디 찾기
 //    @GetMapping("/findId")
