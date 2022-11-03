@@ -135,6 +135,7 @@ public class BoardService {
         else return null;
     }
 
+
     //게시글 수정
     public boolean boardPatch(String lcategory, String mcategory,  BoardInput boardInput){
         Optional<Board> opBoard = Optional.of(this.boardRepository.findByIdAndLcategoryAndMcategory(boardInput.getId(), lcategory, mcategory));

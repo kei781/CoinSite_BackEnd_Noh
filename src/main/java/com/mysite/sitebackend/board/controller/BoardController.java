@@ -49,6 +49,7 @@ public class BoardController {
     public boolean commentPost(@PathVariable("lcategory") String lcategory, @PathVariable("mcategory") String mcategory, @RequestBody BoardInput boardInput) {
         return this.boardService.commentPost(boardInput);
     }
+    // 이미지 작성하기
 
     //게시글 전체 불러오기
     @GetMapping("/get")
@@ -66,6 +67,7 @@ public class BoardController {
     public List<CommentListDto> commentGet(@PathVariable("lcategory") String lcategory, @PathVariable("mcategory") String mcategory, @RequestParam("id") Integer id){
         return this.boardService.findByIdToComment(lcategory, mcategory, id);
     }
+    //이미지 불러오기
 
     //게시글 수정
     @PatchMapping("/patch")
@@ -77,6 +79,7 @@ public class BoardController {
     public boolean commentPatch(@RequestBody BoardInput boardInput){
         return this.boardService.commentPatch(boardInput);
     }
+    // 이미지 수정
 
     //게시글 삭제
     @DeleteMapping("/delete")
@@ -88,4 +91,5 @@ public class BoardController {
     public boolean commnetDelete(@RequestBody BoardInput boardInput){
         return this.boardService.commnetDelete(boardInput);
     }
+    // 이미지 삭제
 }
