@@ -63,8 +63,8 @@ public class BoardController {
     }
     //해당 id값의 댓글들 불러오기
     @GetMapping("/getid/comment")
-    public List<CommentListDto> commentGet(@PathVariable("lcategory") String lcategory, @PathVariable("mcategory") String mcategory, @RequestBody BoardInput boardInput){
-        return this.boardService.findByIdToComment(lcategory, mcategory, boardInput);
+    public List<CommentListDto> commentGet(@PathVariable("lcategory") String lcategory, @PathVariable("mcategory") String mcategory, @RequestParam("id") Integer id){
+        return this.boardService.findByIdToComment(lcategory, mcategory, id);
     }
 
     //게시글 수정

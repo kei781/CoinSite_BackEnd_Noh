@@ -66,32 +66,32 @@ public class BoardService {
             this.boardRepository.save(b1);
             return true;
     }
-//    public void imageSave(MultipartFile file, Board board) {
-//        Date date = new Date();
-//        StringBuilder sb = new StringBuilder();
-//        Image image = new Image();
-//        // file image 가 없을 경우
-//        if (file.isEmpty()) {
-//            sb.append("none");
-//        } else {
-//            sb.append(date.getTime());
-//            sb.append(file.getOriginalFilename());
-//            image.setFileName(sb.toString());
-//            image.setFileUrl("C://images/feed/");
-//        }
-//        if (!file.isEmpty()) {
-//            File dest = new File("C://images/feed/" + sb.toString());
-//            try {
-//                file.transferTo(dest);
-//            } catch (IllegalStateException e) {
-//                e.printStackTrace();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
+    public void imageSave(MultipartFile file, Board board) {
+        Date date = new Date();
+        StringBuilder sb = new StringBuilder();
+        Image image = new Image();
+        // file image 가 없을 경우
+        if (file.isEmpty()) {
+            sb.append("none");
+        } else {
+            sb.append(date.getTime());
+            sb.append(file.getOriginalFilename());
+            image.setFileName(sb.toString());
+            image.setFileUrl("C://images/feed/");
+        }
+        if (!file.isEmpty()) {
+            File dest = new File("C://images/feed/" + sb.toString());
+            try {
+                file.transferTo(dest);
+            } catch (IllegalStateException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 //            board.setImage(image);
-//            this.boardRepository.save(board);
-//        }
-//    }
+            this.boardRepository.save(board);
+        }
+    }
     //댓글 작성하기
     public boolean commentPost(BoardInput boardInput){
         Optional<Board> optionalCoinBoard = this.boardRepository.findById(boardInput.getId());
@@ -124,14 +124,16 @@ public class BoardService {
         return boardDto;
     }
     //게시글 1개의 댓글 전체목록 불러오기
-    public List<CommentListDto> findByIdToComment(String lcategory, String mcategory, BoardInput boardInput){
-        Optional<Board> opboard = Optional.of(this.boardRepository.findByIdAndLcategoryAndMcategory(boardInput.getId(), lcategory, mcategory));
-        opboard.isPresent() ;
-            List<BoardComment> comment = commentRepository.findAllByBoardIndex(boardInput.getId());
+    public List<CommentListDto> findByIdToComment(String lcategory, String mcategory, Integer id){
+        Optional<Board> opboard = Optional.of(this.boardRepository.findByIdAndLcategoryAndMcategory(id, lcategory, mcategory));
+        if (opboard.isPresent()){
+            List<BoardComment> comment = commentRepository.findAllByBoardIndex(id);
             List<CommentListDto> boardListDto = comment.stream()
                     .map(comments1 -> modelMapper.map(comments1, CommentListDto.class))
                     .collect(Collectors.toList());
-        return boardListDto;
+            return boardListDto;
+        }
+        else return null;
     }
 
     //게시글 수정
