@@ -1,7 +1,7 @@
 package com.mysite.sitebackend.account.controller;
 
 
-import com.mysite.sitebackend.account.dto.AccountInput;
+import com.mysite.sitebackend.account.vo.AccountInput;
 import com.mysite.sitebackend.account.dto.AccountSighInDto;
 import com.mysite.sitebackend.account.service.AccountService;
 import lombok.RequiredArgsConstructor;

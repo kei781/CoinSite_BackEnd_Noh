@@ -1,8 +1,7 @@
-package com.mysite.sitebackend.chart.market.api.marketApiClient;
+package com.mysite.sitebackend.chart.market.api.client;
 
 import com.mysite.sitebackend.chart.market.dao.MarketChartRepository;
 import com.mysite.sitebackend.chart.market.domain.MarketChart;
-import com.mysite.sitebackend.chart.market.dto.MarketApiDto;
 import lombok.RequiredArgsConstructor;
 import org.jdom2.Document;
 import org.jdom2.Element;

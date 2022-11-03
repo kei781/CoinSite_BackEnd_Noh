@@ -24,6 +24,17 @@ public class BoardController {
         return "Coin"+ Lcategory + Mcategory;
     }
 
+    //전체 검색
+    @GetMapping("/searchAll")
+    public List<BoardListDto> search(@RequestParam("value") String value){
+        return this.boardService.searchAll(value);
+    }
+    // 게시판별 검색
+    @GetMapping("/search")
+    public List<BoardListDto> search(@PathVariable("lcategory") String lcategory, @PathVariable("mcategory") String mcategory, @RequestParam("value") String value){
+        return this.boardService.search(value, lcategory, mcategory);
+    }
+
     //게시글 작성하기
     @PostMapping("/post")
     public boolean boardPost(@PathVariable("lcategory") String lcategory, @PathVariable("mcategory") String mcategory, @RequestBody BoardInput boardInput) {

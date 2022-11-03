@@ -1,4 +1,4 @@
-package com.mysite.sitebackend.account.dto;
+package com.mysite.sitebackend.account.vo;
 
 
 import lombok.Getter;

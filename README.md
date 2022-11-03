@@ -37,67 +37,73 @@
       개인정보(Privacy) : /set/privacy
 
 
-1. 게시글작성(post 메소드, /board/{Large category}/{Medium category}/post) 기능은 다음과 같은 객체를 필요로 합니다.
-   ````json
+1. 게시글작성(post 메소드, /board/{Large category}/{Medium category}/post) 기능은 다음과 같은 ```객체```를 필요로 합니다.
+   ```JSON
    {
-   "subject" : "제목입니다.",
-   "contents" : "내용입니다.",
-   "author" : "글작성자입니다."
+    "subject" : "제목입니다.",
+    "contents" : "내용입니다.",
+    "author" : "글작성자입니다."
    }
-   ````
+   ```
 2. 게시판 리스트 가져오기(get 메소드, /board/{Large category}/{Medium category}/get)
-3. 특정 게시글 가져오기(get 메소드, /board/{Large category}/{Medium category}/getid) 기능은 다음과 같은 객체를 필요로 합니다.
-   ````json
+3. 특정 게시글 가져오기(get 메소드, /board/{Large category}/{Medium category}/getid) 기능은 다음과 같은 ```파라미터```를 필요로 합니다.
+   ```
+   id=숫자
+   ```
+4. 특정 게시글 수정(patch 메소드, /board/{Large category}/{Medium category}/patch) 기능은 다음과 같은 ```객체```를 필요로 합니다.
+   ````JSON
    {
-   "id" : 숫자
+    "id" : 게시글의 고유 아이디값(숫자),
+    "subject" : "제목입니다.",
+    "contens" : "내용입니다.",
+    "author" : "글작성자입니다."
    }
    ````
-4. 특정 게시글 수정(patch 메소드, /board/{Large category}/{Medium category}/patch) 기능은 다음과 같은 객체를 필요로 합니다.
-   ````json
-   {
-   "id" : 게시글의 고유 아이디값(숫자),
-   "subject" : "제목입니다.",
-   "contens" : "내용입니다.",
-   "author" : "글작성자입니다."
-   }
-   ````
-5. 게시글 삭제(delet메소드, /board/{Large category}/{Medium category}/delete/) 기능은 다음과 같은 객체를 필요로 합니다.
+5. 게시글 삭제(delet메소드, /board/{Large category}/{Medium category}/delete/) 기능은 다음과 같은 ```객체```를 필요로 합니다.
    주의사항 : 해당 게시글에 포함된 댓글까지 일괄삭제됩니다!!
-   ````json
+   ````JSON
    {
-   "id" : 숫자,
-   "author" : "글작성자입니다."
+    "id" : 숫자,
+    "author" : "글작성자입니다."
    }
    ````
-6. 댓글 작성(post메소드, /board/{Large category}/{Medium category}/post/comment/) 기능은 다음과 같은 객체를 필요로 합니다.
-   ````json
+6. 댓글 작성(post메소드, /board/{Large category}/{Medium category}/post/comment/) 기능은 다음과 같은 ```객체```를 필요로 합니다.
+   ````JSON
    {
-   "contents" : "댓글 내용입니다.",
-   "author" : "댓글 작성자입니다.",
-   "id" : "게시글의 고유 아이디값(숫자)"
+    "id" : 게시글의 고유 아이디값(숫자),
+    "contents" : "댓글 내용입니다.",
+    "author" : "댓글 작성자입니다."
    }
    ````
-7. 특정게시글의 댓글리스트 가져오기(get메소드, /board/{Large category}/{Medium category}/getid/comment) 기능은 다음과 같은 객체를 필요로 합니다.
-   ````
+7. 특정게시글의 댓글리스트 가져오기(get메소드, /board/{Large category}/{Medium category}/getid/comment) 기능은 다음과 같은 ```객체```를 필요로 합니다.
+   ````JSON
    {
-   "id" : "게시글의 고유 아이디값(숫자)"
+    "id" : "게시글의 고유 아이디값(숫자)"
    }
    ````
-8. 댓글 수정(patch 메소드, /board/{Large category}/{Medium category}/patch/comment) 기능은 다음과 같은 객체를 필요로 합니다.
-   ````json
+8. 댓글 수정(patch 메소드, /board/{Large category}/{Medium category}/patch/comment) 기능은 다음과 같은 ```객체```를 필요로 합니다.
+   ````JSON
    {
-   "id" : 댓글의 고유 아이디값(숫자),
-   "contens" : "내용입니다.",
-   "author" : "댓글작성자입니다."
+    "id" : 댓글의 고유 아이디값(숫자),
+    "contens" : "내용입니다.",
+    "author" : "댓글작성자입니다."
    }
    ````
-9. 댓글 삭제(delet메소드, /board/{Large category}/{Medium category}/delete/comment) 기능은 다음과 같은 객체를 필요로 합니다.
-   ````json
+9. 댓글 삭제(delet메소드, /board/{Large category}/{Medium category}/delete/comment) 기능은 다음과 같은 ```객체```를 필요로 합니다.
+   ````JSON
    {
-   "id" : "게시글의 고유 아이디값(숫자)",
-   "author" : "댓글작성자입니다."
+    "id" : "게시글의 고유 아이디값(숫자)",
+    "author" : "댓글작성자입니다."
    }
    ````
+10. 검색(전체게시판)(get메소드, /board/{Large category}/{Medium category}/searchAll) 기능은 다음과 같은 ```파라미터```를 필요로 합니다.
+   ```
+   value=검색할데이터(제목)
+   ```
+11. 검색(개별게시판)(get메소드, /board/{Large category}/{Medium category}/search) 기능은 다음과 같은 ```파라미터```를 필요로 합니다.
+   ```
+   value = 검색할데이터(제목)
+   ```
 
 
 <h2> chart(미구현) </h2>
@@ -105,33 +111,33 @@
 <h2> 계정관리(/account/)의 경우 다음의 기능을 제공합니다. </h2>
 
    1. 회원가입(post메소드, /account/signUp) 기능은 다음과 같은 객체를 필요로 합니다.
-````json
-{
-"userId" : "아이디값을 입력하여 주세요.",
-"userName" : "당신의 실명을 입력하여주세요",
-"password" : "패스워드를 입력해주세요",
-"confirmPassword" : "검증용 패스워드를 입력해주세요"
-}
-````
+   ````JSON
+   {
+      "userId" : "아이디값을 입력하여 주세요.",
+      "userName" : "당신의 실명을 입력하여주세요",
+      "password" : "패스워드를 입력해주세요",
+      "confirmPassword" : "검증용 패스워드를 입력해주세요"
+   }
+   ````
    2. 로그인(post메소드, account/signIn)기능은 기능은 다음과 같은 객체를 필요로 합니다.
-````json
-{
-"userId" : "아이디값을 입력하여 주세요.",
-"password" : "패스워드를 입력해주세요"
-}
+````JSON
+  {
+    "userId" : "아이디값을 입력하여 주세요.",
+    "password" : "패스워드를 입력해주세요"
+  }
 ````
    3. 패스워드 재설정(get 메소드, account/pwReset) 기능은 다음과 같은 객체를 필요로 합니다.
-````json
-{
-"userId" : "아이디값을 입력하여 주세요.",
-"userName" : "당신의 실명을 입력하여주세요",
-"password" : "패스워드를 입력해주세요",
-"confirmPassword" : "검증용 패스워드를 입력해주세요"
-}
+````JSON
+  {
+    "userId" : "아이디값을 입력하여 주세요.",
+    "userName" : "당신의 실명을 입력하여주세요",
+    "password" : "패스워드를 입력해주세요",
+    "confirmPassword" : "검증용 패스워드를 입력해주세요"
+  }
 ````
    4. 가져오기(get 메소드, account/accountGet) 기능은 다음과 같은 객체를 필요로 합니다.
-````json
-{
-"userId" : "아이디값을 입력하여 주세요.",
-}
+````JSON
+  {
+    "userId" : "아이디값을 입력하여 주세요.",
+  }
 ````

@@ -1,4 +1,4 @@
-package com.mysite.sitebackend.chart.market.dto;
+package com.mysite.sitebackend.chart.market.vo;
 
 import lombok.Getter;
 

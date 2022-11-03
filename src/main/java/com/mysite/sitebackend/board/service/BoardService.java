@@ -9,13 +9,19 @@ import com.mysite.sitebackend.board.dto.BoardDto;
 import com.mysite.sitebackend.board.dto.BoardListDto;
 import com.mysite.sitebackend.board.dto.CommentListDto;
 import com.mysite.sitebackend.board.vo.BoardInput;
+import com.mysite.sitebackend.board.vo.Image;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.swing.text.html.parser.Parser;
+import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -29,6 +35,24 @@ public class BoardService {
     LocalDate now = LocalDate.now();
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
     String formatedNow = now.format(formatter);
+
+    //전체검색
+    public List<BoardListDto> searchAll(String value){
+        List<Board> boardList = this.boardRepository.findBySubjectContaining(value);
+        List<BoardListDto> boardListDto = boardList.stream()
+                .map(BoardListDto1 -> modelMapper.map(BoardListDto1, BoardListDto.class))
+                .collect(Collectors.toList());
+        return boardListDto;
+    }
+    //게시판별검색
+    public List<BoardListDto> search(String value, String lcategory, String mcategory){
+        List<Board> boardList = this.boardRepository.findBySubjectContainingAndLcategoryAndMcategory(value, lcategory, mcategory);
+        List<BoardListDto> boardListDto = boardList.stream()
+                .map(BoardListDto1 -> modelMapper.map(BoardListDto1, BoardListDto.class))
+                .collect(Collectors.toList());
+        return boardListDto;
+    }
+
     //게시글 작성하기
     public boolean boardPost(String lcategory, String mcategory, BoardInput boardInput) throws SQLException {
             Board b1 = new Board();
@@ -42,6 +66,32 @@ public class BoardService {
             this.boardRepository.save(b1);
             return true;
     }
+//    public void imageSave(MultipartFile file, Board board) {
+//        Date date = new Date();
+//        StringBuilder sb = new StringBuilder();
+//        Image image = new Image();
+//        // file image 가 없을 경우
+//        if (file.isEmpty()) {
+//            sb.append("none");
+//        } else {
+//            sb.append(date.getTime());
+//            sb.append(file.getOriginalFilename());
+//            image.setFileName(sb.toString());
+//            image.setFileUrl("C://images/feed/");
+//        }
+//        if (!file.isEmpty()) {
+//            File dest = new File("C://images/feed/" + sb.toString());
+//            try {
+//                file.transferTo(dest);
+//            } catch (IllegalStateException e) {
+//                e.printStackTrace();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//            board.setImage(image);
+//            this.boardRepository.save(board);
+//        }
+//    }
     //댓글 작성하기
     public boolean commentPost(BoardInput boardInput){
         Optional<Board> optionalCoinBoard = this.boardRepository.findById(boardInput.getId());
@@ -54,9 +104,7 @@ public class BoardService {
             this.commentRepository.save(a);
             return true;
         }
-        else {
-            return false;
-        }
+        else return false;
     }
 
     //게시글 전체목록 불러오기
@@ -71,6 +119,7 @@ public class BoardService {
     public BoardDto findByIdToBoard(String lcategory, String mcategory, Integer id){
         Board board = this.boardRepository.findByIdAndLcategoryAndMcategory(id, lcategory, mcategory);
         board.setViews(board.getViews() +1);
+        this.boardRepository.save(board);
         BoardDto boardDto = modelMapper.map(board, BoardDto.class);
         return boardDto;
     }
@@ -98,13 +147,10 @@ public class BoardService {
                 boardRepository.save(board);
                 return true;
             }
-            else {
-                return false;
-            }
+            else return false;
         }
-        else{
-            return false;
-        }
+        else return false;
+
     }
     //댓글 수정
     public boolean commentPatch(BoardInput boardInput){
@@ -119,13 +165,11 @@ public class BoardService {
                 commentRepository.save(comment);
                 return true;
             }
-            else{
-                return false;
-            }
+            else return false;
+
         }
-        else{
-            return false;
-        }
+        else return false;
+
     }
 
     //게시글 삭제
@@ -137,13 +181,9 @@ public class BoardService {
                 this.commentRepository.deleteAllByBoardIndex(boardInput.getId());
                 return true;
             }
-            else {
-                return false;
-            }
+            else return false;
         }
-        else{
-            return false;
-        }
+        else return false;
     }
     // 댓글삭제
     public boolean commnetDelete(BoardInput boardInput){
@@ -152,8 +192,6 @@ public class BoardService {
             this.commentRepository.deleteById(boardInput.getId());
             return true;
         }
-        else{
-            return false;
-        }
+        else return false;
     }
 }

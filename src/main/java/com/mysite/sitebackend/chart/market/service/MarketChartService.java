@@ -1,9 +1,9 @@
 package com.mysite.sitebackend.chart.market.service;
 
-import com.mysite.sitebackend.chart.market.api.marketApiClient.MarketChartApiClient;
+import com.mysite.sitebackend.chart.market.api.client.MarketChartApiClient;
 import com.mysite.sitebackend.chart.market.dao.MarketChartRepository;
 import com.mysite.sitebackend.chart.market.domain.MarketChart;
-import com.mysite.sitebackend.chart.market.dto.MarketApiVo;
+import com.mysite.sitebackend.chart.market.vo.MarketApiVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +14,9 @@ import java.util.List;
 public class MarketChartService {
     private final MarketChartRepository marketChartRepository;
     private final MarketChartApiClient marketChartApiClient;
-//    public List<MarketChart> findByAll(){
-//        return this.marketChartRepository.findAll();
-//    }
+    public List<MarketChart> findByAll(){
+        return this.marketChartRepository.findAll();
+    }
 
 
     public MarketChart get(MarketApiVo marketApiVo){

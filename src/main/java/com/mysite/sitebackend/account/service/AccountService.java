@@ -3,7 +3,7 @@ package com.mysite.sitebackend.account.service;
 
 import com.mysite.sitebackend.account.dao.AccountRepository;
 import com.mysite.sitebackend.account.domain.Account;
-import com.mysite.sitebackend.account.dto.AccountInput;
+import com.mysite.sitebackend.account.vo.AccountInput;
 import com.mysite.sitebackend.account.dto.AccountSighInDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

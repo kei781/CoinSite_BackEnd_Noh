@@ -1,9 +1,8 @@
 package com.mysite.sitebackend.chart.market.controller;
 
 
-import com.mysite.sitebackend.board.vo.BoardInput;
 import com.mysite.sitebackend.chart.market.domain.MarketChart;
-import com.mysite.sitebackend.chart.market.dto.MarketApiVo;
+import com.mysite.sitebackend.chart.market.vo.MarketApiVo;
 import com.mysite.sitebackend.chart.market.service.MarketChartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -22,14 +21,13 @@ public class MarketChartController {
         return "MarketChart";
     }
 
-//    @GetMapping("/get")
-//    public List<MarketChart> get(){
-//        System.out.println("정상실행되었씁니다.");
-//        return this.marketChartService.findByAll();
-//    }
-
     @GetMapping("/get")
-    public MarketChart get(@RequestBody MarketApiVo marketApiVo) {
+    public List<MarketChart> get(){
+        return this.marketChartService.findByAll();
+    }
+
+    @GetMapping("/get1")
+    public MarketChart get1(@RequestBody MarketApiVo marketApiVo) {
         return marketChartService.get(marketApiVo);
     }
 
