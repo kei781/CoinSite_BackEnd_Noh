@@ -52,7 +52,6 @@ public class BoardService {
                 .collect(Collectors.toList());
         return boardListDto;
     }
-
     //게시글 작성하기
     public boolean boardPost(String lcategory, String mcategory, BoardInput boardInput) throws SQLException {
             Board b1 = new Board();
@@ -168,10 +167,8 @@ public class BoardService {
                 return true;
             }
             else return false;
-
         }
         else return false;
-
     }
 
     //게시글 삭제
