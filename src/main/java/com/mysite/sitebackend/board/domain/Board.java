@@ -1,9 +1,7 @@
 package com.mysite.sitebackend.board.domain;
 
-import com.mysite.sitebackend.board.vo.Image;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.persistence.*;
 

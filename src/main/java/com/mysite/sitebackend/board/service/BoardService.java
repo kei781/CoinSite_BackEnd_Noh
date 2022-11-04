@@ -9,19 +9,14 @@ import com.mysite.sitebackend.board.dto.BoardDto;
 import com.mysite.sitebackend.board.dto.BoardListDto;
 import com.mysite.sitebackend.board.dto.CommentListDto;
 import com.mysite.sitebackend.board.vo.BoardInput;
-import com.mysite.sitebackend.board.vo.Image;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.swing.text.html.parser.Parser;
-import java.io.File;
-import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -53,7 +48,7 @@ public class BoardService {
         return boardListDto;
     }
     //게시글 작성하기
-    public boolean boardPost(String lcategory, String mcategory, BoardInput boardInput) throws SQLException {
+    public boolean boardPost(String lcategory, String mcategory, BoardInput boardInput, MultipartFile file) throws SQLException {
             Board b1 = new Board();
             b1.setSubject(boardInput.getSubject());
             b1.setContents(boardInput.getContents());
@@ -62,34 +57,9 @@ public class BoardService {
             b1.setDate(formatedNow);
             b1.setLcategory(lcategory);
             b1.setMcategory(mcategory);
+//            b1.setImage(this.imageSave(file));
             this.boardRepository.save(b1);
             return true;
-    }
-    public void imageSave(MultipartFile file, Board board) {
-        Date date = new Date();
-        StringBuilder sb = new StringBuilder();
-        Image image = new Image();
-        // file image 가 없을 경우
-        if (file.isEmpty()) {
-            sb.append("none");
-        } else {
-            sb.append(date.getTime());
-            sb.append(file.getOriginalFilename());
-            image.setFileName(sb.toString());
-            image.setFileUrl("C://images/feed/");
-        }
-        if (!file.isEmpty()) {
-            File dest = new File("C://images/feed/" + sb.toString());
-            try {
-                file.transferTo(dest);
-            } catch (IllegalStateException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-//            board.setImage(image);
-            this.boardRepository.save(board);
-        }
     }
     //댓글 작성하기
     public boolean commentPost(BoardInput boardInput){
@@ -158,7 +128,7 @@ public class BoardService {
     public boolean commentPatch(BoardInput boardInput){
         Optional<BoardComment> opComment = commentRepository.findById(boardInput.getId());
         if(opComment.isPresent()){
-            if(boardInput.getAuthor() == opComment.get().getAuthor()){
+            if(boardInput.getAuthor().equals(opComment.get().getAuthor())){
                 BoardComment comment = opComment.get();
                 comment.setContents(boardInput.getContents());
                 comment.setAuthor(boardInput.getAuthor());

@@ -7,6 +7,7 @@ import com.mysite.sitebackend.board.service.BoardService;
 import com.mysite.sitebackend.board.vo.BoardInput;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -34,12 +35,11 @@ public class BoardController {
     public List<BoardListDto> search(@PathVariable("lcategory") String lcategory, @PathVariable("mcategory") String mcategory, @RequestParam("value") String value){
         return this.boardService.search(value, lcategory, mcategory);
     }
-
     //게시글 작성하기
     @PostMapping("/post")
-    public boolean boardPost(@PathVariable("lcategory") String lcategory, @PathVariable("mcategory") String mcategory, @RequestBody BoardInput boardInput) {
+    public boolean boardPost(@PathVariable("lcategory") String lcategory, @PathVariable("mcategory") String mcategory, @RequestBody BoardInput boardInput, @RequestBody MultipartFile file) {
         try {
-            return this.boardService.boardPost(lcategory, mcategory, boardInput);
+            return this.boardService.boardPost(lcategory, mcategory, boardInput, file);
         } catch (SQLException e) {
             return false;
         }
@@ -49,7 +49,6 @@ public class BoardController {
     public boolean commentPost(@PathVariable("lcategory") String lcategory, @PathVariable("mcategory") String mcategory, @RequestBody BoardInput boardInput) {
         return this.boardService.commentPost(boardInput);
     }
-    // 이미지 작성하기
 
     //게시글 전체 불러오기
     @GetMapping("/get")

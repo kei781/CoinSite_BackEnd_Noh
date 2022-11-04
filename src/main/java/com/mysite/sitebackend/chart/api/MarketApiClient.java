@@ -1,7 +1,7 @@
-package com.mysite.sitebackend.chart.market.api.client;
+package com.mysite.sitebackend.chart.api;
 
-import com.mysite.sitebackend.chart.market.dao.MarketChartRepository;
-import com.mysite.sitebackend.chart.market.domain.MarketChart;
+import com.mysite.sitebackend.chart.dao.ChartRepository;
+import com.mysite.sitebackend.chart.domain.Chart;
 import lombok.RequiredArgsConstructor;
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -18,20 +18,20 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
-public class MarketChartApiClient {
-        private final MarketChartRepository marketChartRepository;
+public class MarketApiClient {
+        private final ChartRepository chartRepository;
         LocalDate now = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
         String formatedNow = now.minusDays(1).format(formatter);
 
-        public MarketChart marketApiCall(String market) throws Exception{
-                if(market == "코스피" || market == "코스닥"){ // 코스피 코스닥만 입력가능
-                        Optional<MarketChart> opMarketChart = Optional.ofNullable(marketChartRepository.findByDateAndName(formatedNow, market));
+        public Chart ApiCall(String name) throws Exception{
+                if(name.equals("코스피") || name.equals("코스닥")){ // 코스피 코스닥만 입력가능
+                        Optional<Chart> opMarketChart = Optional.ofNullable(this.chartRepository.findByDateAndNameAndChartIndex(formatedNow, name, "Market"));
                         if (opMarketChart.isEmpty()) {
                                 //api에 데이터 요청하기
                                 StringBuffer sb = new StringBuffer("http://apis.data.go.kr/1160100/service/GetMarketIndexInfoService/getStockMarketIndex?");
-                                String idxNm = URLEncoder.encode(market, "UTF-8");
-                                sb.append("ServiceKey=J0bSLK%2BDoFdhT9ULtidMBZ5nV2VMqf9Ly6LxAv0fzrVRoEOf62u4UbVmhHJZfFaDXbE53Bk%2FmY%2FRpTlNIC83ng%3D%3D");
+                                String idxNm = URLEncoder.encode(name, "UTF-8");
+                                sb.append("serviceKey=J0bSLK%2BDoFdhT9ULtidMBZ5nV2VMqf9Ly6LxAv0fzrVRoEOf62u4UbVmhHJZfFaDXbE53Bk%2FmY%2FRpTlNIC83ng%3D%3D");
                                 sb.append("&likeBasDt=" + formatedNow);
                                 sb.append("&idxNm=" + idxNm);
 
@@ -41,9 +41,7 @@ public class MarketChartApiClient {
                                 conn.setRequestProperty("Content-Type","application/xml");
                                 conn.connect();
 
-
                                 SAXBuilder builder = new SAXBuilder();
-
 
                                 Document document = builder.build(conn.getInputStream());
                                 //api 데이터 요청하기 끝
@@ -56,30 +54,29 @@ public class MarketChartApiClient {
                                 Element item = items.getChild("item");
                                 //api 데이터 파싱하기 끝
                                 Optional<Element> opElement = Optional.ofNullable(item);
-                                MarketChart marketChart = new MarketChart();
+                                Chart chartChart = new Chart();
                                 if (opElement.isPresent()){ // 요청한 api에 데이터가 존재하면(전일이 평일일경우)
                                         //api 데이터 저장하기
-                                        marketChart.setDate(item.getChildText("basDt"));//날짜
-                                        marketChart.setName(item.getChildText("idxNm")); // 이름
-                                        marketChart.setValue(item.getChildText("clpr")); // 전일종가
-                                        marketChart.setAvg(item.getChildText("fltRt")); // 전일대비 변동폭
-                                        marketChart.setHigh(item.getChildText("hipr"));  // 전일 고점
-                                        marketChart.setLow(item.getChildText("lopr")); // 전일 저점
-                                        marketChart.setYavg(item.getChildText("lsYrEdVsFltRg")); // 52주 평균 변동폭
+                                        chartChart.setDate(item.getChildText("basDt"));//날짜
+                                        chartChart.setName(item.getChildText("idxNm")); // 이름
+                                        chartChart.setValue(item.getChildText("clpr")); // 전일종가
+                                        chartChart.setAvg(item.getChildText("fltRt")); // 전일대비 변동폭
+                                        chartChart.setHigh(item.getChildText("hipr"));  // 전일 고점
+                                        chartChart.setLow(item.getChildText("lopr")); // 전일 저점
+                                        chartChart.setYavg(item.getChildText("lsYrEdVsFltRg")); // 52주 평균 변동폭
+                                        chartChart.setChartIndex("Market");
                                 }
                                 else {
                                         formatedNow = now.minusDays(2).format(formatter);
-                                        marketChart = marketChartRepository.findByDateAndName(formatedNow, market);
-                                        marketChart.setDate(now.minusDays(1).format(formatter));
+                                        chartChart = this.chartRepository.findByDateAndNameAndChartIndex(formatedNow, name, "Market");
+                                        chartChart.setDate(now.minusDays(1).format(formatter));
                                 }
-                                marketChartRepository.save(marketChart);
+                                this.chartRepository.save(chartChart);
                         }
-                        return marketChartRepository.findByDateAndName(formatedNow, market);
+                        return this.chartRepository.findByDateAndNameAndChartIndex(formatedNow, name, "Market");
                 }
                 else { // 코스피 코스닥이 입력값이 아닐경우 안보냄.
                         return null;
                 }
-
         }
-
 }

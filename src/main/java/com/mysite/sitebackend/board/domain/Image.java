@@ -8,8 +8,8 @@ import javax.persistence.Embeddable;
 
 @EqualsAndHashCode
 @AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@Setter
 @Embeddable
 public class Image {
     @NotNull
