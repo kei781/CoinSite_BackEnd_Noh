@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
@@ -23,16 +24,30 @@ public class MarketApiClient {
         LocalDate now = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
         String formatedNow = now.minusDays(1).format(formatter);
+        public String time(){
+                DayOfWeek dayOfWeek = this.now.getDayOfWeek();
+                int dayOfWeekNumber = dayOfWeek.getValue();
+                String formatedNow1;
+                //만약 오늘이 월요일이거나
+                if(dayOfWeekNumber == 1){
+                        return formatedNow1 = this.now.minusDays(3).format(formatter);
+                }
+                //만약 오늘이 일요일이라면
+                else if (dayOfWeekNumber ==7) {
+                        return formatedNow1 = this.now.minusDays(2).format(formatter);
+                }
+                return formatedNow1 = this.now.minusDays(1).format(formatter);
+        }
 
         public Chart ApiCall(String name) throws Exception{
                 if(name.equals("코스피") || name.equals("코스닥")){ // 코스피 코스닥만 입력가능
-                        Optional<Chart> opMarketChart = Optional.ofNullable(this.chartRepository.findByDateAndNameAndChartIndex(formatedNow, name, "Market"));
+                        Optional<Chart> opMarketChart = Optional.ofNullable(this.chartRepository.findByDateAndNameAndChartIndex(this.formatedNow, name, "Market"));
                         if (opMarketChart.isEmpty()) {
                                 //api에 데이터 요청하기
                                 StringBuffer sb = new StringBuffer("http://apis.data.go.kr/1160100/service/GetMarketIndexInfoService/getStockMarketIndex?");
                                 String idxNm = URLEncoder.encode(name, "UTF-8");
                                 sb.append("serviceKey=J0bSLK%2BDoFdhT9ULtidMBZ5nV2VMqf9Ly6LxAv0fzrVRoEOf62u4UbVmhHJZfFaDXbE53Bk%2FmY%2FRpTlNIC83ng%3D%3D");
-                                sb.append("&likeBasDt=" + formatedNow);
+                                sb.append("&likeBasDt=" + time());
                                 sb.append("&idxNm=" + idxNm);
 
                                 URL url = new URL(sb.toString());
@@ -57,7 +72,7 @@ public class MarketApiClient {
                                 Chart chartChart = new Chart();
                                 if (opElement.isPresent()){ // 요청한 api에 데이터가 존재하면(전일이 평일일경우)
                                         //api 데이터 저장하기
-                                        chartChart.setDate(item.getChildText("basDt"));//날짜
+                                        chartChart.setDate(this.formatedNow);//날짜
                                         chartChart.setName(item.getChildText("idxNm")); // 이름
                                         chartChart.setValue(item.getChildText("clpr")); // 전일종가
                                         chartChart.setAvg(item.getChildText("fltRt")); // 전일대비 변동폭
@@ -65,13 +80,8 @@ public class MarketApiClient {
                                         chartChart.setLow(item.getChildText("lopr")); // 전일 저점
                                         chartChart.setYavg(item.getChildText("lsYrEdVsFltRg")); // 52주 평균 변동폭
                                         chartChart.setChartIndex("Market");
+                                        this.chartRepository.save(chartChart);
                                 }
-                                else {
-                                        formatedNow = now.minusDays(2).format(formatter);
-                                        chartChart = this.chartRepository.findByDateAndNameAndChartIndex(formatedNow, name, "Market");
-                                        chartChart.setDate(now.minusDays(1).format(formatter));
-                                }
-                                this.chartRepository.save(chartChart);
                         }
                         return this.chartRepository.findByDateAndNameAndChartIndex(formatedNow, name, "Market");
                 }
@@ -80,3 +90,9 @@ public class MarketApiClient {
                 }
         }
 }
+
+
+
+
+
+

@@ -3,16 +3,12 @@ package com.mysite.sitebackend.configurable;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.filter.CharacterEncodingFilter;
-
-import javax.servlet.FilterRegistration;
 
 @Configurable
-public class RestTemplateClient {
+public class Config {
 
     @Bean
     public RestTemplate restTemplate(RestTemplateBuilder builder) {
@@ -22,6 +18,4 @@ public class RestTemplateClient {
     public ModelMapper modelMapper(){
         return new ModelMapper();
     }
-
-
 }

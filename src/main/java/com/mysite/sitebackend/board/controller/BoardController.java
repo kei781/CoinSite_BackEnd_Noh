@@ -35,6 +35,7 @@ public class BoardController {
     public List<BoardListDto> search(@PathVariable("lcategory") String lcategory, @PathVariable("mcategory") String mcategory, @RequestParam("value") String value){
         return this.boardService.search(value, lcategory, mcategory);
     }
+    
     //게시글 작성하기
     @PostMapping("/post")
     public boolean boardPost(@PathVariable("lcategory") String lcategory, @PathVariable("mcategory") String mcategory, @RequestBody BoardInput boardInput, @RequestBody MultipartFile file) {
@@ -49,6 +50,7 @@ public class BoardController {
     public boolean commentPost(@PathVariable("lcategory") String lcategory, @PathVariable("mcategory") String mcategory, @RequestBody BoardInput boardInput) {
         return this.boardService.commentPost(boardInput);
     }
+    //이미지 추가하기
 
     //게시글 전체 불러오기
     @GetMapping("/get")

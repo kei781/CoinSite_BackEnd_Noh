@@ -29,10 +29,13 @@ public class ChartController {
         return this.chartService.findAll();
     }
 
+    //증시
     @GetMapping("/Market/get")
     public MarketApiDto marketGet(@RequestParam("name") String name) {
         return chartService.marketGet(name);
     }
+
+    //주식
     @GetMapping("/Stock/get")
     public StockApiDto stockGet(@RequestParam("name") String name) {
         return chartService.stockGet(name);
