@@ -16,26 +16,27 @@ public class AccountService {
     private final AccountRepository accountRepository;
     //회원가입
     public boolean signUp(AccountInput accountInput){
-        //
         if(accountInput.getPassword().equals(accountInput.getConfirmPassword())){
             Account a1 = new Account();
             a1.setUserId(accountInput.getUserId());
             a1.setUserName(accountInput.getUserName());
             a1.setPassword(accountInput.getPassword());
+            a1.setRole("USER");
             this.accountRepository.save(a1);
             return true;
         }
-        else{
-            return false;
-        }
-    }
+        else return false;
 
+    }
     //로그인
     public AccountSighInDto signIn(AccountInput accountInput){
+        // 아이디가 포함된 컬럼 찾음.(없다면 null)
         Optional<Account> opAccount = Optional.ofNullable(accountRepository.findByUserId(accountInput.getUserId()));
         AccountSighInDto accountSighInDto = new AccountSighInDto();
+        // 만약 아이디가 포함된 칼럼이 '있다면'
         if (opAccount.isPresent()){
             Account account = accountRepository.findByUserId(accountInput.getUserId());
+            // 입력받은 패스워드와, 컬럼에 포함된 패스워드가 '같은지 체크'
             if (account.getPassword().equals(accountInput.getPassword())){
                 //로그인에 성공했을때만, 유저네임과 true 반환
                 //실패했을땐 null과 false반환
@@ -52,6 +53,7 @@ public class AccountService {
                 return accountSighInDto;
             }
         }
+        // 만약 아이디가 포함된 칼럼이 '없다면'
         else {
             accountSighInDto.setUserId(null);
             accountSighInDto.setUserName(null);
@@ -59,7 +61,6 @@ public class AccountService {
             return accountSighInDto;
         }
     }
-
     //패스워드 리셋
     public boolean pwReset(AccountInput accountInput){
         // 입력받은 패스워드와 체크패스워드가 같을때
@@ -73,18 +74,8 @@ public class AccountService {
                 this.accountRepository.save(account);
                 return true;
             }
-            else{
-                return false;
-            }
+            else return false;
         }
-        else {
-            return false;
-        }
-    }
-
-
-    public Optional accountGet(AccountInput accountInput){
-        Optional<Account> opAccount = Optional.ofNullable(accountRepository.findByUserId(accountInput.getUserId()));
-        return opAccount;
+        else  return false;
     }
 }

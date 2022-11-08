@@ -1,6 +1,8 @@
 package com.mysite.sitebackend.board.service;
 
 
+import com.mysite.sitebackend.account.dao.AccountRepository;
+import com.mysite.sitebackend.account.domain.Account;
 import com.mysite.sitebackend.board.dao.BoardCommentRepository;
 import com.mysite.sitebackend.board.dao.BoardRepository;
 import com.mysite.sitebackend.board.domain.Board;
@@ -11,6 +13,7 @@ import com.mysite.sitebackend.board.dto.CommentListDto;
 import com.mysite.sitebackend.board.vo.BoardInput;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,6 +28,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class BoardService {
     private final BoardRepository boardRepository;
+    private final AccountRepository accountRepository;
     private final BoardCommentRepository commentRepository;
     private final ModelMapper modelMapper;
     LocalDate now = LocalDate.now();
@@ -33,7 +37,7 @@ public class BoardService {
 
     //전체검색
     public List<BoardListDto> searchAll(String value){
-        List<Board> boardList = this.boardRepository.findBySubjectContaining(value);
+        List<Board> boardList = this.boardRepository.searchAll(value);
         List<BoardListDto> boardListDto = boardList.stream()
                 .map(BoardListDto1 -> modelMapper.map(BoardListDto1, BoardListDto.class))
                 .collect(Collectors.toList());
@@ -41,7 +45,7 @@ public class BoardService {
     }
     //게시판별검색
     public List<BoardListDto> search(String value, String lcategory, String mcategory){
-        List<Board> boardList = this.boardRepository.findBySubjectContainingAndLcategoryAndMcategory(value, lcategory, mcategory);
+        List<Board> boardList = this.boardRepository.search(value, lcategory, mcategory);
         List<BoardListDto> boardListDto = boardList.stream()
                 .map(BoardListDto1 -> modelMapper.map(BoardListDto1, BoardListDto.class))
                 .collect(Collectors.toList());
@@ -49,6 +53,23 @@ public class BoardService {
     }
     //게시글 작성하기
     public boolean boardPost(String lcategory, String mcategory, BoardInput boardInput, MultipartFile file) throws SQLException {
+        if(lcategory.equals("")){
+            Account account = accountRepository.findByUserId(boardInput.getAuthor());
+            if(account.getRole().equals("ADMIN")){
+                Board b1 = new Board();
+                b1.setSubject(boardInput.getSubject());
+                b1.setContents(boardInput.getContents());
+                b1.setAuthor(boardInput.getAuthor());
+                b1.setViews(0);
+                b1.setDate(formatedNow);
+                b1.setLcategory(lcategory);
+                b1.setMcategory(mcategory);
+                this.boardRepository.save(b1);
+                return true;
+            }
+            else return false;
+        }
+        else {
             Board b1 = new Board();
             b1.setSubject(boardInput.getSubject());
             b1.setContents(boardInput.getContents());
@@ -57,9 +78,9 @@ public class BoardService {
             b1.setDate(formatedNow);
             b1.setLcategory(lcategory);
             b1.setMcategory(mcategory);
-//            b1.setImage(this.imageSave(file));
             this.boardRepository.save(b1);
             return true;
+        }
     }
     //댓글 작성하기
     public boolean commentPost(BoardInput boardInput){
@@ -84,6 +105,15 @@ public class BoardService {
                         .collect(Collectors.toList());
         return boardListDto;
     }
+    //게시글 3개만 불러오기
+    public List<BoardListDto> findThree(String lcategory, String mcategory){
+        List<Board> board = boardRepository.findThree(lcategory, mcategory, PageRequest.of(0, 3));
+        List<BoardListDto> boardListDto = board.stream()
+                .map(BoardListDto1 -> modelMapper.map(BoardListDto1, BoardListDto.class))
+                .collect(Collectors.toList());
+        return boardListDto;
+    }
+
     //게시글 1개불러오기
     public BoardDto findByIdToBoard(String lcategory, String mcategory, Integer id){
         Board board = this.boardRepository.findByIdAndLcategoryAndMcategory(id, lcategory, mcategory);
@@ -144,24 +174,57 @@ public class BoardService {
 
     //게시글 삭제
     public boolean boardDelete(String lcategory, String mcategory,  BoardInput boardInput){
-        Optional<Board> optionalBoard = Optional.of(this.boardRepository.findByIdAndLcategoryAndMcategory(boardInput.getId(), lcategory, mcategory));
-        if(optionalBoard.isPresent()){
-            if(boardInput.getAuthor().equals(optionalBoard.get().getAuthor())){
+        Account account = this.accountRepository.findByUserId(boardInput.getAuthor());
+        // 사용자가 단순 유저일경우
+        if(account.getRole().equals("USER")){
+            Optional<Board> optionalBoard = Optional.of(this.boardRepository.findByIdAndLcategoryAndMcategory(boardInput.getId(), lcategory, mcategory));
+            if(optionalBoard.isPresent()){
+                // 해당작성자가 맞는지 체크 후 삭제
+                if(boardInput.getAuthor().equals(optionalBoard.get().getAuthor())){
+                    this.boardRepository.deleteById(boardInput.getId());
+                    this.commentRepository.deleteAllByBoardIndex(boardInput.getId());
+                    return true;
+                }
+                else return false;
+            }
+            else return false;
+        }
+        // 사용자가 관리자 일경우
+        else if (account.getRole().equals("ADMIN")) {
+            Optional<Board> optionalBoard = Optional.of(this.boardRepository.findByIdAndLcategoryAndMcategory(boardInput.getId(), lcategory, mcategory));
+            // 작성자유무를 체크하지않고 바로 삭제
+            if(optionalBoard.isPresent()){
                 this.boardRepository.deleteById(boardInput.getId());
                 this.commentRepository.deleteAllByBoardIndex(boardInput.getId());
                 return true;
             }
             else return false;
         }
-        else return false;
+            else return false;
     }
     // 댓글삭제
     public boolean commnetDelete(BoardInput boardInput){
+        Account account = this.accountRepository.findByUserId(boardInput.getAuthor());
         Optional<BoardComment> optionalCoinBoardComment = this.commentRepository.findById(boardInput.getId());
-        if(optionalCoinBoardComment.isPresent()){
-            this.commentRepository.deleteById(boardInput.getId());
-            return true;
+        //상용자가 유저일경우
+        if (account.getRole().equals("USER")){
+            if(optionalCoinBoardComment.isPresent()){
+                // 작성자가 맞는지 체크 후 삭제
+                if (boardInput.getAuthor().equals(optionalCoinBoardComment.get().getAuthor())) {
+                    this.commentRepository.deleteById(boardInput.getId());
+                    return true;
+                }
+                else return false;
+            }
         }
-        else return false;
+        //사용자가 관리자일경우
+        else if (account.getRole().equals("ADMIN")) {
+            if(optionalCoinBoardComment.isPresent()){
+                //작성자가 맞는지 체크하지않고 삭제
+                    this.commentRepository.deleteById(boardInput.getId());
+                    return true;
+            }
+        } else return false;
+        return false;
     }
 }

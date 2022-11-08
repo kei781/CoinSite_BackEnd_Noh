@@ -1,5 +1,6 @@
 package com.mysite.sitebackend.board.controller;
 
+import com.mysite.sitebackend.board.domain.Board;
 import com.mysite.sitebackend.board.dto.BoardDto;
 import com.mysite.sitebackend.board.dto.BoardListDto;
 import com.mysite.sitebackend.board.dto.CommentListDto;
@@ -56,6 +57,11 @@ public class BoardController {
     @GetMapping("/get")
     public List<BoardListDto> get(@PathVariable("lcategory") String lcategory, @PathVariable("mcategory") String mcategory){
         return this.boardService.findAll(lcategory, mcategory);
+    }
+//    //게시글 3개 불러오기
+    @GetMapping("/get3")
+    public List<BoardListDto> boardGet(@PathVariable("lcategory") String lcategory, @PathVariable("mcategory") String mcategory){
+        return this.boardService.findThree(lcategory, mcategory);
     }
 
     //게시글 1개 불러오기
