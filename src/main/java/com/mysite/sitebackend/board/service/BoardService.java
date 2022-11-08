@@ -53,13 +53,16 @@ public class BoardService {
     }
     //게시글 작성하기
     public boolean boardPost(String lcategory, String mcategory, BoardInput boardInput, MultipartFile file) throws SQLException {
-        if(lcategory.equals("")){
+        //공지카테고리안의 공지사항 게시판이나 이벤트 게시판일 경우
+        if(lcategory.equals("notice") && (mcategory.equals("n") || mcategory.equals("e"))){
             Account account = accountRepository.findByUserId(boardInput.getAuthor());
+            // 어드민만 게시글 작성가능
             if(account.getRole().equals("ADMIN")){
                 Board b1 = new Board();
                 b1.setSubject(boardInput.getSubject());
                 b1.setContents(boardInput.getContents());
-                b1.setAuthor(boardInput.getAuthor());
+                // 관리자는 글 작성시 반드시 어드민
+                b1.setAuthor("관리자");
                 b1.setViews(0);
                 b1.setDate(formatedNow);
                 b1.setLcategory(lcategory);
@@ -69,7 +72,9 @@ public class BoardService {
             }
             else return false;
         }
+        // 그외 카테고리, 게시판일경우
         else {
+            // 자유롭게 게시글 작성가능
             Board b1 = new Board();
             b1.setSubject(boardInput.getSubject());
             b1.setContents(boardInput.getContents());
@@ -84,16 +89,36 @@ public class BoardService {
     }
     //댓글 작성하기
     public boolean commentPost(BoardInput boardInput){
-        Optional<Board> optionalCoinBoard = this.boardRepository.findById(boardInput.getId());
-        if(optionalCoinBoard.isPresent()){
-            BoardComment a = new BoardComment();
-            a.setContents(boardInput.getContents());
-            a.setDate(formatedNow);
-            a.setAuthor(boardInput.getAuthor());
-            a.setBoardIndex(boardInput.getId());
-            this.commentRepository.save(a);
-            return true;
+        Optional<Board> optionalBoard = this.boardRepository.findById(boardInput.getId());
+        // 댓글을 작성하려는 게시글이 옳바르게 존재하면
+        if(optionalBoard.isPresent()) {
+            // 해당게시글이 문의 게시판인지 체크
+            if (optionalBoard.get().getLcategory().equals("notice") && optionalBoard.get().getMcategory().equals("i")) {
+                //문의 게시판의 게시글에 댓글은, 어드민만 작성가능
+                if (boardInput.getAuthor().equals("ADMIN")) {
+                    BoardComment a = new BoardComment();
+                    a.setContents(boardInput.getContents());
+                    a.setDate(formatedNow);
+                    a.setAuthor("ADMIN");
+                    a.setBoardIndex(boardInput.getId());
+                    this.commentRepository.save(a);
+                    return true;
+                }
+                // 문의 게시판의 게시글에 댓글은, 어드민이 아니면 작성 불가
+                else return false;
+            } else {
+                // 해당게시판이 문의 게시판이 아니라면
+                // 자유롭게 댓글 작성가능
+                BoardComment a = new BoardComment();
+                a.setContents(boardInput.getContents());
+                a.setDate(formatedNow);
+                a.setAuthor(boardInput.getAuthor());
+                a.setBoardIndex(boardInput.getId());
+                this.commentRepository.save(a);
+                return true;
+            }
         }
+        // 댓글을 작성하려는 게시글이 옳바르게 존재하지않으면 실패
         else return false;
     }
 
