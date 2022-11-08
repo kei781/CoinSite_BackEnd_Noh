@@ -9,6 +9,7 @@ import com.mysite.sitebackend.board.domain.Board;
 import com.mysite.sitebackend.board.domain.BoardComment;
 import com.mysite.sitebackend.board.dto.BoardDto;
 import com.mysite.sitebackend.board.dto.BoardListDto;
+import com.mysite.sitebackend.board.dto.BoardSearchAllDto;
 import com.mysite.sitebackend.board.dto.CommentListDto;
 import com.mysite.sitebackend.board.vo.BoardInput;
 import lombok.RequiredArgsConstructor;
@@ -36,12 +37,12 @@ public class BoardService {
     String formatedNow = now.format(formatter);
 
     //전체검색
-    public List<BoardListDto> searchAll(String value){
+    public List<BoardSearchAllDto> searchAll(String value){
         List<Board> boardList = this.boardRepository.searchAll(value);
-        List<BoardListDto> boardListDto = boardList.stream()
-                .map(BoardListDto1 -> modelMapper.map(BoardListDto1, BoardListDto.class))
+        List<BoardSearchAllDto> boardSearchAllDto = boardList.stream()
+                .map(boardSearchAllDto1 -> modelMapper.map(boardSearchAllDto1, BoardSearchAllDto.class))
                 .collect(Collectors.toList());
-        return boardListDto;
+        return boardSearchAllDto;
     }
     //게시판별검색
     public List<BoardListDto> search(String value, String lcategory, String mcategory){

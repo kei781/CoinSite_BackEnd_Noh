@@ -3,6 +3,7 @@ package com.mysite.sitebackend.board.controller;
 import com.mysite.sitebackend.board.domain.Board;
 import com.mysite.sitebackend.board.dto.BoardDto;
 import com.mysite.sitebackend.board.dto.BoardListDto;
+import com.mysite.sitebackend.board.dto.BoardSearchAllDto;
 import com.mysite.sitebackend.board.dto.CommentListDto;
 import com.mysite.sitebackend.board.service.BoardService;
 import com.mysite.sitebackend.board.vo.BoardInput;
@@ -28,7 +29,7 @@ public class BoardController {
 
     //전체 검색
     @GetMapping("/searchAll")
-    public List<BoardListDto> search(@RequestParam("value") String value){
+    public List<BoardSearchAllDto> search(@RequestParam("value") String value){
         return this.boardService.searchAll(value);
     }
     // 게시판별 검색
