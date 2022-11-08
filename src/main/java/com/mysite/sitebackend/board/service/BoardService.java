@@ -94,8 +94,9 @@ public class BoardService {
         if(optionalBoard.isPresent()) {
             // 해당게시글이 문의 게시판인지 체크
             if (optionalBoard.get().getLcategory().equals("notice") && optionalBoard.get().getMcategory().equals("i")) {
+                System.out.println("문의 게시판!!!!");
                 //문의 게시판의 게시글에 댓글은, 어드민만 작성가능
-                if (boardInput.getAuthor().equals("ADMIN")) {
+                if (accountRepository.findByUserId(boardInput.getAuthor()).getRole().equals("ADMIN")) {
                     BoardComment a = new BoardComment();
                     a.setContents(boardInput.getContents());
                     a.setDate(formatedNow);

@@ -58,7 +58,7 @@ public class BoardController {
     public List<BoardListDto> get(@PathVariable("lcategory") String lcategory, @PathVariable("mcategory") String mcategory){
         return this.boardService.findAll(lcategory, mcategory);
     }
-//    //게시글 3개 불러오기
+   //게시글 3개 불러오기
     @GetMapping("/get3")
     public List<BoardListDto> boardGet(@PathVariable("lcategory") String lcategory, @PathVariable("mcategory") String mcategory){
         return this.boardService.findThree(lcategory, mcategory);
