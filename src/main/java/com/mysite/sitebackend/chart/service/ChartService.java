@@ -20,17 +20,17 @@ public class ChartService {
     private final StockApiClient stockApiClient;
     private final ModelMapper modelMapper;
 
-    public List<Chart> findAll(){
+    public List<Chart> findAll() {
         List<Chart> charts = this.chartRepository.findAll();
         return charts;
     }
 
-    public MarketApiDto marketGet(String name){
+    public MarketApiDto marketGet(String name) {
         try {
             Chart chart = marketApiClient.ApiCall(name);
             MarketApiDto marketApiDto = modelMapper.map(chart, MarketApiDto.class);
             return marketApiDto;
-        } catch (Exception e){
+        } catch (Exception e) {
             System.out.println("에러발생!!!에러발생!!!에러발생!!!에러발생!!!에러발생!!!");
             return null;
         }

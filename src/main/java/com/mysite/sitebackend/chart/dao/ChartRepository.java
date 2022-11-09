@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface ChartRepository extends JpaRepository<Chart, Integer> {
     Chart findByDateAndNameAndChartIndex(String date, String name, String chartIndex);
+
     List<Chart> findAllByChartIndex(String ChartIndex);
 }

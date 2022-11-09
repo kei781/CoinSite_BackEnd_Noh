@@ -37,28 +37,30 @@ public class BoardService {
     String formatedNow = now.format(formatter);
 
     //전체검색
-    public List<BoardSearchAllDto> searchAll(String value){
+    public List<BoardSearchAllDto> searchAll(String value) {
         List<Board> boardList = this.boardRepository.searchAll(value);
         List<BoardSearchAllDto> boardSearchAllDto = boardList.stream()
                 .map(boardSearchAllDto1 -> modelMapper.map(boardSearchAllDto1, BoardSearchAllDto.class))
                 .collect(Collectors.toList());
         return boardSearchAllDto;
     }
+
     //게시판별검색
-    public List<BoardListDto> search(String value, String lcategory, String mcategory){
+    public List<BoardListDto> search(String value, String lcategory, String mcategory) {
         List<Board> boardList = this.boardRepository.search(value, lcategory, mcategory);
         List<BoardListDto> boardListDto = boardList.stream()
                 .map(BoardListDto1 -> modelMapper.map(BoardListDto1, BoardListDto.class))
                 .collect(Collectors.toList());
         return boardListDto;
     }
+
     //게시글 작성하기
     public boolean boardPost(String lcategory, String mcategory, BoardInput boardInput, MultipartFile file) throws SQLException {
         //공지카테고리안의 공지사항 게시판이나 이벤트 게시판일 경우
-        if(lcategory.equals("notice") && (mcategory.equals("n") || mcategory.equals("e"))){
+        if (lcategory.equals("notice") && (mcategory.equals("n") || mcategory.equals("e"))) {
             Account account = accountRepository.findByUserId(boardInput.getAuthor());
             // 어드민만 게시글 작성가능
-            if(account.getRole().equals("ADMIN")){
+            if (account.getRole().equals("ADMIN")) {
                 Board b1 = new Board();
                 b1.setSubject(boardInput.getSubject());
                 b1.setContents(boardInput.getContents());
@@ -70,8 +72,7 @@ public class BoardService {
                 b1.setMcategory(mcategory);
                 this.boardRepository.save(b1);
                 return true;
-            }
-            else return false;
+            } else return false;
         }
         // 그외 카테고리, 게시판일경우
         else {
@@ -88,11 +89,12 @@ public class BoardService {
             return true;
         }
     }
+
     //댓글 작성하기
-    public boolean commentPost(BoardInput boardInput){
+    public boolean commentPost(BoardInput boardInput) {
         Optional<Board> optionalBoard = this.boardRepository.findById(boardInput.getId());
         // 댓글을 작성하려는 게시글이 옳바르게 존재하면
-        if(optionalBoard.isPresent()) {
+        if (optionalBoard.isPresent()) {
             // 해당게시글이 문의 게시판인지 체크
             if (optionalBoard.get().getLcategory().equals("notice") && optionalBoard.get().getMcategory().equals("i")) {
                 System.out.println("문의 게시판!!!!");
@@ -125,15 +127,16 @@ public class BoardService {
     }
 
     //게시글 전체목록 불러오기
-    public List<BoardListDto> findAll(String lcategory, String mcategory){
+    public List<BoardListDto> findAll(String lcategory, String mcategory) {
         List<Board> board = boardRepository.findAllByLcategoryAndMcategory(lcategory, mcategory);
         List<BoardListDto> boardListDto = board.stream()
-                        .map(BoardListDto1 -> modelMapper.map(BoardListDto1, BoardListDto.class))
-                        .collect(Collectors.toList());
+                .map(BoardListDto1 -> modelMapper.map(BoardListDto1, BoardListDto.class))
+                .collect(Collectors.toList());
         return boardListDto;
     }
+
     //게시글 3개만 불러오기
-    public List<BoardListDto> findThree(String lcategory, String mcategory){
+    public List<BoardListDto> findThree(String lcategory, String mcategory) {
         List<Board> board = boardRepository.findThree(lcategory, mcategory, PageRequest.of(0, 3));
         List<BoardListDto> boardListDto = board.stream()
                 .map(BoardListDto1 -> modelMapper.map(BoardListDto1, BoardListDto.class))
@@ -142,32 +145,32 @@ public class BoardService {
     }
 
     //게시글 1개불러오기
-    public BoardDto findByIdToBoard(String lcategory, String mcategory, Integer id){
+    public BoardDto findByIdToBoard(String lcategory, String mcategory, Integer id) {
         Board board = this.boardRepository.findByIdAndLcategoryAndMcategory(id, lcategory, mcategory);
-        board.setViews(board.getViews() +1);
+        board.setViews(board.getViews() + 1);
         this.boardRepository.save(board);
         BoardDto boardDto = modelMapper.map(board, BoardDto.class);
         return boardDto;
     }
+
     //게시글 1개의 댓글 전체목록 불러오기
-    public List<CommentListDto> findByIdToComment(String lcategory, String mcategory, Integer id){
+    public List<CommentListDto> findByIdToComment(String lcategory, String mcategory, Integer id) {
         Optional<Board> opboard = Optional.of(this.boardRepository.findByIdAndLcategoryAndMcategory(id, lcategory, mcategory));
-        if (opboard.isPresent()){
+        if (opboard.isPresent()) {
             List<BoardComment> comment = commentRepository.findAllByBoardIndex(id);
             List<CommentListDto> boardListDto = comment.stream()
                     .map(comments1 -> modelMapper.map(comments1, CommentListDto.class))
                     .collect(Collectors.toList());
             return boardListDto;
-        }
-        else return null;
+        } else return null;
     }
 
 
     //게시글 수정
-    public boolean boardPatch(String lcategory, String mcategory,  BoardInput boardInput){
+    public boolean boardPatch(String lcategory, String mcategory, BoardInput boardInput) {
         Optional<Board> opBoard = Optional.of(this.boardRepository.findByIdAndLcategoryAndMcategory(boardInput.getId(), lcategory, mcategory));
-        if(opBoard.isPresent()){
-            if(boardInput.getAuthor().equals(opBoard.get().getAuthor())){
+        if (opBoard.isPresent()) {
+            if (boardInput.getAuthor().equals(opBoard.get().getAuthor())) {
                 Board board = opBoard.get();
                 board.setSubject(boardInput.getSubject());
                 board.setContents(boardInput.getContents());
@@ -175,17 +178,16 @@ public class BoardService {
                 board.setDate(formatedNow);
                 boardRepository.save(board);
                 return true;
-            }
-            else return false;
-        }
-        else return false;
+            } else return false;
+        } else return false;
 
     }
+
     //댓글 수정
-    public boolean commentPatch(BoardInput boardInput){
+    public boolean commentPatch(BoardInput boardInput) {
         Optional<BoardComment> opComment = commentRepository.findById(boardInput.getId());
-        if(opComment.isPresent()){
-            if(boardInput.getAuthor().equals(opComment.get().getAuthor())){
+        if (opComment.isPresent()) {
+            if (boardInput.getAuthor().equals(opComment.get().getAuthor())) {
                 BoardComment comment = opComment.get();
                 comment.setContents(boardInput.getContents());
                 comment.setAuthor(boardInput.getAuthor());
@@ -193,63 +195,57 @@ public class BoardService {
                 comment.setBoardIndex(comment.getBoardIndex());
                 commentRepository.save(comment);
                 return true;
-            }
-            else return false;
-        }
-        else return false;
+            } else return false;
+        } else return false;
     }
 
     //게시글 삭제
-    public boolean boardDelete(String lcategory, String mcategory,  BoardInput boardInput){
+    public boolean boardDelete(String lcategory, String mcategory, BoardInput boardInput) {
         Account account = this.accountRepository.findByUserId(boardInput.getAuthor());
         // 사용자가 단순 유저일경우
-        if(account.getRole().equals("USER")){
+        if (account.getRole().equals("USER")) {
             Optional<Board> optionalBoard = Optional.of(this.boardRepository.findByIdAndLcategoryAndMcategory(boardInput.getId(), lcategory, mcategory));
-            if(optionalBoard.isPresent()){
+            if (optionalBoard.isPresent()) {
                 // 해당작성자가 맞는지 체크 후 삭제
-                if(boardInput.getAuthor().equals(optionalBoard.get().getAuthor())){
+                if (boardInput.getAuthor().equals(optionalBoard.get().getAuthor())) {
                     this.boardRepository.deleteById(boardInput.getId());
                     this.commentRepository.deleteAllByBoardIndex(boardInput.getId());
                     return true;
-                }
-                else return false;
-            }
-            else return false;
+                } else return false;
+            } else return false;
         }
         // 사용자가 관리자 일경우
         else if (account.getRole().equals("ADMIN")) {
             Optional<Board> optionalBoard = Optional.of(this.boardRepository.findByIdAndLcategoryAndMcategory(boardInput.getId(), lcategory, mcategory));
             // 작성자유무를 체크하지않고 바로 삭제
-            if(optionalBoard.isPresent()){
+            if (optionalBoard.isPresent()) {
                 this.boardRepository.deleteById(boardInput.getId());
                 this.commentRepository.deleteAllByBoardIndex(boardInput.getId());
                 return true;
-            }
-            else return false;
-        }
-            else return false;
+            } else return false;
+        } else return false;
     }
+
     // 댓글삭제
-    public boolean commnetDelete(BoardInput boardInput){
+    public boolean commnetDelete(BoardInput boardInput) {
         Account account = this.accountRepository.findByUserId(boardInput.getAuthor());
         Optional<BoardComment> optionalCoinBoardComment = this.commentRepository.findById(boardInput.getId());
         //상용자가 유저일경우
-        if (account.getRole().equals("USER")){
-            if(optionalCoinBoardComment.isPresent()){
+        if (account.getRole().equals("USER")) {
+            if (optionalCoinBoardComment.isPresent()) {
                 // 작성자가 맞는지 체크 후 삭제
                 if (boardInput.getAuthor().equals(optionalCoinBoardComment.get().getAuthor())) {
                     this.commentRepository.deleteById(boardInput.getId());
                     return true;
-                }
-                else return false;
+                } else return false;
             }
         }
         //사용자가 관리자일경우
         else if (account.getRole().equals("ADMIN")) {
-            if(optionalCoinBoardComment.isPresent()){
+            if (optionalCoinBoardComment.isPresent()) {
                 //작성자가 맞는지 체크하지않고 삭제
-                    this.commentRepository.deleteById(boardInput.getId());
-                    return true;
+                this.commentRepository.deleteById(boardInput.getId());
+                return true;
             }
         } else return false;
         return false;

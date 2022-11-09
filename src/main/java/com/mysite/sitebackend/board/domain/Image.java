@@ -2,7 +2,10 @@ package com.mysite.sitebackend.board.domain;
 
 
 import com.sun.istack.NotNull;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.Embeddable;
 

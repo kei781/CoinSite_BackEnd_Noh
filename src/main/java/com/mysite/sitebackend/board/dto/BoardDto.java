@@ -2,8 +2,6 @@ package com.mysite.sitebackend.board.dto;
 
 import lombok.Data;
 
-import javax.persistence.Column;
-
 @Data
 public class BoardDto {
     private Integer id;

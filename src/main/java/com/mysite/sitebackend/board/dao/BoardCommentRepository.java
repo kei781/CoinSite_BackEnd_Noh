@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface BoardCommentRepository extends JpaRepository<BoardComment, Integer> {
     List<BoardComment> findAllByBoardIndex(Integer boardIndex);
+
     @Transactional
     int deleteAllByBoardIndex(Integer boardIndex);
 }

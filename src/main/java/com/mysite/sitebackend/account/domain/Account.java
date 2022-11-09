@@ -1,7 +1,6 @@
 package com.mysite.sitebackend.account.domain;
 
 import com.sun.istack.NotNull;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
