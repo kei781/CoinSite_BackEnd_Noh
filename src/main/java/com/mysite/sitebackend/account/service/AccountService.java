@@ -67,7 +67,6 @@ public class AccountService {
         // 입력받은 패스워드와 체크패스워드가 같을때
         if (accountInput.getPassword().equals(accountInput.getConfirmPassword())) {
             Optional<Account> opAccount = Optional.ofNullable(this.accountRepository.findByUserId(accountInput.getUserId()));
-            AccountSighInDto accountSighInDto = new AccountSighInDto();
             // 찾은 id가db에 존재할때
             if (opAccount.isPresent()) {
                 Account account = this.accountRepository.findByUserId(accountInput.getUserId());

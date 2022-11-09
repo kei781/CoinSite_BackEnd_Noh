@@ -16,7 +16,6 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -39,23 +38,21 @@ public class BoardService {
     //전체검색
     public List<BoardSearchAllDto> searchAll(String value) {
         List<Board> boardList = this.boardRepository.searchAll(value);
-        List<BoardSearchAllDto> boardSearchAllDto = boardList.stream()
+        return boardList.stream()
                 .map(boardSearchAllDto1 -> modelMapper.map(boardSearchAllDto1, BoardSearchAllDto.class))
                 .collect(Collectors.toList());
-        return boardSearchAllDto;
     }
 
     //게시판별검색
     public List<BoardListDto> search(String value, String lcategory, String mcategory) {
         List<Board> boardList = this.boardRepository.search(value, lcategory, mcategory);
-        List<BoardListDto> boardListDto = boardList.stream()
+        return boardList.stream()
                 .map(BoardListDto1 -> modelMapper.map(BoardListDto1, BoardListDto.class))
                 .collect(Collectors.toList());
-        return boardListDto;
     }
 
     //게시글 작성하기
-    public boolean boardPost(String lcategory, String mcategory, BoardInput boardInput, MultipartFile file) throws SQLException {
+    public boolean boardPost(String lcategory, String mcategory, BoardInput boardInput) throws SQLException {
         //공지카테고리안의 공지사항 게시판이나 이벤트 게시판일 경우
         if (lcategory.equals("notice") && (mcategory.equals("n") || mcategory.equals("e"))) {
             Account account = accountRepository.findByUserId(boardInput.getAuthor());
@@ -129,19 +126,17 @@ public class BoardService {
     //게시글 전체목록 불러오기
     public List<BoardListDto> findAll(String lcategory, String mcategory) {
         List<Board> board = boardRepository.findAllByLcategoryAndMcategory(lcategory, mcategory);
-        List<BoardListDto> boardListDto = board.stream()
+        return board.stream()
                 .map(BoardListDto1 -> modelMapper.map(BoardListDto1, BoardListDto.class))
                 .collect(Collectors.toList());
-        return boardListDto;
     }
 
     //게시글 3개만 불러오기
     public List<BoardListDto> findThree(String lcategory, String mcategory) {
         List<Board> board = boardRepository.findThree(lcategory, mcategory, PageRequest.of(0, 3));
-        List<BoardListDto> boardListDto = board.stream()
+        return board.stream()
                 .map(BoardListDto1 -> modelMapper.map(BoardListDto1, BoardListDto.class))
                 .collect(Collectors.toList());
-        return boardListDto;
     }
 
     //게시글 1개불러오기
@@ -149,26 +144,24 @@ public class BoardService {
         Board board = this.boardRepository.findByIdAndLcategoryAndMcategory(id, lcategory, mcategory);
         board.setViews(board.getViews() + 1);
         this.boardRepository.save(board);
-        BoardDto boardDto = modelMapper.map(board, BoardDto.class);
-        return boardDto;
+        return modelMapper.map(board, BoardDto.class);
     }
 
     //게시글 1개의 댓글 전체목록 불러오기
     public List<CommentListDto> findByIdToComment(String lcategory, String mcategory, Integer id) {
-        Optional<Board> opboard = Optional.of(this.boardRepository.findByIdAndLcategoryAndMcategory(id, lcategory, mcategory));
+        Optional<Board> opboard = Optional.ofNullable(this.boardRepository.findByIdAndLcategoryAndMcategory(id, lcategory, mcategory));
         if (opboard.isPresent()) {
             List<BoardComment> comment = commentRepository.findAllByBoardIndex(id);
-            List<CommentListDto> boardListDto = comment.stream()
+            return comment.stream()
                     .map(comments1 -> modelMapper.map(comments1, CommentListDto.class))
                     .collect(Collectors.toList());
-            return boardListDto;
         } else return null;
     }
 
 
     //게시글 수정
     public boolean boardPatch(String lcategory, String mcategory, BoardInput boardInput) {
-        Optional<Board> opBoard = Optional.of(this.boardRepository.findByIdAndLcategoryAndMcategory(boardInput.getId(), lcategory, mcategory));
+        Optional<Board> opBoard = Optional.ofNullable(this.boardRepository.findByIdAndLcategoryAndMcategory(boardInput.getId(), lcategory, mcategory));
         if (opBoard.isPresent()) {
             if (boardInput.getAuthor().equals(opBoard.get().getAuthor())) {
                 Board board = opBoard.get();
@@ -204,7 +197,7 @@ public class BoardService {
         Account account = this.accountRepository.findByUserId(boardInput.getAuthor());
         // 사용자가 단순 유저일경우
         if (account.getRole().equals("USER")) {
-            Optional<Board> optionalBoard = Optional.of(this.boardRepository.findByIdAndLcategoryAndMcategory(boardInput.getId(), lcategory, mcategory));
+            Optional<Board> optionalBoard = Optional.ofNullable(this.boardRepository.findByIdAndLcategoryAndMcategory(boardInput.getId(), lcategory, mcategory));
             if (optionalBoard.isPresent()) {
                 // 해당작성자가 맞는지 체크 후 삭제
                 if (boardInput.getAuthor().equals(optionalBoard.get().getAuthor())) {
@@ -216,7 +209,7 @@ public class BoardService {
         }
         // 사용자가 관리자 일경우
         else if (account.getRole().equals("ADMIN")) {
-            Optional<Board> optionalBoard = Optional.of(this.boardRepository.findByIdAndLcategoryAndMcategory(boardInput.getId(), lcategory, mcategory));
+            Optional<Board> optionalBoard = Optional.ofNullable(this.boardRepository.findByIdAndLcategoryAndMcategory(boardInput.getId(), lcategory, mcategory));
             // 작성자유무를 체크하지않고 바로 삭제
             if (optionalBoard.isPresent()) {
                 this.boardRepository.deleteById(boardInput.getId());

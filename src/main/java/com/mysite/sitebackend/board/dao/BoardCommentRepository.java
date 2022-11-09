@@ -10,5 +10,5 @@ public interface BoardCommentRepository extends JpaRepository<BoardComment, Inte
     List<BoardComment> findAllByBoardIndex(Integer boardIndex);
 
     @Transactional
-    int deleteAllByBoardIndex(Integer boardIndex);
+    void deleteAllByBoardIndex(Integer boardIndex);
 }

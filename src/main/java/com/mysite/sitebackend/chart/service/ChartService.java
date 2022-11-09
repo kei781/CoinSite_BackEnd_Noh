@@ -21,15 +21,13 @@ public class ChartService {
     private final ModelMapper modelMapper;
 
     public List<Chart> findAll() {
-        List<Chart> charts = this.chartRepository.findAll();
-        return charts;
+        return this.chartRepository.findAll();
     }
 
     public MarketApiDto marketGet(String name) {
         try {
             Chart chart = marketApiClient.ApiCall(name);
-            MarketApiDto marketApiDto = modelMapper.map(chart, MarketApiDto.class);
-            return marketApiDto;
+            return modelMapper.map(chart, MarketApiDto.class);
         } catch (Exception e) {
             System.out.println("에러발생!!!에러발생!!!에러발생!!!에러발생!!!에러발생!!!");
             return null;
@@ -39,8 +37,7 @@ public class ChartService {
     public StockApiDto stockGet(String name) {
         try {
             Chart chart = stockApiClient.ApiCall(name);
-            StockApiDto stockApiDto = modelMapper.map(chart, StockApiDto.class);
-            return stockApiDto;
+            return modelMapper.map(chart, StockApiDto.class);
         } catch (Exception e) {
             System.out.println("에러발생!!!에러발생!!!에러발생!!!에러발생!!!에러발생!!!");
             return null;

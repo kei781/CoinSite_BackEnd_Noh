@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -30,27 +31,26 @@ public class StockApiClient {
     public String time() {
         DayOfWeek dayOfWeek = this.now.getDayOfWeek();
         int dayOfWeekNumber = dayOfWeek.getValue();
-        String formatedNow1;
         //만약 오늘이 월요일이거나
         if (dayOfWeekNumber == 1) {
-            return formatedNow1 = this.now.minusDays(3).format(formatter);
+            return this.now.minusDays(3).format(formatter);
         }
         //만약 오늘이 일요일이라면
         else if (dayOfWeekNumber == 7) {
-            return formatedNow1 = this.now.minusDays(2).format(formatter);
+            return this.now.minusDays(2).format(formatter);
         }
-        return formatedNow1 = this.now.minusDays(1).format(formatter);
+        return this.now.minusDays(1).format(formatter);
     }
 
     public Chart ApiCall(String name) throws Exception {
         Optional<Chart> opStockChart = Optional.ofNullable(this.chartRepository.findByDateAndNameAndChartIndex(this.formatedNow, name, "Stock"));
         if (opStockChart.isEmpty()) {
             //api에 데이터 요청하기
-            StringBuffer sb = new StringBuffer("http://apis.data.go.kr/1160100/service/GetStockSecuritiesInfoService/getStockPriceInfo?");
-            String idxNm = URLEncoder.encode(name, "UTF-8");
-            sb.append("serviceKey=" + apiKey.getStockApiKey());
-            sb.append("&basDt=" + time());
-            sb.append("&itmsNm=" + idxNm);
+            StringBuilder sb = new StringBuilder("http://apis.data.go.kr/1160100/service/GetStockSecuritiesInfoService/getStockPriceInfo?");
+            String idxNm = URLEncoder.encode(name, StandardCharsets.UTF_8);
+            sb.append("serviceKey=").append(apiKey.getStockApiKey());
+            sb.append("&basDt=").append(time());
+            sb.append("&itmsNm=").append(idxNm);
 
             URL url = new URL(sb.toString());
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -65,7 +65,6 @@ public class StockApiClient {
 
             //api 데이터 파싱하기
             Element root = document.getRootElement();
-            Element response = root.getChild("response");
             Element body = root.getChild("body");
             Element items = body.getChild("items");
             Element item = items.getChild("item");

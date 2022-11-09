@@ -9,7 +9,6 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface BoardRepository extends JpaRepository<Board, Integer> {
-    Board findBySubject(String subject);
 
     List<Board> findAllByLcategoryAndMcategory(String lcategory, String mcategory);
 

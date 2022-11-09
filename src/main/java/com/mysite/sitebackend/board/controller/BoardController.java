@@ -8,7 +8,6 @@ import com.mysite.sitebackend.board.service.BoardService;
 import com.mysite.sitebackend.board.vo.BoardInput;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -40,9 +39,9 @@ public class BoardController {
 
     //게시글 작성하기
     @PostMapping("/post")
-    public boolean boardPost(@PathVariable("lcategory") String lcategory, @PathVariable("mcategory") String mcategory, @RequestBody BoardInput boardInput, @RequestBody MultipartFile file) {
+    public boolean boardPost(@PathVariable("lcategory") String lcategory, @PathVariable("mcategory") String mcategory, @RequestBody BoardInput boardInput) {
         try {
-            return this.boardService.boardPost(lcategory, mcategory, boardInput, file);
+            return this.boardService.boardPost(lcategory, mcategory, boardInput);
         } catch (SQLException e) {
             return false;
         }
