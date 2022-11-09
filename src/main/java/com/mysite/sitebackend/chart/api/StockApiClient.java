@@ -1,6 +1,7 @@
 package com.mysite.sitebackend.chart.api;
 
 
+import com.mysite.sitebackend.configurable.ApiKey;
 import com.mysite.sitebackend.chart.dao.ChartRepository;
 import com.mysite.sitebackend.chart.domain.Chart;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,8 @@ import java.util.Optional;
 @Service
 public class StockApiClient {
     private final ChartRepository chartRepository;
+    private final ApiKey apiKey = ApiKey.getInstance();
+    private final String KEY = apiKey.getStockApiKey();
     LocalDate now = LocalDate.now();
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
     String formatedNow = now.minusDays(1).format(formatter);
@@ -45,7 +48,7 @@ public class StockApiClient {
                 //api에 데이터 요청하기
             StringBuffer sb = new StringBuffer("http://apis.data.go.kr/1160100/service/GetStockSecuritiesInfoService/getStockPriceInfo?");
             String idxNm = URLEncoder.encode(name, "UTF-8");
-            sb.append("serviceKey=J0bSLK%2BDoFdhT9ULtidMBZ5nV2VMqf9Ly6LxAv0fzrVRoEOf62u4UbVmhHJZfFaDXbE53Bk%2FmY%2FRpTlNIC83ng%3D%3D");
+            sb.append("serviceKey=" + KEY);
             sb.append("&basDt=" + time());
             sb.append("&itmsNm=" + idxNm);
 

@@ -4,8 +4,9 @@ build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
-!src/resources/application-Secret.yml
-
+!src/resources/application-secret.yml
+src/resources/application-secret.yml
+!**src/resources/application-secret.yml
 ### STS ###
 .apt_generated
 .classpath
