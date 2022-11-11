@@ -24,6 +24,7 @@ public class ChartService {
         return this.chartRepository.findAll();
     }
 
+    //마켓GET요청 처리
     public MarketApiDto marketGet(String name) {
         try {
             Chart chart = marketApiClient.ApiCall(name);
@@ -34,6 +35,7 @@ public class ChartService {
         }
     }
 
+    //주식GET요청 처리
     public StockApiDto stockGet(String name) {
         try {
             Chart chart = stockApiClient.ApiCall(name);

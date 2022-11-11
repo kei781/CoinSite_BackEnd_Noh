@@ -36,7 +36,6 @@
     설정(Set)
       개인정보(Privacy) : /set/privacy
 
-
 1. 게시글작성(post 메소드, /board/{Large category}/{Medium category}/post) 기능은 다음과 같은 ```객체```를 필요로 합니다.
    ```JSON
    {
@@ -106,11 +105,10 @@
    value = 검색할데이터(제목)
    ```
 
-
 <h2> chart(/chart/) </h2>
 
 1. 전체 조회(get메소드, /chart/getAll 기능은 다음과 같은 ```추가데이터```를 ```필요로 하지 않습니다.```)
-   
+
 2. 증시 조회(get메소드, /chart/Market/get 기능은 다음과 같은 ```파라미터```를 필요로 합니다.)
    ````
    {
@@ -153,34 +151,44 @@
 
 <h2> 계정관리(/account/)의 경우 다음의 기능을 제공합니다. </h2>
 
-   1. 회원가입(post메소드, /account/signUp) 기능은 다음과 같은 객체를 필요로 합니다.
+1. 회원가입(post메소드, /account/signUp) 기능은 다음과 같은 객체를 필요로 합니다.
+
    ````JSON
    {
-      "userId" : "아이디값을 입력하여 주세요.",
-      "userName" : "당신의 실명을 입력하여주세요",
-      "password" : "패스워드를 입력해주세요",
-      "confirmPassword" : "검증용 패스워드를 입력해주세요"
-   }
+  "userId": "아이디값을 입력하여 주세요.",
+  "userName": "당신의 실명을 입력하여주세요",
+  "password": "패스워드를 입력해주세요",
+  "confirmPassword": "검증용 패스워드를 입력해주세요"
+}
    ````
-   2. 로그인(post메소드, account/signIn)기능은 기능은 다음과 같은 객체를 필요로 합니다.
+
+2. 로그인(post메소드, account/signIn)기능은 기능은 다음과 같은 객체를 필요로 합니다.
+
 ````JSON
   {
-    "userId" : "아이디값을 입력하여 주세요.",
-    "password" : "패스워드를 입력해주세요"
-  }
+  "userId": "아이디값을 입력하여 주세요.",
+  "password": "패스워드를 입력해주세요"
+}
 ````
-   3. 패스워드 재설정(get 메소드, account/pwReset) 기능은 다음과 같은 객체를 필요로 합니다.
+
+3. 패스워드 재설정(get 메소드, account/pwReset) 기능은 다음과 같은 객체를 필요로 합니다.
+
 ````JSON
   {
-    "userId" : "아이디값을 입력하여 주세요.",
-    "userName" : "당신의 실명을 입력하여주세요",
-    "password" : "패스워드를 입력해주세요",
-    "confirmPassword" : "검증용 패스워드를 입력해주세요"
-  }
+  "userId": "아이디값을 입력하여 주세요.",
+  "userName": "당신의 실명을 입력하여주세요",
+  "password": "패스워드를 입력해주세요",
+  "confirmPassword": "검증용 패스워드를 입력해주세요"
+}
 ````
-   4. 가져오기(get 메소드, account/accountGet) 기능은 다음과 같은 객체를 필요로 합니다.
+
+4. 회원탈퇴(delete 메소드, account/signOut) 기능은 다음과 같은 객체를 필요로 합니다.
+
 ````JSON
-  {
-    "userId" : "아이디값을 입력하여 주세요.",
-  }
+   {
+  "userId": "아이디값을 입력하여 주세요.",
+  "userName": "당신의 실명을 입력하여주세요",
+  "password": "패스워드를 입력해주세요",
+  "confirmPassword": "검증용 패스워드를 입력해주세요"
+}
 ````

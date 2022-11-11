@@ -66,7 +66,7 @@ public class BoardController {
         return this.boardService.findThree(lcategory, mcategory);
     }
 
-    //게시글 1개 불러오기
+    //게시글 상세내용 불러오기
     @GetMapping("/getid")
     public BoardDto boardGet(@PathVariable("lcategory") String lcategory, @PathVariable("mcategory") String mcategory, @RequestParam("id") Integer id) {
         return this.boardService.findByIdToBoard(lcategory, mcategory, id);

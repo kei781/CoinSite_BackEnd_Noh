@@ -94,7 +94,6 @@ public class BoardService {
         if (optionalBoard.isPresent()) {
             // 해당게시글이 문의 게시판인지 체크
             if (optionalBoard.get().getLcategory().equals("notice") && optionalBoard.get().getMcategory().equals("i")) {
-                System.out.println("문의 게시판!!!!");
                 //문의 게시판의 게시글에 댓글은, 어드민만 작성가능
                 if (accountRepository.findByUserId(boardInput.getAuthor()).getRole().equals("ADMIN")) {
                     BoardComment a = new BoardComment();
@@ -123,7 +122,7 @@ public class BoardService {
         else return false;
     }
 
-    //게시글 전체목록 불러오기
+    //게시판 리스트 불러오기
     public List<BoardListDto> findAll(String lcategory, String mcategory) {
         List<Board> board = boardRepository.findAllByLcategoryAndMcategory(lcategory, mcategory);
         return board.stream()
@@ -173,7 +172,6 @@ public class BoardService {
                 return true;
             } else return false;
         } else return false;
-
     }
 
     //댓글 수정
@@ -202,6 +200,7 @@ public class BoardService {
                 // 해당작성자가 맞는지 체크 후 삭제
                 if (boardInput.getAuthor().equals(optionalBoard.get().getAuthor())) {
                     this.boardRepository.deleteById(boardInput.getId());
+                    // 해당 게시글에 달린 댓글까지 모두 삭제
                     this.commentRepository.deleteAllByBoardIndex(boardInput.getId());
                     return true;
                 } else return false;
@@ -223,7 +222,7 @@ public class BoardService {
     public boolean commnetDelete(BoardInput boardInput) {
         Account account = this.accountRepository.findByUserId(boardInput.getAuthor());
         Optional<BoardComment> optionalCoinBoardComment = this.commentRepository.findById(boardInput.getId());
-        //상용자가 유저일경우
+        //사용자가 유저일경우
         if (account.getRole().equals("USER")) {
             if (optionalCoinBoardComment.isPresent()) {
                 // 작성자가 맞는지 체크 후 삭제

@@ -28,28 +28,28 @@ public class MarketApiClient {
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
     String formatedNow = now.minusDays(1).format(formatter);
 
-    public String time() {
+    private String time() {
         DayOfWeek dayOfWeek = this.now.getDayOfWeek();
         int dayOfWeekNumber = dayOfWeek.getValue();
         //만약 오늘이 월요일이거나
-        if (dayOfWeekNumber == 1) {
-            return this.now.minusDays(3).format(formatter);
-        }
-        //만약 오늘이 일요일이라면
-        else if (dayOfWeekNumber == 7) {
-            return this.now.minusDays(2).format(formatter);
-        }
-        return this.now.minusDays(1).format(formatter);
+        if (dayOfWeekNumber == 1) return this.now.minusDays(3).format(formatter);
+            //만약 오늘이 일요일이라면
+        else if (dayOfWeekNumber == 7) return this.now.minusDays(2).format(formatter);
+            //화요일~토요일이라면
+        else return this.now.minusDays(1).format(formatter);
     }
 
     public Chart ApiCall(String name) throws Exception {
         if (name.equals("코스피") || name.equals("코스닥")) { // 코스피 코스닥만 입력가능
+            // DB에 기저장된 자료가 있는지 체크
+            // DB에 기 저장된 자료가 없다면 매일 초회에 한하여 1회 api호출 후 DB에 저장
             Optional<Chart> opMarketChart = Optional.ofNullable(this.chartRepository.findByDateAndNameAndChartIndex(this.formatedNow, name, "Market"));
             if (opMarketChart.isEmpty()) {
                 //api에 데이터 요청하기
                 StringBuilder sb = new StringBuilder("http://apis.data.go.kr/1160100/service/GetMarketIndexInfoService/getStockMarketIndex?");
                 String idxNm = URLEncoder.encode(name, StandardCharsets.UTF_8);
                 sb.append("serviceKey=").append(apiKey.getMarketApiKey());
+                // 일, 월일경우 금요일껄 호출하여, 오늘데이터로 입력
                 sb.append("&likeBasDt=").append(time());
                 sb.append("&idxNm=").append(idxNm);
 
@@ -85,6 +85,8 @@ public class MarketApiClient {
                     this.chartRepository.save(chartChart);
                 }
             }
+            // DB에 기 저장된 자료가 없다면 매일 초회에 한하여 1회 api호출 후 DB에 저장 후 return
+            // DB에 기 저장된 자료가 있따면 api를 호출하지않고, DB에서 바로 return
             return this.chartRepository.findByDateAndNameAndChartIndex(formatedNow, name, "Market");
         }
         // 코스피 코스닥이 입력값이 아닐경우 안보냄.

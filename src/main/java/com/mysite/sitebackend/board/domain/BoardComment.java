@@ -18,5 +18,4 @@ public class BoardComment {
     @DateTimeFormat(pattern = "YYYYMMDD")
     private String date; // 작성일자
     private Integer boardIndex;
-
 }

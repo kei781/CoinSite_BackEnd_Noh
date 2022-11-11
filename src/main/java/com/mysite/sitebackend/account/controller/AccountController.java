@@ -31,4 +31,10 @@ public class AccountController {
     public boolean pwReset(@RequestBody AccountInput accountInput) {
         return this.accountService.pwReset(accountInput);
     }
+
+    //회원탈퇴
+    @DeleteMapping("/signOut")
+    public boolean signOut(@RequestBody AccountInput accountInput) {
+        return this.accountService.signOut(accountInput);
+    }
 }
