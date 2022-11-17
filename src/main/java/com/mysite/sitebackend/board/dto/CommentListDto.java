@@ -8,4 +8,5 @@ public class CommentListDto {
     private String contents; // 내용
     private String author; // 작성자명
     private String date; // 작성일자
+    private Integer boardIndex;
 }

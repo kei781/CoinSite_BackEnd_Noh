@@ -51,6 +51,14 @@ public class BoardService {
                 .collect(Collectors.toList());
     }
 
+    //댓글검색
+    public List<CommentListDto> searchComment(String value) {
+        List<BoardComment> commentList = this.commentRepository.searchComment(value);
+        return commentList.stream()
+                .map(CommentListDto1 -> modelMapper.map(CommentListDto1, CommentListDto.class))
+                .collect(Collectors.toList());
+    }
+
     //게시글 작성하기
     public boolean boardPost(String lcategory, String mcategory, BoardInput boardInput) throws SQLException {
         //공지카테고리안의 공지사항 게시판이나 이벤트 게시판일 경우
@@ -133,6 +141,14 @@ public class BoardService {
     //게시글 3개만 불러오기
     public List<BoardListDto> findThree(String lcategory, String mcategory) {
         List<Board> board = boardRepository.findThree(lcategory, mcategory, PageRequest.of(0, 3));
+        return board.stream()
+                .map(BoardListDto1 -> modelMapper.map(BoardListDto1, BoardListDto.class))
+                .collect(Collectors.toList());
+    }
+
+    //게시글 5개만 불러오기
+    public List<BoardListDto> findFive(String lcategory, String mcategory) {
+        List<Board> board = boardRepository.findThree(lcategory, mcategory, PageRequest.of(0, 5));
         return board.stream()
                 .map(BoardListDto1 -> modelMapper.map(BoardListDto1, BoardListDto.class))
                 .collect(Collectors.toList());
@@ -242,4 +258,6 @@ public class BoardService {
         } else return false;
         return false;
     }
+
+
 }

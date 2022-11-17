@@ -15,8 +15,7 @@ public interface BoardRepository extends JpaRepository<Board, Integer> {
     Board findByIdAndLcategoryAndMcategory(Integer id, String lcategory, String mcategory);
 
     // 종합검색
-    @Query("select b from Board b " +
-            "where subject like %:value% or contents like %:value%")
+    @Query("select b from Board b where subject like %:value% or contents like %:value%")
     List<Board> searchAll(String value);
 
     // 게시판별 검색

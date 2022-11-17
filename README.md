@@ -104,6 +104,10 @@
    ```
    value = 검색할데이터(제목)
    ```
+13. 검색(전체댓글)(get메소드, /board/{Large category}/{Medium category}/searchAll/comment) 기능은 다음과 같은 ```파라미터```를 필요로 합니다.
+   ```
+   value = 검색할데이터(제목)
+   ```
 
 <h2> chart(/chart/) </h2>
 
@@ -153,14 +157,15 @@
 
 1. 회원가입(post메소드, /account/signUp) 기능은 다음과 같은 객체를 필요로 합니다.
 
-   ````JSON
+   ```JSON
    {
-  "userId": "아이디값을 입력하여 주세요.",
-  "userName": "당신의 실명을 입력하여주세요",
-  "password": "패스워드를 입력해주세요",
-  "confirmPassword": "검증용 패스워드를 입력해주세요"
-}
-   ````
+   "userId": "아이디값을 입력하여 주세요.",
+   "userName": "당신의 실명을 입력하여주세요",
+   "password": "패스워드를 입력해주세요",
+   "confirmPassword": "검증용 패스워드를 입력해주세요"
+   }
+   ```
+
 
 2. 로그인(post메소드, account/signIn)기능은 기능은 다음과 같은 객체를 필요로 합니다.
 

@@ -37,6 +37,12 @@ public class BoardController {
         return this.boardService.search(value, lcategory, mcategory);
     }
 
+    // 게시판별 검색
+    @GetMapping("/searchAll/comment")
+    public List<CommentListDto> searchComment(@RequestParam("value") String value) {
+        return this.boardService.searchComment(value);
+    }
+
     //게시글 작성하기
     @PostMapping("/post")
     public boolean boardPost(@PathVariable("lcategory") String lcategory, @PathVariable("mcategory") String mcategory, @RequestBody BoardInput boardInput) {
@@ -60,10 +66,16 @@ public class BoardController {
         return this.boardService.findAll(lcategory, mcategory);
     }
 
-    //게시글 3개 불러오기
+    //게시글 3개만 불러오기
     @GetMapping("/get3")
-    public List<BoardListDto> boardGet(@PathVariable("lcategory") String lcategory, @PathVariable("mcategory") String mcategory) {
+    public List<BoardListDto> get3(@PathVariable("lcategory") String lcategory, @PathVariable("mcategory") String mcategory) {
         return this.boardService.findThree(lcategory, mcategory);
+    }
+
+    //게시글 5개만 불러오기
+    @GetMapping("/get5")
+    public List<BoardListDto> get5(@PathVariable("lcategory") String lcategory, @PathVariable("mcategory") String mcategory) {
+        return this.boardService.findFive(lcategory, mcategory);
     }
 
     //게시글 상세내용 불러오기
