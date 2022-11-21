@@ -48,11 +48,9 @@ public class FileController {
     public List<FileEntity> downloadImage(HttpServletRequest request, HttpServletResponse response,
                                           @RequestParam(value = "filename") String filename) {
         File file = new File(filepath + filename);
-
         FileInputStream fis;
         BufferedInputStream bis;
         ServletOutputStream sos;
-
         try {
             fis = new FileInputStream(file);
             bis = new BufferedInputStream(fis);

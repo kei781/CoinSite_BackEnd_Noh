@@ -117,11 +117,14 @@ public class BoardService {
             } else {
                 // 해당게시판이 문의 게시판이 아니라면
                 // 자유롭게 댓글 작성가능
+                Optional<Board> board = boardRepository.findById(boardInput.getId());
                 BoardComment a = new BoardComment();
                 a.setContents(boardInput.getContents());
                 a.setDate(formatedNow);
                 a.setAuthor(boardInput.getAuthor());
                 a.setBoardIndex(boardInput.getId());
+                a.setLcategory(board.get().getLcategory());
+                a.setMcategory(board.get().getMcategory());
                 this.commentRepository.save(a);
                 return true;
             }
