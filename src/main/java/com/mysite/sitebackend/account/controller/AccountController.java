@@ -2,7 +2,7 @@ package com.mysite.sitebackend.account.controller;
 
 
 import com.mysite.sitebackend.account.dto.AccountSighInDto;
-import com.mysite.sitebackend.account.service.AccountService;
+import com.mysite.sitebackend.account.vo.service.AccountService;
 import com.mysite.sitebackend.account.vo.AccountInput;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
