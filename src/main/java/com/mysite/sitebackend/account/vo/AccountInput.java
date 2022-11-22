@@ -7,6 +7,7 @@ import lombok.Getter;
 public class AccountInput {
     private String userId;
     private String userName;
+    private String usePassword;
     private String password;
     private String confirmPassword;
 }

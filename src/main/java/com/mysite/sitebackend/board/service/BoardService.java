@@ -107,7 +107,7 @@ public class BoardService {
                     BoardComment a = new BoardComment();
                     a.setContents(boardInput.getContents());
                     a.setDate(formatedNow);
-                    a.setAuthor("ADMIN");
+                    a.setAuthor("관리자");
                     a.setBoardIndex(boardInput.getId());
                     this.commentRepository.save(a);
                     return true;
