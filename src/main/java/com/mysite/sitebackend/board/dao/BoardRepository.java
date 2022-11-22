@@ -29,4 +29,8 @@ public interface BoardRepository extends JpaRepository<Board, Integer> {
             "where b.lcategory = :lcategory and b.mcategory = :mcategory " +
             "order by b.date desc")
     List<Board> findThree(@Param("lcategory") String lcategory, @Param("mcategory") String mcategory, Pageable pageable);
+
+    @Query("select b from Board b " +
+            "order by b.views desc")
+    List<Board> findThreeHot(Pageable pageable);
 }

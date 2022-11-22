@@ -78,6 +78,12 @@ public class BoardController {
         return this.boardService.findFive(lcategory, mcategory);
     }
 
+    //게시글 5개만 불러오기
+    @GetMapping("/get5hot")
+    public List<BoardListDto> get5hot(@PathVariable("lcategory") String lcategory, @PathVariable("mcategory") String mcategory) {
+        return this.boardService.findFivebyhot();
+    }
+
     //게시글 상세내용 불러오기
     @GetMapping("/getid")
     public BoardDto boardGet(@PathVariable("lcategory") String lcategory, @PathVariable("mcategory") String mcategory, @RequestParam("id") Integer id) {

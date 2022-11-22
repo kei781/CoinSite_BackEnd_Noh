@@ -143,7 +143,7 @@ public class BoardService {
 
     //게시글 3개만 불러오기
     public List<BoardListDto> findThree(String lcategory, String mcategory) {
-        List<Board> board = boardRepository.findThree(lcategory, mcategory, PageRequest.of(0, 3));
+        List<Board> board = this.boardRepository.findThree(lcategory, mcategory, PageRequest.of(0, 3));
         return board.stream()
                 .map(BoardListDto1 -> modelMapper.map(BoardListDto1, BoardListDto.class))
                 .collect(Collectors.toList());
@@ -151,7 +151,14 @@ public class BoardService {
 
     //게시글 5개만 불러오기
     public List<BoardListDto> findFive(String lcategory, String mcategory) {
-        List<Board> board = boardRepository.findThree(lcategory, mcategory, PageRequest.of(0, 5));
+        List<Board> board = this.boardRepository.findThree(lcategory, mcategory, PageRequest.of(0, 5));
+        return board.stream()
+                .map(BoardListDto1 -> modelMapper.map(BoardListDto1, BoardListDto.class))
+                .collect(Collectors.toList());
+    }
+
+    public List<BoardListDto> findFivebyhot() {
+        List<Board> board = this.boardRepository.findThreeHot(PageRequest.of(0, 5));
         return board.stream()
                 .map(BoardListDto1 -> modelMapper.map(BoardListDto1, BoardListDto.class))
                 .collect(Collectors.toList());

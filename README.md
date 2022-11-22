@@ -46,11 +46,13 @@
    ```
 2. 게시판 리스트 가져오기(get 메소드, /board/{Large category}/{Medium category}/get)
 3. 게시판 리스트 ```최신순서 '3개'만``` 가져오기(get 메소드, /board/{Large category}/{Medium category}/get3)
-4. 특정 게시글 가져오기(get 메소드, /board/{Large category}/{Medium category}/getid) 기능은 다음과 같은 ```파라미터```를 필요로 합니다.
+4. 게시판 리스트 ```최신순서 '5개'만``` 가져오기(get 메소드, /board/{Large category}/{Medium category}/get5)
+5. 게시판 리스트 ```조회수높은순서 '5개'만``` 가져오기(get 메소드, /board/{Large category}/{Medium category}/get5hot)
+6. 특정 게시글 가져오기(get 메소드, /board/{Large category}/{Medium category}/getid) 기능은 다음과 같은 ```파라미터```를 필요로 합니다.
    ```
    id=숫자
    ```
-5. 특정 게시글 수정(patch 메소드, /board/{Large category}/{Medium category}/patch) 기능은 다음과 같은 ```객체```를 필요로 합니다.
+7. 특정 게시글 수정(patch 메소드, /board/{Large category}/{Medium category}/patch) 기능은 다음과 같은 ```객체```를 필요로 합니다.
    ````JSON
    {
     "id" : 게시글의 고유 아이디값(숫자),
@@ -59,7 +61,7 @@
     "author" : "글작성자입니다."
    }
    ````
-6. 게시글 삭제(delet메소드, /board/{Large category}/{Medium category}/delete/) 기능은 다음과 같은 ```객체```를 필요로 합니다.
+8. 게시글 삭제(delet메소드, /board/{Large category}/{Medium category}/delete/) 기능은 다음과 같은 ```객체```를 필요로 합니다.
    주의사항 : 해당 게시글에 포함된 댓글까지 일괄삭제됩니다!!
    ````JSON
    {
@@ -67,7 +69,7 @@
     "author" : "글작성자입니다."
    }
    ````
-7. 댓글 작성(post메소드, /board/{Large category}/{Medium category}/post/comment/) 기능은 다음과 같은 ```객체```를 필요로 합니다.
+9. 댓글 작성(post메소드, /board/{Large category}/{Medium category}/post/comment/) 기능은 다음과 같은 ```객체```를 필요로 합니다.
    ````JSON
    {
     "id" : 게시글의 고유 아이디값(숫자),
@@ -75,13 +77,13 @@
     "author" : "댓글 작성자입니다."
    }
    ````
-8. 특정게시글의 댓글리스트 가져오기(get메소드, /board/{Large category}/{Medium category}/getid/comment) 기능은 다음과 같은 ```객체```를 필요로 합니다.
+10. 특정게시글의 댓글리스트 가져오기(get메소드, /board/{Large category}/{Medium category}/getid/comment) 기능은 다음과 같은 ```객체```를 필요로 합니다.
    ````JSON
    {
     "id" : "게시글의 고유 아이디값(숫자)"
    }
    ````
-9. 댓글 수정(patch 메소드, /board/{Large category}/{Medium category}/patch/comment) 기능은 다음과 같은 ```객체```를 필요로 합니다.
+11. 댓글 수정(patch 메소드, /board/{Large category}/{Medium category}/patch/comment) 기능은 다음과 같은 ```객체```를 필요로 합니다.
    ````JSON
    {
     "id" : 댓글의 고유 아이디값(숫자),
@@ -89,22 +91,22 @@
     "author" : "댓글작성자입니다."
    }
    ````
-10. 댓글 삭제(delet메소드, /board/{Large category}/{Medium category}/delete/comment) 기능은 다음과 같은 ```객체```를 필요로 합니다.
+12. 댓글 삭제(delet메소드, /board/{Large category}/{Medium category}/delete/comment) 기능은 다음과 같은 ```객체```를 필요로 합니다.
    ````JSON
    {
     "id" : "댓글의 고유 아이디값(숫자)",
     "author" : "댓글작성자입니다."
    }
    ````
-11. 검색(전체게시판)(get메소드, /board/{Large category}/{Medium category}/searchAll) 기능은 다음과 같은 ```파라미터```를 필요로 합니다.
+13. 검색(전체게시판)(get메소드, /board/{Large category}/{Medium category}/searchAll) 기능은 다음과 같은 ```파라미터```를 필요로 합니다.
    ```
    value=검색할데이터(제목)
    ```
-12. 검색(개별게시판)(get메소드, /board/{Large category}/{Medium category}/search) 기능은 다음과 같은 ```파라미터```를 필요로 합니다.
+14. 검색(개별게시판)(get메소드, /board/{Large category}/{Medium category}/search) 기능은 다음과 같은 ```파라미터```를 필요로 합니다.
    ```
    value = 검색할데이터(제목)
    ```
-13. 검색(전체댓글)(get메소드, /board/{Large category}/{Medium category}/searchAll/comment) 기능은 다음과 같은 ```파라미터```를 필요로 합니다.
+15. 검색(전체댓글)(get메소드, /board/{Large category}/{Medium category}/searchAll/comment) 기능은 다음과 같은 ```파라미터```를 필요로 합니다.
    ```
    value = 검색할데이터(제목)
    ```
