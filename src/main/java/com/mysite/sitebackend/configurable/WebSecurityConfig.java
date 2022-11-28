@@ -8,12 +8,36 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+//@Configuration
+//@EnableWebSecurity
+//@RequiredArgsConstructor
+//public class WebSecurityConfig {
+//
+//    private final ObjectMapper objectMapper;
+//
+//    @Bean
+//    public PasswordEncoder passwordEncoder() {
+//        return new BCryptPasswordEncoder();
+//    }
+//
+//    @Bean
+//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+//        http.authorizeRequests().and()
+//                .httpBasic(withDefaults())
+//                .formLogin().disable()
+//                .cors().disable()
+//                .csrf().disable();
+//        return http.build();
+//    }
+//}
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
-    public PasswordEncoder passwordEncoder() {return new BCryptPasswordEncoder();
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().disable()
